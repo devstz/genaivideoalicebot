@@ -137,13 +137,7 @@ async def seed():
             )
             uow.session.add(pack)
         
-        # commit произойдет автоматически при выходе из context manager'а UOW
-    
     print(f"✅ Successfully seeded {len(TEMPLATES)} templates and {len(PACKS)} packs.")
-
-
-    print(f"✅ Seeded {len(TEMPLATES)} templates, {len(PACKS)} packs, 1 AI model")
-
 
 
 if __name__ == "__main__":
