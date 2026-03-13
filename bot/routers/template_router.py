@@ -1,0 +1,102 @@
+import logging
+from aiogram import F
+from aiogram.types import Message, CallbackQuery
+from aiogram.fsm.context import FSMContext
+
+from bot.routers.base import BaseRouter
+from bot.keyboards.inline.private_keyboards import (
+    templates_kb, template_preview_kb, skip_wishes_kb, main_menu_kb
+)
+from bot.keyboards.callback_data.private import MainMenuCD, TemplateCD, ConfirmCD
+from bot.states.private import GenerationStates
+from services.template_service import TemplateService
+from services.user_service import UserService
+from services.generation_service import GenerationService
+
+
+logger = logging.getLogger(__name__)
+
+
+class TemplateRouter(BaseRouter):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def setup_handlers(self) -> None:
+        self.callback_query.register(self.show_templates, MainMenuCD.filter(F.action == "templates"))
+        self.callback_query.register(self.view_template, TemplateCD.filter(F.action == "view"))
+        self.callback_query.register(self.start_generation, TemplateCD.filter(F.action == "start_gen"))
+        self.message.register(self.process_photo, GenerationStates.uploading_photo)
+        self.message.register(self.process_wishes, GenerationStates.entering_wishes)
+        self.callback_query.register(self.skip_wishes, ConfirmCD.filter(F.action == "skip_wishes"), GenerationStates.entering_wishes)
+
+    async def show_templates(self, call: CallbackQuery, template_service: TemplateService, i18n) -> None:
+        templates = await template_service.get_active_templates()
+        if not templates:
+            await call.answer(i18n.TEMPLATE_EMPTY, show_alert=True)
+            return
+            
+        await call.message.edit_text(i18n.TEMPLATE_LIST, reply_markup=templates_kb(templates))
+
+    async def view_template(self, call: CallbackQuery, callback_data: TemplateCD, template_service: TemplateService, user_service: UserService, i18n) -> None:
+        template_id = callback_data.id
+        template = await template_service.get_template(template_id)
+        
+        if not template:
+            await call.answer("❌", show_alert=True)
+            return
+
+        profile = await user_service.get_profile_info(call.from_user.id)
+        has_balance = profile["balance"] > 0
+        
+        text = i18n.template_preview(template.name, has_balance)
+        kb = template_preview_kb(template.id, has_balance)
+        
+        await call.message.edit_text(text, reply_markup=kb)
+
+    async def start_generation(self, call: CallbackQuery, callback_data: TemplateCD, state: FSMContext, i18n) -> None:
+        template_id = callback_data.id
+        await state.update_data(template_id=template_id)
+        await state.set_state(GenerationStates.uploading_photo)
+        await call.message.edit_text(i18n.ASK_PHOTO)
+
+    async def process_photo(self, message: Message, state: FSMContext, i18n) -> None:
+        if not message.photo:
+            await message.answer(i18n.ERROR_NOT_PHOTO)
+            return
+            
+        photo_id = message.photo[-1].file_id
+        await state.update_data(photo_id=photo_id)
+        
+        await state.set_state(GenerationStates.entering_wishes)
+        await message.answer(i18n.ASK_WISHES, reply_markup=skip_wishes_kb())
+
+    async def _finish_generation_request(self, user_id: int, message: Message, state: FSMContext, generation_service: GenerationService, i18n, wishes: str | None = None) -> None:
+        data = await state.get_data()
+        template_id = data.get("template_id")
+        photo_id = data.get("photo_id")
+
+        generation = await generation_service.create_generation_request(
+            user_id=user_id,
+            template_id=template_id,
+            input_photo_path=photo_id,
+            user_prompt=wishes
+        )
+
+        await state.clear()
+
+        if not generation:
+            await message.answer(i18n.INSUFFICIENT_BALANCE)
+            await message.answer(i18n.WELCOME_MAIN, reply_markup=main_menu_kb())
+            return
+
+        await message.answer(i18n.GENERATION_STARTED)
+        await message.answer(i18n.WELCOME_MAIN, reply_markup=main_menu_kb())
+
+
+    async def process_wishes(self, message: Message, state: FSMContext, generation_service: GenerationService, i18n) -> None:
+        wishes = message.text
+        await self._finish_generation_request(message.from_user.id, message, state, generation_service, i18n, wishes)
+
+    async def skip_wishes(self, call: CallbackQuery, state: FSMContext, generation_service: GenerationService, i18n) -> None:
+        await call.message.delete_reply_markup()
+        await self._finish_generation_request(call.from_user.id, call.message, state, generation_service, i18n, wishes=None)
