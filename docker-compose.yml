@@ -23,7 +23,10 @@ services:
     depends_on:
       - db
     env_file:
-      - .env # Убедитесь, что внутри указан правильный DB URL (пример: postgresql+asyncpg://postgres:postgres@db:5432/genaivideo)
+      - .env
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
     ports:
       - "8000:8000"
     volumes:

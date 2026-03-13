@@ -14,14 +14,19 @@ COPY requirements.txt .
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     libpq-dev \
+    netcat-openbsd \
     && rm -rf /var/lib/apt/lists/* \
     && pip install --no-cache-dir -r requirements.txt
 
 # Копируем проект
 COPY . .
 
+# Даем права на выполнение скриптов
+RUN chmod +x entrypoint.sh
+
 # Проект работает через main.py (по умолчанию порт берётся из настроек)
 EXPOSE 8000
 
-# Запуск
-CMD ["python", "main.py"]
+# Запуск через entrypoint
+ENTRYPOINT ["/app/entrypoint.sh"]
+
