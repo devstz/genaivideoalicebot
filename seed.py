@@ -97,43 +97,50 @@ PACKS = [
 
 
 async def seed():
-    async with SessionFactory() as session:
-        from sqlalchemy import select
-        
-        # Check if we already have seeded data
-        existing_model = await session.execute(select(AiModel).filter_by(name="MockGenerator"))
-        if existing_model.scalars().first():
+    from db.uow import SQLAlchemyUnitOfWork
+    from sqlalchemy import select
+
+    async with SQLAlchemyUnitOfWork() as uow:
+        # 1. Проверяем, есть ли уже данные
+        res = await uow.session.execute(select(AiModel).filter_by(name="MockGenerator"))
+        if res.scalars().first():
             print("⚠️ Database already seeded. Skipping...")
             return
 
-        async with session.begin():
-            # AI Model
-            ai_model = AiModel(name="MockGenerator", provider="mock", is_current=True)
-            session.add(ai_model)
-            await session.flush()
+        print("🌱 Seeding database with initial data...")
+        
+        # 2. AI Model
+        ai_model = AiModel(name="MockGenerator", provider="mock", is_current=True)
+        uow.session.add(ai_model)
+        await uow.session.flush()
 
-            # Templates
-            for t in TEMPLATES:
-                template = Template(
-                    name=t["name"],
-                    category=t["category"],
-                    base_prompt=t["base_prompt"],
-                    negative_prompt=t["negative_prompt"],
-                    status=t["status"],
-                    ai_model_id=ai_model.id,
-                )
-                session.add(template)
+        # 3. Templates
+        for t in TEMPLATES:
+            template = Template(
+                name=t["name"],
+                category=t["category"],
+                base_prompt=t["base_prompt"],
+                negative_prompt=t["negative_prompt"],
+                status=t["status"],
+                ai_model_id=ai_model.id,
+            )
+            uow.session.add(template)
 
-            # Packs
-            for p in PACKS:
-                pack = Pack(
-                    name=p["name"],
-                    description=p["description"],
-                    generations_count=p["generations_count"],
-                    price=p["price"],
-                    is_active=p["is_active"],
-                )
-                session.add(pack)
+        # 4. Packs
+        for p in PACKS:
+            pack = Pack(
+                name=p["name"],
+                description=p["description"],
+                generations_count=p["generations_count"],
+                price=p["price"],
+                is_active=p["is_active"],
+            )
+            uow.session.add(pack)
+        
+        # commit произойдет автоматически при выходе из context manager'а UOW
+    
+    print(f"✅ Successfully seeded {len(TEMPLATES)} templates and {len(PACKS)} packs.")
+
 
     print(f"✅ Seeded {len(TEMPLATES)} templates, {len(PACKS)} packs, 1 AI model")
 
