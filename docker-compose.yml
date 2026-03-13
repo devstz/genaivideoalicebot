@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: genaivideo_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-genaivideo}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  bot_api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: genaivideo_bot_api
+    restart: always
+    depends_on:
+      - db
+    env_file:
+      - .env # Убедитесь, что внутри указан правильный DB URL (пример: postgresql+asyncpg://postgres:postgres@db:5432/genaivideo)
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./media:/app/media
+      - ./logs:/app/logs
+
+  frontend:
+    build:
+      context: ../genweb
+      dockerfile: Dockerfile
+    container_name: genaivideo_frontend
+    restart: always
+    depends_on:
+      - bot_api
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      # Переменные для Next.js, если нужны:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1 # Укажите публичный домен API бота
+
+volumes:
+  postgres_data:
