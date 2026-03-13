@@ -7,7 +7,7 @@ services:
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-+QrGoVAZNb9t7lN6Tm95yQ==}
       POSTGRES_DB: ${POSTGRES_DB:-genaivideo}
     ports:
       - "5432:5432"
