@@ -98,6 +98,14 @@ PACKS = [
 
 async def seed():
     async with SessionFactory() as session:
+        from sqlalchemy import select
+        
+        # Check if we already have seeded data
+        existing_model = await session.execute(select(AiModel).filter_by(name="MockGenerator"))
+        if existing_model.scalars().first():
+            print("⚠️ Database already seeded. Skipping...")
+            return
+
         async with session.begin():
             # AI Model
             ai_model = AiModel(name="MockGenerator", provider="mock", is_current=True)
@@ -128,6 +136,7 @@ async def seed():
                 session.add(pack)
 
     print(f"✅ Seeded {len(TEMPLATES)} templates, {len(PACKS)} packs, 1 AI model")
+
 
 
 if __name__ == "__main__":
