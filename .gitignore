@@ -1,0 +1,31 @@
+# Байт-код Python
+__pycache__/
+*.py[cod]
+*.class
+
+# Виртуальные окружения
+venv/
+.venv/
+env/
+bin/
+lib/
+
+# Переменные окружения (ТОКЕНЫ БОТА ТУТ)
+.env
+
+# Базы данных (если используешь локальную sqlite для тестов)
+*.sqlite3
+*.db
+
+# Логи
+*.log
+
+# Специфично для macOS (твой MacBook)
+.DS_Store
+
+# Настройки Cursor и VS Code
+.vscode/
+.cursor/
+
+# Хвосты Docker
+.docker/
