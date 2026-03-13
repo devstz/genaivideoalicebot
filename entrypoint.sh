@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# Add current directory to PYTHONPATH for imports to work
+export PYTHONPATH=$PYTHONPATH:/app
+
 # Ожидание Postgres
 echo "Waiting for PostgreSQL at $DATABASE_HOST:$DATABASE_PORT..."
 while ! nc -z $DATABASE_HOST $DATABASE_PORT; do
