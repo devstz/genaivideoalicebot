@@ -28,13 +28,13 @@ class VideoGenerationWorker:
             "ru": {
                 "started": "🔄 Генерация запущена...",
                 "progress": "🔄 Обработка... {percent}%",
-                "progress_no_pct": "🔄 Нейросеть обрабатывает ваше видео...",
+                "progress_no_pct": "🔄 Создаём ваше видео...",
                 "completed": "✅ Готово! Видео отправляется...",
             },
             "en": {
                 "started": "🔄 Generation started...",
                 "progress": "🔄 Processing... {percent}%",
-                "progress_no_pct": "🔄 AI is processing your video...",
+                "progress_no_pct": "🔄 Creating your video...",
                 "completed": "✅ Done! Sending video...",
             },
         }

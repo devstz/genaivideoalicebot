@@ -30,10 +30,10 @@ def main_menu_kb() -> InlineKeyboardMarkup:
 
 def templates_kb(templates: list[Template]) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
+    builder.button(text=BTN_CUSTOM_PROMPT, callback_data=MainMenuCD(action="custom_prompt"))
     for t in templates:
         builder.button(text=t.name, callback_data=TemplateCD(id=t.id, action="view"))
-    builder.button(text=BTN_CUSTOM_PROMPT, callback_data=MainMenuCD(action="custom_prompt"))
-    builder.adjust(2)
+    builder.adjust(1, 2)
     builder.row(InlineKeyboardButton(text=BTN_BACK, callback_data=MainMenuCD(action="main").pack()))
     return builder.as_markup()
 
@@ -48,9 +48,16 @@ def template_preview_kb(template_id: int, has_balance: bool) -> InlineKeyboardMa
     builder.adjust(1)
     return builder.as_markup()
 
+def ask_photo_kb() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    builder.button(text=BTN_BACK, callback_data=ConfirmCD(action="gen_back_to_templates"))
+    return builder.as_markup()
+
 def skip_wishes_kb() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     builder.button(text=BTN_SKIP, callback_data=ConfirmCD(action="skip_wishes"))
+    builder.button(text=BTN_BACK, callback_data=ConfirmCD(action="gen_back_to_photo"))
+    builder.adjust(2)
     return builder.as_markup()
 
 def packs_kb(packs: list[Pack]) -> InlineKeyboardMarkup:

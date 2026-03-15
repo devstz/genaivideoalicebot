@@ -5,7 +5,7 @@ from aiogram.fsm.context import FSMContext
 
 from bot.routers.base import BaseRouter
 from bot.keyboards.inline.private_keyboards import (
-    templates_kb, template_preview_kb, skip_wishes_kb, main_menu_kb
+    templates_kb, template_preview_kb, skip_wishes_kb, ask_photo_kb, main_menu_kb
 )
 from bot.keyboards.callback_data.private import MainMenuCD, TemplateCD, ConfirmCD
 from bot.states.private import GenerationStates
@@ -29,6 +29,8 @@ class TemplateRouter(BaseRouter):
         self.message.register(self.process_photo, GenerationStates.uploading_photo)
         self.message.register(self.process_wishes, GenerationStates.entering_wishes)
         self.callback_query.register(self.skip_wishes, ConfirmCD.filter(F.action == "skip_wishes"), GenerationStates.entering_wishes)
+        self.callback_query.register(self.back_from_photo, ConfirmCD.filter(F.action == "gen_back_to_templates"), GenerationStates.uploading_photo)
+        self.callback_query.register(self.back_from_wishes, ConfirmCD.filter(F.action == "gen_back_to_photo"), GenerationStates.entering_wishes)
 
     async def show_templates(self, call: CallbackQuery, template_service: TemplateService, i18n) -> None:
         templates = await template_service.get_active_templates()
@@ -58,16 +60,28 @@ class TemplateRouter(BaseRouter):
         template_id = callback_data.id
         await state.update_data(template_id=template_id, is_custom_prompt=False)
         await state.set_state(GenerationStates.uploading_photo)
-        await call.message.edit_text(i18n.ASK_PHOTO)
+        await call.message.edit_text(i18n.ASK_PHOTO, reply_markup=ask_photo_kb())
 
     async def start_custom_prompt(self, call: CallbackQuery, state: FSMContext, user_service: UserService, i18n) -> None:
         profile = await user_service.get_profile_info(call.from_user.id)
         if profile["balance"] <= 0:
-            await call.answer(i18n.INSUFFICIENT_BALANCE, show_alert=True)
+            await call.answer(i18n.INSUFFICIENT_BALANCE_ALERT, show_alert=True)
             return
         await state.update_data(template_id=None, is_custom_prompt=True)
         await state.set_state(GenerationStates.uploading_photo)
-        await call.message.edit_text(i18n.ASK_PHOTO)
+        await call.message.edit_text(i18n.ASK_PHOTO, reply_markup=ask_photo_kb())
+
+    async def back_from_photo(self, call: CallbackQuery, state: FSMContext, template_service: TemplateService, i18n) -> None:
+        await state.clear()
+        templates = await template_service.get_active_templates()
+        if not templates:
+            await call.answer(i18n.TEMPLATE_EMPTY, show_alert=True)
+            return
+        await call.message.edit_text(i18n.TEMPLATE_LIST, reply_markup=templates_kb(templates))
+
+    async def back_from_wishes(self, call: CallbackQuery, state: FSMContext, i18n) -> None:
+        await state.set_state(GenerationStates.uploading_photo)
+        await call.message.edit_text(i18n.ASK_PHOTO, reply_markup=ask_photo_kb())
 
     async def process_photo(self, message: Message, state: FSMContext, i18n) -> None:
         if not message.photo:

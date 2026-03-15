@@ -33,7 +33,7 @@ BTN_BUY_PACK = "{name} — {price} RUB ({count} pcs)"
 BTN_MOCK_PAY = "✅ Pay (Test)"
 BTN_SKIP = "⏭ Skip"
 BTN_CONFIRM = "✅ Confirm"
-BTN_CUSTOM_PROMPT = "✍️ Custom prompt"
+BTN_CUSTOM_PROMPT = "✨ Create your own"
 
 # --- Profile ---
 PROFILE_TEXT = (
@@ -77,27 +77,28 @@ ASK_PHOTO = (
 ASK_WISHES = (
     "📝 <b>Any special requests?</b>\n\n"
     "Describe what you'd like to see, "
-    "or tap <b>«Skip»</b> — our AI knows what to do 😉"
+    "or tap <b>«Skip»</b> — we'll pick for you 😉"
 )
 ASK_CUSTOM_PROMPT = (
-    "✍️ <b>Enter full prompt</b>\n\n"
-    "Describe everything you want to see in the video — "
-    "this text will be sent to the AI as-is.\n"
-    "Or tap <b>«Skip»</b> for a default scenario."
+    "✍️ <b>Create your own scenario</b>\n\n"
+    "Describe everything you want to see — "
+    "your text will be sent as is.\n"
+    "Or tap <b>«Skip»</b> for a default option."
 )
 GENERATION_STARTED = (
     "⏳ <b>Photo submitted!</b>\n\n"
-    "Our AI is working its magic on your video. "
-    "The result will arrive in this chat — usually takes a couple of minutes ✨"
+    "Creating your video — the result will arrive here "
+    "usually within a couple of minutes ✨"
 )
 GENERATION_QUEUED = "⏳ Queued..."
 GENERATION_PROGRESS = "🔄 Processing... {percent}%"
-GENERATION_PROGRESS_NO_PERCENT = "🔄 AI is processing your video..."
+GENERATION_PROGRESS_NO_PERCENT = "🔄 Creating your video..."
 GENERATION_DRAFT_COMPLETED = "✅ Done! Sending video..."
 INSUFFICIENT_BALANCE = (
     "😔 <b>No generations left</b>\n\n"
     "Top up your balance to keep creating amazing videos!"
 )
+INSUFFICIENT_BALANCE_ALERT = "😔 No generations left. Top up your balance!"
 
 # --- Packs ---
 PACKS_LIST = (
@@ -130,7 +131,7 @@ ERROR_NOT_PHOTO = "❌ Please send a photo (not a file or document)."
 
 STATUS_MESSAGES = {
     GenerationStatus.PENDING: "⏳ Queued...",
-    GenerationStatus.PROCESSING: "🔄 AI is processing...",
+    GenerationStatus.PROCESSING: "🔄 Creating video...",
     GenerationStatus.COMPLETED: "✅ Your video is ready!",
     GenerationStatus.FAILED: "❌ Generation failed.",
 }
