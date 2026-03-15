@@ -96,12 +96,29 @@ class TemplateRouter(BaseRouter):
         await state.set_state(GenerationStates.entering_wishes)
 
         prompt_msg = i18n.ASK_CUSTOM_PROMPT if is_custom else i18n.ASK_WISHES
-        await message.answer(prompt_msg, reply_markup=skip_wishes_kb())
+        sent = await message.answer(prompt_msg, reply_markup=skip_wishes_kb())
+        await state.update_data(prompt_message_id=sent.message_id)
+
+    async def _finalize_prompt_message(self, message: Message, prompt_message_id: int | None, i18n) -> None:
+        if not prompt_message_id:
+            return
+        try:
+            await message.bot.edit_message_text(
+                chat_id=message.chat.id,
+                message_id=prompt_message_id,
+                text=i18n.PROMPT_ACCEPTED,
+                reply_markup=None,
+            )
+        except Exception as e:
+            logger.debug(f"Failed to finalize prompt message {prompt_message_id}: {e}")
 
     async def _finish_generation_request(self, user_id: int, message: Message, state: FSMContext, generation_service: GenerationService, i18n, wishes: str | None = None) -> None:
         data = await state.get_data()
         template_id = data.get("template_id")
         photo_id = data.get("photo_id")
+        prompt_message_id = data.get("prompt_message_id")
+
+        await self._finalize_prompt_message(message, prompt_message_id, i18n)
 
         generation = await generation_service.create_generation_request(
             user_id=user_id,
@@ -133,5 +150,4 @@ class TemplateRouter(BaseRouter):
         await self._finish_generation_request(message.from_user.id, message, state, generation_service, i18n, wishes)
 
     async def skip_wishes(self, call: CallbackQuery, state: FSMContext, generation_service: GenerationService, i18n) -> None:
-        await call.message.delete_reply_markup()
         await self._finish_generation_request(call.from_user.id, call.message, state, generation_service, i18n, wishes=None)

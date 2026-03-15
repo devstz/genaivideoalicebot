@@ -34,10 +34,16 @@ def _model_to_read(g: Generation) -> GenerationLogRead:
     }
     status_str = status_map.get(status_val, status_val)
 
+    source_image_path = (
+        f"{g.media_folder}/photo.jpg"
+        if g.media_folder
+        else g.input_photo_path
+    )
+
     return GenerationLogRead(
         id=f"GEN-{g.id:05d}",
         created_at=g.created_at,
-        source_image_url=_build_media_url(g.input_photo_path),
+        source_image_url=_build_media_url(source_image_path),
         user_prompt=g.user_prompt,
         result_video_url=_build_media_url(g.result_video_path) if g.result_video_path else None,
         status=status_str,

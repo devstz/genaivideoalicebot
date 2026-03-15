@@ -26,13 +26,13 @@ class VideoGenerationWorker:
         }
         self._draft_locales = {
             "ru": {
-                "started": "🔄 Генерация запущена...",
+                "started": "🔄 Обработка... 0%",
                 "progress": "🔄 Обработка... {percent}%",
                 "progress_no_pct": "🔄 Создаём ваше видео...",
                 "completed": "✅ Готово! Видео отправляется...",
             },
             "en": {
-                "started": "🔄 Generation started...",
+                "started": "🔄 Processing... 0%",
                 "progress": "🔄 Processing... {percent}%",
                 "progress_no_pct": "🔄 Creating your video...",
                 "completed": "✅ Done! Sending video...",
@@ -106,11 +106,18 @@ class VideoGenerationWorker:
 
     async def _initiate_generation(self, task, gs: GenerationService, uow: SQLAlchemyUnitOfWork):
         local_photo_path = None
+        cleanup_local_photo = True
         try:
             logger.info(f"Initiating generation for task {task.id}")
-            # Download photo from Telegram
             os.makedirs(self.settings.MEDIA_ROOT, exist_ok=True)
-            local_photo_path = os.path.join(self.settings.MEDIA_ROOT, f"input_{uuid.uuid4()}.jpg")
+            if task.media_folder:
+                generation_dir = os.path.join(self.settings.MEDIA_ROOT, task.media_folder)
+                os.makedirs(generation_dir, exist_ok=True)
+                local_photo_path = os.path.join(generation_dir, "photo.jpg")
+                cleanup_local_photo = False
+            else:
+                # Backward compatibility for old rows without media_folder.
+                local_photo_path = os.path.join(self.settings.MEDIA_ROOT, f"input_{uuid.uuid4()}.jpg")
             
             # Note: We need to get the file from Telegram using the input_photo_path (file_id)
             file = await self.bot.get_file(task.input_photo_path)
@@ -160,7 +167,7 @@ class VideoGenerationWorker:
             await uow.commit()
             await self.bot.send_message(task.user_id, f"❌ Ошибка при запуске генерации: {str(e)}")
         finally:
-            if local_photo_path and os.path.exists(local_photo_path):
+            if cleanup_local_photo and local_photo_path and os.path.exists(local_photo_path):
                 os.remove(local_photo_path)
 
     async def _poll_generation(self, task, gs: GenerationService, uow: SQLAlchemyUnitOfWork):
@@ -170,15 +177,25 @@ class VideoGenerationWorker:
             
             if status_info.status == GenerationStatus.COMPLETED:
                 logger.info(f"Task {task.id} COMPLETED.")
-                await gs.update_status(task.id, GenerationStatus.COMPLETED, result_video_path=status_info.download_url)
-                await uow.commit()
-
-                # Update draft: completed, then send video as new message
                 loc = self._draft_locales.get("ru", self._draft_locales["en"])
                 await self._update_draft(task.user_id, task.id, loc["completed"])
-                
-                # Download the video manually to avoid aiogram URLInputFile timeouts
-                local_video_path = os.path.join(self.settings.MEDIA_ROOT, f"output_{uuid.uuid4()}.mp4")
+                os.makedirs(self.settings.MEDIA_ROOT, exist_ok=True)
+
+                if task.media_folder:
+                    generation_dir = os.path.join(self.settings.MEDIA_ROOT, task.media_folder)
+                    os.makedirs(generation_dir, exist_ok=True)
+                    local_video_path = os.path.join(generation_dir, "video.mp4")
+                    result_video_path = f"{task.media_folder}/video.mp4"
+                    cleanup_local_video = False
+                else:
+                    # Backward compatibility for old rows without media_folder.
+                    local_video_path = os.path.join(self.settings.MEDIA_ROOT, f"output_{uuid.uuid4()}.mp4")
+                    result_video_path = status_info.download_url
+                    cleanup_local_video = True
+
+                await gs.update_status(task.id, GenerationStatus.COMPLETED, result_video_path=result_video_path)
+                await uow.commit()
+
                 try:
                     logger.info(f"Downloading video for task {task.id} from {status_info.download_url}")
                     async with httpx.AsyncClient(timeout=300.0) as client:
@@ -197,7 +214,7 @@ class VideoGenerationWorker:
                     # Maybe tell user?
                     await self.bot.send_message(task.user_id, f"✅ Видео сгенерировано, но не удалось его отправить напрямую. Ссылка: {status_info.download_url}")
                 finally:
-                    if os.path.exists(local_video_path):
+                    if cleanup_local_video and os.path.exists(local_video_path):
                         os.remove(local_video_path)
                 
             elif status_info.status in (GenerationStatus.PENDING, GenerationStatus.PROCESSING):

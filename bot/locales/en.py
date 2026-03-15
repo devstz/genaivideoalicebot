@@ -85,6 +85,7 @@ ASK_CUSTOM_PROMPT = (
     "your text will be sent as is.\n"
     "Or tap <b>«Skip»</b> for a default option."
 )
+PROMPT_ACCEPTED = "✅ Prompt accepted"
 GENERATION_STARTED = (
     "⏳ <b>Photo submitted!</b>\n\n"
     "Creating your video — the result will arrive here "

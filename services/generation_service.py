@@ -1,3 +1,5 @@
+import uuid
+
 from sqlalchemy import select
 from db.models import Generation
 from db.uow import SQLAlchemyUnitOfWork
@@ -31,6 +33,7 @@ class GenerationService:
             template_id=template_id,
             input_photo_path=input_photo_path,
             user_prompt=user_prompt,
+            media_folder=f"gen_{uuid.uuid4().hex[:12]}",
             status=GenerationStatus.PENDING
         )
         return await self.uow.generation_repo.add(generation)

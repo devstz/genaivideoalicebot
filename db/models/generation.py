@@ -20,6 +20,7 @@ class Generation(Base, TimestampMixin, ModelHelpersMixin, IdPkMixin):
     final_prompt: Mapped[Optional[str]] = mapped_column(Text)
     external_task_id: Mapped[Optional[str]] = mapped_column(String(100))
     result_video_path: Mapped[Optional[str]] = mapped_column(String(255))
+    media_folder: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
     error_message: Mapped[Optional[str]] = mapped_column(Text)
 
     user: Mapped["User"] = relationship(back_populates="generations")
