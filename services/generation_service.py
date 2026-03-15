@@ -8,19 +8,24 @@ class GenerationService:
     def __init__(self, uow: SQLAlchemyUnitOfWork) -> None:
         self.uow = uow
 
-    async def create_generation_request(self, user_id: int, template_id: int, input_photo_path: str, user_prompt: str | None = None) -> Generation | None:
+    async def create_generation_request(
+        self,
+        user_id: int,
+        input_photo_path: str,
+        user_prompt: str | None = None,
+        template_id: int | None = None,
+    ) -> Generation | None:
         """
         Attempts to create a generation request. Deducts 1 generation from balance if successful.
         Returns the created Generation object or None if insufficient balance.
+        template_id=None means custom prompt mode (user provides full prompt).
         """
         balance = await self.uow.user_balance_repo.get_or_create(user_id)
         if balance.generations_remaining <= 0:
             return None
 
-        # Subtract 1 generation
         await self.uow.user_balance_repo.subtract_generations(user_id, 1)
 
-        # Create generation record
         generation = Generation(
             user_id=user_id,
             template_id=template_id,
@@ -28,7 +33,6 @@ class GenerationService:
             user_prompt=user_prompt,
             status=GenerationStatus.PENDING
         )
-        
         return await self.uow.generation_repo.add(generation)
 
     async def update_status(self, generation_id: int, status: GenerationStatus, result_video_path: str | None = None, error_message: str | None = None) -> bool:
@@ -60,5 +64,13 @@ class GenerationService:
         if not generation:
             return False
         generation.external_task_id = external_task_id
+        await self.uow.generation_repo.update(generation)
+        return True
+
+    async def update_final_prompt(self, generation_id: int, final_prompt: str) -> bool:
+        generation = await self.uow.generation_repo.get(generation_id)
+        if not generation:
+            return False
+        generation.final_prompt = final_prompt
         await self.uow.generation_repo.update(generation)
         return True

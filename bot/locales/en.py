@@ -33,6 +33,7 @@ BTN_BUY_PACK = "{name} — {price} RUB ({count} pcs)"
 BTN_MOCK_PAY = "✅ Pay (Test)"
 BTN_SKIP = "⏭ Skip"
 BTN_CONFIRM = "✅ Confirm"
+BTN_CUSTOM_PROMPT = "✍️ Custom prompt"
 
 # --- Profile ---
 PROFILE_TEXT = (
@@ -78,11 +79,21 @@ ASK_WISHES = (
     "Describe what you'd like to see, "
     "or tap <b>«Skip»</b> — our AI knows what to do 😉"
 )
+ASK_CUSTOM_PROMPT = (
+    "✍️ <b>Enter full prompt</b>\n\n"
+    "Describe everything you want to see in the video — "
+    "this text will be sent to the AI as-is.\n"
+    "Or tap <b>«Skip»</b> for a default scenario."
+)
 GENERATION_STARTED = (
     "⏳ <b>Photo submitted!</b>\n\n"
     "Our AI is working its magic on your video. "
     "The result will arrive in this chat — usually takes a couple of minutes ✨"
 )
+GENERATION_QUEUED = "⏳ Queued..."
+GENERATION_PROGRESS = "🔄 Processing... {percent}%"
+GENERATION_PROGRESS_NO_PERCENT = "🔄 AI is processing your video..."
+GENERATION_DRAFT_COMPLETED = "✅ Done! Sending video..."
 INSUFFICIENT_BALANCE = (
     "😔 <b>No generations left</b>\n\n"
     "Top up your balance to keep creating amazing videos!"

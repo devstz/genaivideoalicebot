@@ -23,6 +23,7 @@ class TemplateRouter(BaseRouter):
 
     def setup_handlers(self) -> None:
         self.callback_query.register(self.show_templates, MainMenuCD.filter(F.action == "templates"))
+        self.callback_query.register(self.start_custom_prompt, MainMenuCD.filter(F.action == "custom_prompt"))
         self.callback_query.register(self.view_template, TemplateCD.filter(F.action == "view"))
         self.callback_query.register(self.start_generation, TemplateCD.filter(F.action == "start_gen"))
         self.message.register(self.process_photo, GenerationStates.uploading_photo)
@@ -55,7 +56,16 @@ class TemplateRouter(BaseRouter):
 
     async def start_generation(self, call: CallbackQuery, callback_data: TemplateCD, state: FSMContext, i18n) -> None:
         template_id = callback_data.id
-        await state.update_data(template_id=template_id)
+        await state.update_data(template_id=template_id, is_custom_prompt=False)
+        await state.set_state(GenerationStates.uploading_photo)
+        await call.message.edit_text(i18n.ASK_PHOTO)
+
+    async def start_custom_prompt(self, call: CallbackQuery, state: FSMContext, user_service: UserService, i18n) -> None:
+        profile = await user_service.get_profile_info(call.from_user.id)
+        if profile["balance"] <= 0:
+            await call.answer(i18n.INSUFFICIENT_BALANCE, show_alert=True)
+            return
+        await state.update_data(template_id=None, is_custom_prompt=True)
         await state.set_state(GenerationStates.uploading_photo)
         await call.message.edit_text(i18n.ASK_PHOTO)
 
@@ -63,12 +73,16 @@ class TemplateRouter(BaseRouter):
         if not message.photo:
             await message.answer(i18n.ERROR_NOT_PHOTO)
             return
-            
+
         photo_id = message.photo[-1].file_id
         await state.update_data(photo_id=photo_id)
-        
+
+        data = await state.get_data()
+        is_custom = data.get("is_custom_prompt", False)
         await state.set_state(GenerationStates.entering_wishes)
-        await message.answer(i18n.ASK_WISHES, reply_markup=skip_wishes_kb())
+
+        prompt_msg = i18n.ASK_CUSTOM_PROMPT if is_custom else i18n.ASK_WISHES
+        await message.answer(prompt_msg, reply_markup=skip_wishes_kb())
 
     async def _finish_generation_request(self, user_id: int, message: Message, state: FSMContext, generation_service: GenerationService, i18n, wishes: str | None = None) -> None:
         data = await state.get_data()
@@ -77,9 +91,9 @@ class TemplateRouter(BaseRouter):
 
         generation = await generation_service.create_generation_request(
             user_id=user_id,
-            template_id=template_id,
             input_photo_path=photo_id,
-            user_prompt=wishes
+            user_prompt=wishes,
+            template_id=template_id,
         )
 
         await state.clear()
@@ -89,7 +103,14 @@ class TemplateRouter(BaseRouter):
             await message.answer(i18n.WELCOME_MAIN, reply_markup=main_menu_kb())
             return
 
-        await message.answer(i18n.GENERATION_STARTED)
+        try:
+            await message.bot.send_message_draft(
+                chat_id=user_id,
+                draft_id=generation.id,
+                text=i18n.GENERATION_QUEUED,
+            )
+        except Exception:
+            await message.answer(i18n.GENERATION_STARTED)
         await message.answer(i18n.WELCOME_MAIN, reply_markup=main_menu_kb())
 
 

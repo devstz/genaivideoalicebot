@@ -20,11 +20,31 @@ class VideoGenerationWorker:
         self.settings = get_settings()
         self.generator = HailuoGenerator(api_key=self.settings.PIAPI_KEY)
         self._running = False
-        # Mapping of localized messages for completion
         self._locales = {
             "ru": "✅ Ваше видео готово!",
             "en": "✅ Your video is ready!"
         }
+        self._draft_locales = {
+            "ru": {
+                "started": "🔄 Генерация запущена...",
+                "progress": "🔄 Обработка... {percent}%",
+                "progress_no_pct": "🔄 Нейросеть обрабатывает ваше видео...",
+                "completed": "✅ Готово! Видео отправляется...",
+            },
+            "en": {
+                "started": "🔄 Generation started...",
+                "progress": "🔄 Processing... {percent}%",
+                "progress_no_pct": "🔄 AI is processing your video...",
+                "completed": "✅ Done! Sending video...",
+            },
+        }
+
+    async def _update_draft(self, user_id: int, draft_id: int, text: str, lang: str = "ru") -> None:
+        """Update Telegram draft message. Logs and continues on failure."""
+        try:
+            await self.bot.send_message_draft(chat_id=user_id, draft_id=draft_id, text=text)
+        except Exception as e:
+            logger.debug(f"Draft update failed for task {draft_id}: {e}")
 
     async def start(self):
         """Starts the worker loop."""
@@ -96,8 +116,32 @@ class VideoGenerationWorker:
             file = await self.bot.get_file(task.input_photo_path)
             await self.bot.download_file(file.file_path, local_photo_path)
 
+            # Build prompt and negative_prompt from template or use user prompt as full (custom mode)
+            prompt: str
+            negative_prompt: str | None = None
+            if task.template_id is not None:
+                template = await uow.template_repo.get(task.template_id)
+                if template:
+                    parts = [template.base_prompt]
+                    if task.user_prompt and task.user_prompt.strip():
+                        parts.append(task.user_prompt.strip())
+                    prompt = "\n".join(parts)
+                    negative_prompt = template.negative_prompt
+                else:
+                    prompt = task.user_prompt or "cinematic video"
+            else:
+                # Custom prompt mode: user typed full prompt
+                prompt = task.user_prompt or "cinematic video"
+
+            final_prompt = prompt
+            await gs.update_final_prompt(task.id, final_prompt)
+
             # Start piAPI generation
-            res = await self.generator.generate(local_photo_path, prompt=task.user_prompt or "cinematic video")
+            res = await self.generator.generate(
+                local_photo_path,
+                prompt=prompt,
+                negative_prompt=negative_prompt,
+            )
             
             if res.status == GenerationStatus.FAILED:
                 raise Exception(res.error or "Failed to start generation in piAPI")
@@ -106,6 +150,8 @@ class VideoGenerationWorker:
             await gs.update_external_task_id(task.id, res.task_id)
             await gs.update_status(task.id, GenerationStatus.PROCESSING)
             await uow.commit()
+            loc = self._draft_locales.get("ru", self._draft_locales["en"])
+            await self._update_draft(task.user_id, task.id, loc["started"])
             logger.info(f"Task {task.id} initiated with internal task ID {res.task_id}")
 
         except Exception as e:
@@ -126,6 +172,10 @@ class VideoGenerationWorker:
                 logger.info(f"Task {task.id} COMPLETED.")
                 await gs.update_status(task.id, GenerationStatus.COMPLETED, result_video_path=status_info.download_url)
                 await uow.commit()
+
+                # Update draft: completed, then send video as new message
+                loc = self._draft_locales.get("ru", self._draft_locales["en"])
+                await self._update_draft(task.user_id, task.id, loc["completed"])
                 
                 # Download the video manually to avoid aiogram URLInputFile timeouts
                 local_video_path = os.path.join(self.settings.MEDIA_ROOT, f"output_{uuid.uuid4()}.mp4")
@@ -150,6 +200,13 @@ class VideoGenerationWorker:
                     if os.path.exists(local_video_path):
                         os.remove(local_video_path)
                 
+            elif status_info.status in (GenerationStatus.PENDING, GenerationStatus.PROCESSING):
+                loc = self._draft_locales.get("ru", self._draft_locales["en"])
+                if status_info.percent is not None:
+                    text = loc["progress"].format(percent=status_info.percent)
+                else:
+                    text = loc["progress_no_pct"]
+                await self._update_draft(task.user_id, task.id, text)
             elif status_info.status == GenerationStatus.FAILED:
                 logger.error(f"Task {task.id} FAILED in piAPI: {status_info.error}")
                 await gs.update_status(task.id, GenerationStatus.FAILED, error_message=status_info.error)

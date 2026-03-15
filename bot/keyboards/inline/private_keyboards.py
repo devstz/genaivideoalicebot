@@ -5,7 +5,7 @@ from bot.locales.ru import (
     BTN_AGREEMENT, BTN_ACCEPT_AGREEMENT,
     BTN_REVIVE_PHOTO, BTN_PACKS, BTN_PROFILE,
     BTN_BACK, BTN_BUY_PACK, BTN_MOCK_PAY,
-    BTN_SKIP, BTN_CONFIRM
+    BTN_SKIP, BTN_CONFIRM, BTN_CUSTOM_PROMPT
 )
 from bot.keyboards.callback_data.private import (
     MainMenuCD, TemplateCD, PackCD, PaymentCD, ConfirmCD
@@ -32,11 +32,8 @@ def templates_kb(templates: list[Template]) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     for t in templates:
         builder.button(text=t.name, callback_data=TemplateCD(id=t.id, action="view"))
-    
-    # 2 buttons per row for templates
+    builder.button(text=BTN_CUSTOM_PROMPT, callback_data=MainMenuCD(action="custom_prompt"))
     builder.adjust(2)
-    
-    # Add back button on a new row
     builder.row(InlineKeyboardButton(text=BTN_BACK, callback_data=MainMenuCD(action="main").pack()))
     return builder.as_markup()
 

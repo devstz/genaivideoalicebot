@@ -202,7 +202,9 @@ class PiAPIBaseGenerator(BaseGenerator):
                 
                 status = status_mapping.get(status_str, GenerationStatus.FAILED)
                 output = res_data.get("output") or {}
-                download_url = output.get("video") or output.get("video_url")
+                download_url = output.get("video") or output.get("video_url") or output.get("download_url")
+                percent_raw = output.get("percent")
+                percent = int(percent_raw) if percent_raw is not None else None
                 
                 # Extract error message properly
                 error_obj = res_data.get("error") or {}
@@ -220,7 +222,8 @@ class PiAPIBaseGenerator(BaseGenerator):
                     status=status,
                     download_url=download_url,
                     error=error_msg,
-                    raw_response=data
+                    raw_response=data,
+                    percent=percent,
                 )
         except Exception as e:
             logger.error(f"Error checking piAPI status for task {task_id}: {e}")

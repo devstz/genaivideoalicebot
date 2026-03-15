@@ -20,6 +20,7 @@ class GenerationStatusInfo:
     download_url: str | None = None
     error: str | None = None
     raw_response: dict[str, Any] | None = None
+    percent: int | None = None
 
 
 class BaseGenerator(ABC):
