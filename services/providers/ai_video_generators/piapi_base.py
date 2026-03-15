@@ -17,6 +17,41 @@ class PiAPIBaseGenerator(BaseGenerator):
             "Content-Type": "application/json"
         }
 
+    async def upload_to_0x0(self, file_content: bytes) -> str | None:
+        """
+        Uploads a file to 0x0.st (reliable, no auth, 512MB limit, 30+ days retention).
+        """
+        url = "https://0x0.st"
+        files = {"file": ("image.jpg", file_content, "image/jpeg")}
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                response = await client.post(url, files=files)
+                response.raise_for_status()
+                url_res = response.text.strip()
+                if url_res.startswith("http"):
+                    return url_res
+        except Exception as e:
+            logger.error(f"Error uploading to 0x0.st: {e}")
+            return None
+
+    async def upload_to_litterbox(self, file_content: bytes) -> str | None:
+        """
+        Uploads a file to Litterbox (catbox.moe temp storage, 24h retention).
+        """
+        url = "https://litterbox.catbox.moe/resources/internals/api.php"
+        data = {"reqtype": "fileupload", "time": "24h"}
+        files = {"fileToUpload": ("image.jpg", file_content, "image/jpeg")}
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                response = await client.post(url, data=data, files=files)
+                response.raise_for_status()
+                url_res = response.text.strip()
+                if url_res.startswith("http"):
+                    return url_res
+        except Exception as e:
+            logger.error(f"Error uploading to Litterbox: {e}")
+            return None
+
     async def upload_to_catbox(self, file_content: bytes) -> str | None:
         """
         Uploads a file to Catbox.moe (reliable and free).
@@ -35,75 +70,41 @@ class PiAPIBaseGenerator(BaseGenerator):
             logger.error(f"Error uploading to Catbox: {e}")
             return None
 
-    async def upload_to_uguu(self, file_content: bytes) -> str | None:
-        """
-        Uploads a file to Uguu.se (reliable and free, handles .moe blocking better).
-        """
-        url = "https://uguu.se/upload.php"
-        files = {"files[]": ("image.jpg", file_content, "image/jpeg")}
-        try:
-            async with httpx.AsyncClient(timeout=30.0) as client:
-                response = await client.post(url, files=files)
-                response.raise_for_status()
-                data = response.json()
-                if data.get("success") and data.get("files"):
-                    return data["files"][0].get("url")
-        except Exception as e:
-            logger.error(f"Error uploading to Uguu: {e}")
-            return None
-
-    async def upload_to_telegraph(self, file_content: bytes) -> str | None:
-        """
-        Uploads a file to Telegra.ph (anonymous and free).
-        Useful when piAPI storage is unavailable (403 Forbidden).
-        """
-        url = "https://telegra.ph/upload"
-        # Telegraph needs a proper User-Agent sometimes
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-        }
-        files = {"file": ("image.jpg", file_content, "image/jpeg")}
-        try:
-            async with httpx.AsyncClient(timeout=30.0, headers=headers) as client:
-                response = await client.post(url, files=files)
-                if response.status_code != 200:
-                    logger.error(f"Telegraph upload failed with status {response.status_code}: {response.text}")
-                response.raise_for_status()
-                data = response.json()
-                if isinstance(data, list) and len(data) > 0:
-                    path = data[0].get("src")
-                    return f"https://telegra.ph{path}"
-        except Exception as e:
-            logger.error(f"Error uploading to Telegraph: {e}")
-            return None
-
     async def upload_file(self, file_content: bytes, file_name: str) -> str | None:
         """
-        Uploads a file to piAPI's ephemeral storage or falls back to Catbox/Telegraph.
+        Uploads a file to piAPI's ephemeral storage or falls back to 0x0.st, Litterbox, Catbox.
         """
         import base64
         url = "https://upload.theapi.app/api/ephemeral_resource"
-        
+
         payload = {
             "file_name": file_name,
             "file_data": base64.b64encode(file_content).decode("utf-8")
         }
-        
+
         try:
             async with httpx.AsyncClient(timeout=60.0) as client:
                 response = await client.post(url, json=payload, headers=self.headers)
-                
+
                 # If 403 (no subscription), fallback to external hosts
                 if response.status_code == 403:
-                    logger.warning("piAPI storage return 403. Falling back to Uguu/Telegraph...")
-                    return await self.upload_to_uguu(file_content) or await self.upload_to_telegraph(file_content) or await self.upload_to_catbox(file_content)
-                
+                    logger.warning("piAPI storage return 403. Falling back to 0x0.st/Litterbox/Catbox...")
+                    return (
+                        await self.upload_to_0x0(file_content)
+                        or await self.upload_to_litterbox(file_content)
+                        or await self.upload_to_catbox(file_content)
+                    )
+
                 response.raise_for_status()
                 data = response.json()
                 return data.get("data", {}).get("url")
         except Exception as e:
             logger.error(f"Error uploading file to piAPI: {e}. Falling back to external hosts...")
-            return await self.upload_to_uguu(file_content) or await self.upload_to_telegraph(file_content) or await self.upload_to_catbox(file_content)
+            return (
+                await self.upload_to_0x0(file_content)
+                or await self.upload_to_litterbox(file_content)
+                or await self.upload_to_catbox(file_content)
+            )
 
     async def generate(self, image_path: str, prompt: str, negative_prompt: str | None = None, **kwargs) -> GenerationResult:
         """
