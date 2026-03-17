@@ -5,7 +5,8 @@ from bot.locales.ru import (
     BTN_AGREEMENT, BTN_ACCEPT_AGREEMENT,
     BTN_REVIVE_PHOTO, BTN_PACKS, BTN_PROFILE,
     BTN_BACK, BTN_BUY_PACK, BTN_MOCK_PAY,
-    BTN_SKIP, BTN_CONFIRM, BTN_CUSTOM_PROMPT
+    BTN_SKIP, BTN_CONFIRM, BTN_CUSTOM_PROMPT,
+    BTN_SETTINGS, BTN_CHANGE_PASSWORD, BTN_TOGGLE_2FA_ON, BTN_TOGGLE_2FA_OFF, BTN_SETTINGS_REFRESH
 )
 from bot.keyboards.callback_data.private import (
     MainMenuCD, TemplateCD, PackCD, PaymentCD, ConfirmCD
@@ -25,7 +26,8 @@ def main_menu_kb() -> InlineKeyboardMarkup:
     builder.button(text=BTN_REVIVE_PHOTO, callback_data=MainMenuCD(action="templates"))
     builder.button(text=BTN_PACKS, callback_data=MainMenuCD(action="packs"))
     builder.button(text=BTN_PROFILE, callback_data=MainMenuCD(action="profile"))
-    builder.adjust(1, 2)
+    builder.button(text=BTN_SETTINGS, callback_data=MainMenuCD(action="settings"))
+    builder.adjust(1, 2, 1)
     return builder.as_markup()
 
 def templates_kb(templates: list[Template]) -> InlineKeyboardMarkup:
@@ -80,4 +82,17 @@ def auth_confirm_kb(token: str) -> InlineKeyboardMarkup:
     builder.button(text="✅ Разрешить", callback_data=ConfirmCD(action=f"auth_approve_{token}"))
     builder.button(text="❌ Отменить", callback_data=ConfirmCD(action=f"auth_reject_{token}"))
     builder.adjust(2)
+    return builder.as_markup()
+
+
+def settings_kb(twofa_enabled: bool) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    builder.button(text=BTN_CHANGE_PASSWORD, callback_data=ConfirmCD(action="settings_change_password"))
+    builder.button(
+        text=BTN_TOGGLE_2FA_OFF if twofa_enabled else BTN_TOGGLE_2FA_ON,
+        callback_data=ConfirmCD(action=f"settings_toggle_2fa_{'off' if twofa_enabled else 'on'}"),
+    )
+    builder.button(text=BTN_SETTINGS_REFRESH, callback_data=MainMenuCD(action="settings"))
+    builder.button(text=BTN_BACK, callback_data=MainMenuCD(action="main"))
+    builder.adjust(1, 1, 2)
     return builder.as_markup()

@@ -2,7 +2,9 @@ from __future__ import annotations
 import uuid
 from typing import Any, Optional
 
-from sqlalchemy import BigInteger, Boolean, String
+from datetime import datetime
+
+from sqlalchemy import BigInteger, Boolean, DateTime, String
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import expression
@@ -42,6 +44,26 @@ class User(Base, TimestampMixin, ModelHelpersMixin):
         default=lambda: uuid.uuid4().hex[:12]
     )
     has_accepted_agreement: Mapped[bool] = mapped_column(Boolean, default=False, server_default=expression.false(), nullable=False)
+    admin_login: Mapped[Optional[str]] = mapped_column(
+        String(64),
+        nullable=True,
+        unique=True,
+        index=True,
+    )
+    admin_password_hash: Mapped[Optional[str]] = mapped_column(
+        String(255),
+        nullable=True,
+    )
+    admin_require_telegram_2fa: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=False,
+        server_default=expression.false(),
+    )
+    admin_credentials_set_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
 
     balance: Mapped["UserBalance"] = relationship(back_populates="user", uselist=False)
     purchases: Mapped[list["Purchase"]] = relationship(back_populates="user")

@@ -1,6 +1,7 @@
 import uuid
 
 from sqlalchemy import select
+from config.settings import get_settings
 from db.models import Generation
 from db.uow import SQLAlchemyUnitOfWork
 from enums import GenerationStatus
@@ -9,6 +10,7 @@ from enums import GenerationStatus
 class GenerationService:
     def __init__(self, uow: SQLAlchemyUnitOfWork) -> None:
         self.uow = uow
+        self.settings = get_settings()
 
     async def create_generation_request(
         self,
@@ -22,6 +24,9 @@ class GenerationService:
         Returns the created Generation object or None if insufficient balance.
         template_id=None means custom prompt mode (user provides full prompt).
         """
+        if not await self.can_create_generation(user_id):
+            return None
+
         balance = await self.uow.user_balance_repo.get_or_create(user_id)
         if balance.generations_remaining <= 0:
             return None
@@ -37,6 +42,13 @@ class GenerationService:
             status=GenerationStatus.PENDING
         )
         return await self.uow.generation_repo.add(generation)
+
+    async def can_create_generation(self, user_id: int) -> bool:
+        max_active = self.settings.MAX_ACTIVE_GENERATIONS_PER_USER
+        if max_active <= 0:
+            return True
+        active_count = await self.uow.generation_repo.count_active_by_user(user_id)
+        return active_count < max_active
 
     async def update_status(self, generation_id: int, status: GenerationStatus, result_video_path: str | None = None, error_message: str | None = None) -> bool:
         generation = await self.uow.generation_repo.get(generation_id)

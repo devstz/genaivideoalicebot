@@ -93,13 +93,24 @@ GENERATION_STARTED = (
 )
 GENERATION_QUEUED = "⏳ Queued..."
 GENERATION_PROGRESS = "🔄 Processing... {percent}%"
-GENERATION_PROGRESS_NO_PERCENT = "🔄 Creating your video..."
+GENERATION_PROGRESS_NO_PERCENT = "🔄 Creating your video... This usually takes about 90 seconds."
 GENERATION_DRAFT_COMPLETED = "✅ Done! Sending video..."
+GENERATION_VIDEO_READY = "✅ Your video is ready!"
+GENERATION_DRAFT_STARTED = "🔄 Processing... 0%"
+GENERATION_START_ERROR = "❌ Failed to start generation: {error}"
+GENERATION_FAILED_ERROR = "❌ Generation failed:\n{error}"
+GENERATION_TIMEOUT_ERROR = "❌ Generation timed out."
+GENERATION_DIRECT_SEND_FAILED = "✅ The video is generated, but direct delivery failed. Link: {url}"
 INSUFFICIENT_BALANCE = (
     "😔 <b>No generations left</b>\n\n"
     "Top up your balance to keep creating amazing videos!"
 )
 INSUFFICIENT_BALANCE_ALERT = "😔 No generations left. Top up your balance!"
+GENERATION_ALREADY_IN_PROGRESS = (
+    "⏳ You already have an active generation.\n\n"
+    "Please wait for it to finish, then start a new one."
+)
+GENERATION_ALREADY_IN_PROGRESS_ALERT = "You already have an active generation. Please wait for it to finish."
 
 # --- Packs ---
 PACKS_LIST = (

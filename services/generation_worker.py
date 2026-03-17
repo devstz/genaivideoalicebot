@@ -6,6 +6,9 @@ import httpx
 from aiogram import Bot
 from aiogram.types import FSInputFile
 
+from bot.keyboards.inline.private_keyboards import main_menu_kb
+from bot.locales import en as en_locale
+from bot.locales import ru as ru_locale
 from config.settings import get_settings
 from db.uow import SQLAlchemyUnitOfWork
 from enums import GenerationStatus
@@ -20,22 +23,30 @@ class VideoGenerationWorker:
         self.settings = get_settings()
         self.generator = HailuoGenerator(api_key=self.settings.PIAPI_KEY)
         self._running = False
-        self._locales = {
-            "ru": "✅ Ваше видео готово!",
-            "en": "✅ Your video is ready!"
-        }
-        self._draft_locales = {
+        self._texts = {
             "ru": {
-                "started": "🔄 Обработка... 0%",
-                "progress": "🔄 Обработка... {percent}%",
-                "progress_no_pct": "🔄 Создаём ваше видео...",
-                "completed": "✅ Готово! Видео отправляется...",
+                "main_menu": ru_locale.WELCOME_MAIN,
+                "video_ready": ru_locale.GENERATION_VIDEO_READY,
+                "started": ru_locale.GENERATION_DRAFT_STARTED,
+                "progress": ru_locale.GENERATION_PROGRESS,
+                "progress_no_pct": ru_locale.GENERATION_PROGRESS_NO_PERCENT,
+                "completed": ru_locale.GENERATION_DRAFT_COMPLETED,
+                "start_error": ru_locale.GENERATION_START_ERROR,
+                "failed_error": ru_locale.GENERATION_FAILED_ERROR,
+                "timeout_error": ru_locale.GENERATION_TIMEOUT_ERROR,
+                "direct_send_failed": ru_locale.GENERATION_DIRECT_SEND_FAILED,
             },
             "en": {
-                "started": "🔄 Processing... 0%",
-                "progress": "🔄 Processing... {percent}%",
-                "progress_no_pct": "🔄 Creating your video...",
-                "completed": "✅ Done! Sending video...",
+                "main_menu": en_locale.WELCOME_MAIN,
+                "video_ready": en_locale.GENERATION_VIDEO_READY,
+                "started": en_locale.GENERATION_DRAFT_STARTED,
+                "progress": en_locale.GENERATION_PROGRESS,
+                "progress_no_pct": en_locale.GENERATION_PROGRESS_NO_PERCENT,
+                "completed": en_locale.GENERATION_DRAFT_COMPLETED,
+                "start_error": en_locale.GENERATION_START_ERROR,
+                "failed_error": en_locale.GENERATION_FAILED_ERROR,
+                "timeout_error": en_locale.GENERATION_TIMEOUT_ERROR,
+                "direct_send_failed": en_locale.GENERATION_DIRECT_SEND_FAILED,
             },
         }
 
@@ -77,11 +88,28 @@ class VideoGenerationWorker:
                 return
 
             logger.info(f"Worker found {len(tasks)} tasks to process.")
-            for task in tasks:
+            processing_tasks = [t for t in tasks if t.status == GenerationStatus.PROCESSING]
+            pending_tasks = [t for t in tasks if t.status == GenerationStatus.PENDING]
+            pending_tasks.sort(key=lambda t: t.created_at)
+
+            for task in processing_tasks:
                 try:
                     await self._handle_task(task, gs, uow)
                 except Exception as e:
                     logger.error(f"Failed to handle task {task.id}: {e}")
+
+            max_concurrent = self.settings.MAX_CONCURRENT_GENERATIONS
+            if max_concurrent <= 0:
+                tasks_to_start = pending_tasks
+            else:
+                available_slots = max(max_concurrent - len(processing_tasks), 0)
+                tasks_to_start = pending_tasks[:available_slots]
+
+            for task in tasks_to_start:
+                try:
+                    await self._handle_task(task, gs, uow)
+                except Exception as e:
+                    logger.error(f"Failed to start queued task {task.id}: {e}")
 
     async def _handle_task(self, task, gs: GenerationService, uow: SQLAlchemyUnitOfWork):
         # 1. Start generation if PENDING
@@ -157,7 +185,7 @@ class VideoGenerationWorker:
             await gs.update_external_task_id(task.id, res.task_id)
             await gs.update_status(task.id, GenerationStatus.PROCESSING)
             await uow.commit()
-            loc = self._draft_locales.get("ru", self._draft_locales["en"])
+            loc = self._texts.get("ru", self._texts["en"])
             await self._update_draft(task.user_id, task.id, loc["started"])
             logger.info(f"Task {task.id} initiated with internal task ID {res.task_id}")
 
@@ -165,7 +193,8 @@ class VideoGenerationWorker:
             logger.error(f"Initiation failed for task {task.id}: {e}")
             await gs.update_status(task.id, GenerationStatus.FAILED, error_message=str(e))
             await uow.commit()
-            await self.bot.send_message(task.user_id, f"❌ Ошибка при запуске генерации: {str(e)}")
+            loc = self._texts.get("ru", self._texts["en"])
+            await self.bot.send_message(task.user_id, loc["start_error"].format(error=str(e)))
         finally:
             if cleanup_local_photo and local_photo_path and os.path.exists(local_photo_path):
                 os.remove(local_photo_path)
@@ -177,7 +206,7 @@ class VideoGenerationWorker:
             
             if status_info.status == GenerationStatus.COMPLETED:
                 logger.info(f"Task {task.id} COMPLETED.")
-                loc = self._draft_locales.get("ru", self._draft_locales["en"])
+                loc = self._texts.get("ru", self._texts["en"])
                 await self._update_draft(task.user_id, task.id, loc["completed"])
                 os.makedirs(self.settings.MEDIA_ROOT, exist_ok=True)
 
@@ -205,20 +234,33 @@ class VideoGenerationWorker:
                             f.write(v_res.content)
                     
                     video = FSInputFile(local_video_path)
-                    msg = self._locales.get("ru")
+                    msg = loc["video_ready"]
                     await self.bot.send_video(task.user_id, video, caption=msg)
+                    await self.bot.send_message(
+                        task.user_id,
+                        loc["main_menu"],
+                        reply_markup=main_menu_kb(),
+                    )
                     logger.info(f"Video sent for task {task.id}")
                 except Exception as send_err:
                     logger.error(f"Failed to download/send video for task {task.id}: {send_err}")
                     # We already marked it as COMPLETED in DB, but couldn't send.
                     # Maybe tell user?
-                    await self.bot.send_message(task.user_id, f"✅ Видео сгенерировано, но не удалось его отправить напрямую. Ссылка: {status_info.download_url}")
+                    await self.bot.send_message(
+                        task.user_id,
+                        loc["direct_send_failed"].format(url=status_info.download_url),
+                    )
+                    await self.bot.send_message(
+                        task.user_id,
+                        loc["main_menu"],
+                        reply_markup=main_menu_kb(),
+                    )
                 finally:
                     if cleanup_local_video and os.path.exists(local_video_path):
                         os.remove(local_video_path)
                 
             elif status_info.status in (GenerationStatus.PENDING, GenerationStatus.PROCESSING):
-                loc = self._draft_locales.get("ru", self._draft_locales["en"])
+                loc = self._texts.get("ru", self._texts["en"])
                 if status_info.percent is not None:
                     text = loc["progress"].format(percent=status_info.percent)
                 else:
@@ -228,7 +270,13 @@ class VideoGenerationWorker:
                 logger.error(f"Task {task.id} FAILED in piAPI: {status_info.error}")
                 await gs.update_status(task.id, GenerationStatus.FAILED, error_message=status_info.error)
                 await uow.commit()
-                await self.bot.send_message(task.user_id, f"❌ Ошибка при генерации:\n{status_info.error}")
+                loc = self._texts.get("ru", self._texts["en"])
+                await self.bot.send_message(task.user_id, loc["failed_error"].format(error=status_info.error))
+                await self.bot.send_message(
+                    task.user_id,
+                    loc["main_menu"],
+                    reply_markup=main_menu_kb(),
+                )
 
             # Check for timeout (optional, but good practice)
             # If created_at > 20 minutes ago and still processing, mark as failed
@@ -243,7 +291,13 @@ class VideoGenerationWorker:
                  logger.warning(f"Task {task.id} timed out after 20 minutes.")
                  await gs.update_status(task.id, GenerationStatus.FAILED, error_message="Timed out after 20 minutes")
                  await uow.commit()
-                 await self.bot.send_message(task.user_id, "❌ Время ожидания генерации истекло.")
+                 loc = self._texts.get("ru", self._texts["en"])
+                 await self.bot.send_message(task.user_id, loc["timeout_error"])
+                 await self.bot.send_message(
+                     task.user_id,
+                     loc["main_menu"],
+                     reply_markup=main_menu_kb(),
+                 )
 
         except Exception as e:
             logger.error(f"Polling failed for task {task.id}: {e}")

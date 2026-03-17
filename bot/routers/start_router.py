@@ -31,8 +31,17 @@ class StartRouter(BaseRouter):
         if not user.is_superuser:
             # Ignore ordinary users trying to auth as admin
             return
-            
+
         token = command.args.replace('auth_', '')
+        session = await _auth_repo.get_session(token)
+        if not session:
+            await message.answer("❌ Код авторизации истек или недействителен.")
+            return
+
+        if session.get("session_type") == "password_2fa" and session.get("user_id") != user.user_id:
+            await message.answer("❌ Этот код подтверждения создан для другого администратора.")
+            return
+
         await message.answer(
             "Вы пытаетесь авторизоваться в админ-панели.\nПодтверждаете вход?", 
             reply_markup=auth_confirm_kb(token)
@@ -44,7 +53,18 @@ class StartRouter(BaseRouter):
             return
             
         token = callback_data.action.replace("auth_approve_", "")
-        success = await _auth_repo.approve_session(token, user.user_id)
+        session = await _auth_repo.get_session(token)
+        if not session:
+            await call.message.edit_text("❌ Ошибка: Время ожидания входа истекло (или код уже использован).")
+            return
+
+        if session.get("session_type") == "password_2fa":
+            if session.get("user_id") != user.user_id:
+                await call.answer("Код принадлежит другому администратору", show_alert=True)
+                return
+            success = await _auth_repo.approve_session(token, user.user_id)
+        else:
+            success = await _auth_repo.approve_session(token, user.user_id)
         
         if success:
             await call.message.edit_text("✅ Успешный вход! Можете вернуться в браузер.")
@@ -55,8 +75,12 @@ class StartRouter(BaseRouter):
         if not user.is_superuser:
             await call.answer("Нет прав", show_alert=True)
             return
-            
+
         token = callback_data.action.replace("auth_reject_", "")
+        session = await _auth_repo.get_session(token)
+        if session and session.get("session_type") == "password_2fa" and session.get("user_id") != user.user_id:
+            await call.answer("Код принадлежит другому администратору", show_alert=True)
+            return
         await _auth_repo.reject_session(token)
         await call.message.edit_text("❌ Вход отменен.")
 

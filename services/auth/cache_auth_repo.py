@@ -18,20 +18,34 @@ class CacheAuthRepository:
     def _make_key(self, token: str) -> str:
         return f"{self.prefix}{token}"
 
+    async def _create_session(
+        self,
+        *,
+        session_type: str,
+        user_id: int | None = None,
+    ) -> str:
+        token = str(uuid.uuid4())
+        key = self._make_key(token)
+        session_data = {
+            "status": "pending",
+            "user_id": user_id,
+            "session_type": session_type,
+        }
+        await self._cache.set(key, session_data, expires_in=self.ttl_seconds)
+        return token
+
     async def create_auth_session(self) -> str:
         """
         Создает новую сессию ожидания авторизации и возвращает уникальный токен.
         Статус по умолчанию "pending".
         """
-        token = str(uuid.uuid4())
-        key = self._make_key(token)
-        # Храним данные сессии (статус и user_id)
-        session_data = {
-            "status": "pending",
-            "user_id": None
-        }
-        await self._cache.set(key, session_data, expires_in=self.ttl_seconds)
-        return token
+        return await self._create_session(session_type="qr_login")
+
+    async def create_password_2fa_session(self, user_id: int) -> str:
+        """
+        Создает сессию подтверждения входа после успешной проверки login/password.
+        """
+        return await self._create_session(session_type="password_2fa", user_id=user_id)
 
     async def get_session(self, token: str) -> Optional[dict]:
         """

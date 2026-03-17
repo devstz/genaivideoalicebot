@@ -61,3 +61,11 @@ class GenerationRepository:
     async def update(self, generation: Generation) -> Generation:
         await self.session.flush()
         return generation
+
+    async def count_active_by_user(self, user_id: int) -> int:
+        stmt = select(func.count()).select_from(Generation).where(
+            Generation.user_id == user_id,
+            Generation.status.in_([GenerationStatus.PENDING, GenerationStatus.PROCESSING]),
+        )
+        result = await self.session.execute(stmt)
+        return int(result.scalar_one() or 0)

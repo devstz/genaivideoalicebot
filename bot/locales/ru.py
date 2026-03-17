@@ -28,6 +28,7 @@ BTN_ACCEPT_AGREEMENT = "✅ Принять"
 BTN_REVIVE_PHOTO = "🎬 Оживить фото"
 BTN_PACKS = "📦 Наборы"
 BTN_PROFILE = "👤 Профиль"
+BTN_SETTINGS = "⚙️ Настройки"
 BTN_BACK = "🔙 Назад"
 BTN_BUY_PACK = "{name} — {price} ₽ ({count} шт.)"
 BTN_MOCK_PAY = "✅ Оплатить (Тест)"
@@ -45,6 +46,28 @@ PROFILE_TEXT = (
     "👥 Приглашено друзей: <b>{ref_count}</b>\n"
     "💎 <i>За каждого друга — бесплатная генерация!</i>"
 )
+
+SETTINGS_TEXT = (
+    "⚙️ <b>Настройки безопасности</b>\n\n"
+    "🆔 Telegram ID: <code>{user_id}</code>\n"
+    "👤 Telegram: {telegram_username}\n"
+    "🔐 Логин админки: <code>{admin_login}</code>\n"
+    "🛡 2FA: <b>{twofa_status}</b>\n\n"
+    "Выберите действие ниже."
+)
+SETTINGS_TWOFA_ON = "включена"
+SETTINGS_TWOFA_OFF = "выключена"
+BTN_CHANGE_PASSWORD = "🔑 Сменить пароль"
+BTN_TOGGLE_2FA_ON = "🛡 Включить 2FA"
+BTN_TOGGLE_2FA_OFF = "🛡 Выключить 2FA"
+BTN_SETTINGS_REFRESH = "🔄 Обновить"
+SETTINGS_ENTER_CURRENT_PASSWORD = "Введите текущий пароль:"
+SETTINGS_ENTER_NEW_PASSWORD = "Введите новый пароль:"
+SETTINGS_PASSWORD_CHANGED = "✅ Пароль обновлен."
+SETTINGS_PASSWORD_INVALID = "❌ Текущий пароль неверный."
+SETTINGS_PASSWORD_TOO_SHORT = "❌ Новый пароль слишком короткий."
+SETTINGS_CREDENTIALS_REQUIRED = "❌ Сначала задайте логин/пароль в веб-панели."
+SETTINGS_2FA_UPDATED = "✅ Настройка 2FA обновлена."
 
 # --- Templates ---
 TEMPLATE_LIST = (
@@ -93,13 +116,24 @@ GENERATION_STARTED = (
 )
 GENERATION_QUEUED = "⏳ В очереди..."
 GENERATION_PROGRESS = "🔄 Обработка... {percent}%"
-GENERATION_PROGRESS_NO_PERCENT = "🔄 Создаём ваше видео..."
+GENERATION_PROGRESS_NO_PERCENT = "🔄 Создаём ваше видео... Обычно это занимает около 90 секунд."
 GENERATION_DRAFT_COMPLETED = "✅ Готово! Видео отправляется..."
+GENERATION_VIDEO_READY = "✅ Ваше видео готово!"
+GENERATION_DRAFT_STARTED = "🔄 Обработка... 0%"
+GENERATION_START_ERROR = "❌ Ошибка при запуске генерации: {error}"
+GENERATION_FAILED_ERROR = "❌ Ошибка при генерации:\n{error}"
+GENERATION_TIMEOUT_ERROR = "❌ Время ожидания генерации истекло."
+GENERATION_DIRECT_SEND_FAILED = "✅ Видео сгенерировано, но не удалось его отправить напрямую. Ссылка: {url}"
 INSUFFICIENT_BALANCE = (
     "😔 <b>Генерации закончились</b>\n\n"
     "Пополните баланс, чтобы продолжить создавать потрясающие видео!"
 )
 INSUFFICIENT_BALANCE_ALERT = "😔 Генерации закончились. Пополните баланс!"
+GENERATION_ALREADY_IN_PROGRESS = (
+    "⏳ У вас уже идёт генерация.\n\n"
+    "Дождитесь завершения текущей, затем запустите новую."
+)
+GENERATION_ALREADY_IN_PROGRESS_ALERT = "У вас уже идёт генерация, дождитесь завершения."
 
 # --- Packs ---
 PACKS_LIST = (

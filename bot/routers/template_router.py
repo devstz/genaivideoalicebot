@@ -56,13 +56,35 @@ class TemplateRouter(BaseRouter):
         
         await call.message.edit_text(text, reply_markup=kb)
 
-    async def start_generation(self, call: CallbackQuery, callback_data: TemplateCD, state: FSMContext, i18n) -> None:
+    async def start_generation(
+        self,
+        call: CallbackQuery,
+        callback_data: TemplateCD,
+        state: FSMContext,
+        generation_service: GenerationService,
+        i18n,
+    ) -> None:
+        if not await generation_service.can_create_generation(call.from_user.id):
+            await call.answer(i18n.GENERATION_ALREADY_IN_PROGRESS_ALERT, show_alert=True)
+            return
+
         template_id = callback_data.id
         await state.update_data(template_id=template_id, is_custom_prompt=False)
         await state.set_state(GenerationStates.uploading_photo)
         await call.message.edit_text(i18n.ASK_PHOTO, reply_markup=ask_photo_kb())
 
-    async def start_custom_prompt(self, call: CallbackQuery, state: FSMContext, user_service: UserService, i18n) -> None:
+    async def start_custom_prompt(
+        self,
+        call: CallbackQuery,
+        state: FSMContext,
+        user_service: UserService,
+        generation_service: GenerationService,
+        i18n,
+    ) -> None:
+        if not await generation_service.can_create_generation(call.from_user.id):
+            await call.answer(i18n.GENERATION_ALREADY_IN_PROGRESS_ALERT, show_alert=True)
+            return
+
         profile = await user_service.get_profile_info(call.from_user.id)
         if profile["balance"] <= 0:
             await call.answer(i18n.INSUFFICIENT_BALANCE_ALERT, show_alert=True)
@@ -130,7 +152,10 @@ class TemplateRouter(BaseRouter):
         await state.clear()
 
         if not generation:
-            await message.answer(i18n.INSUFFICIENT_BALANCE)
+            if not await generation_service.can_create_generation(user_id):
+                await message.answer(i18n.GENERATION_ALREADY_IN_PROGRESS)
+            else:
+                await message.answer(i18n.INSUFFICIENT_BALANCE)
             await message.answer(i18n.WELCOME_MAIN, reply_markup=main_menu_kb())
             return
 
@@ -142,7 +167,6 @@ class TemplateRouter(BaseRouter):
             )
         except Exception:
             await message.answer(i18n.GENERATION_STARTED)
-        await message.answer(i18n.WELCOME_MAIN, reply_markup=main_menu_kb())
 
 
     async def process_wishes(self, message: Message, state: FSMContext, generation_service: GenerationService, i18n) -> None:

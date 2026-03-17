@@ -30,6 +30,11 @@ class SQLAlchemyUserRepository:
         result = await self.session.execute(stmt)
         return result.scalars().first()
 
+    async def get_by_admin_login(self, admin_login: str) -> Optional[User]:
+        stmt = select(User).where(User.admin_login == admin_login)
+        result = await self.session.execute(stmt)
+        return result.scalars().first()
+
     async def count_users(
         self,
         *,
