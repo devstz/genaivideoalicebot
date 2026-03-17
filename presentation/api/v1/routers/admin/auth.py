@@ -135,6 +135,7 @@ async def login_with_password(
 
 
 @router.post("/credentials/setup", response_model=BindAdminCredentialsResponse)
+@router.post("/setup", response_model=BindAdminCredentialsResponse)
 async def setup_admin_credentials(
     request: BindAdminCredentialsRequest,
     admin: User = Depends(get_current_admin),
