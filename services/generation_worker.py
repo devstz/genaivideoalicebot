@@ -53,7 +53,12 @@ class VideoGenerationWorker:
     async def _update_draft(self, user_id: int, draft_id: int, text: str, lang: str = "ru") -> None:
         """Update Telegram draft message. Logs and continues on failure."""
         try:
-            await self.bot.send_message_draft(chat_id=user_id, draft_id=draft_id, text=text)
+            await self.bot.send_message_draft(
+                chat_id=user_id,
+                draft_id=draft_id,
+                text=text,
+                reply_parameters=None,
+            )
         except Exception as e:
             logger.debug(f"Draft update failed for task {draft_id}: {e}")
 

@@ -164,6 +164,7 @@ class TemplateRouter(BaseRouter):
                 chat_id=user_id,
                 draft_id=generation.id,
                 text=i18n.GENERATION_QUEUED,
+                reply_parameters=None,
             )
         except Exception:
             await message.answer(i18n.GENERATION_STARTED)
