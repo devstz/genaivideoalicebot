@@ -14,3 +14,6 @@ from .mailing import Mailing as Mailing
 from .referral import Referral as Referral
 from .user_action import UserAction as UserAction
 from .global_setting import GlobalSetting as GlobalSetting
+from .utm_campaign import UtmCampaign as UtmCampaign
+from .utm_click import UtmClick as UtmClick
+from .utm_registration import UtmRegistration as UtmRegistration

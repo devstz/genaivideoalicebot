@@ -16,6 +16,9 @@ from db.repo import (
     UserActionRepository,
     GlobalSettingRepository,
     MailingRepository,
+    UtmCampaignRepository,
+    UtmClickRepository,
+    UtmRegistrationRepository,
 )
 
 from .session import SessionFactory
@@ -36,6 +39,9 @@ class SQLAlchemyUnitOfWork:
     _user_action_repo: Optional[UserActionRepository]
     _global_setting_repo: Optional[GlobalSettingRepository]
     _mailing_repo: Optional[MailingRepository]
+    _utm_campaign_repo: Optional[UtmCampaignRepository]
+    _utm_click_repo: Optional[UtmClickRepository]
+    _utm_registration_repo: Optional[UtmRegistrationRepository]
 
     def __init__(self, session_factory: async_sessionmaker[AsyncSession] = SessionFactory) -> None:
         self._session_factory = session_factory
@@ -52,6 +58,9 @@ class SQLAlchemyUnitOfWork:
         self._user_action_repo = None
         self._global_setting_repo = None
         self._mailing_repo = None
+        self._utm_campaign_repo = None
+        self._utm_click_repo = None
+        self._utm_registration_repo = None
 
     # ---------- public accessors ----------
 
@@ -116,6 +125,21 @@ class SQLAlchemyUnitOfWork:
         assert self._mailing_repo is not None, "mailing_repo is not initialized"
         return self._mailing_repo
 
+    @property
+    def utm_campaign_repo(self) -> UtmCampaignRepository:
+        assert self._utm_campaign_repo is not None, "utm_campaign_repo is not initialized"
+        return self._utm_campaign_repo
+
+    @property
+    def utm_click_repo(self) -> UtmClickRepository:
+        assert self._utm_click_repo is not None, "utm_click_repo is not initialized"
+        return self._utm_click_repo
+
+    @property
+    def utm_registration_repo(self) -> UtmRegistrationRepository:
+        assert self._utm_registration_repo is not None, "utm_registration_repo is not initialized"
+        return self._utm_registration_repo
+
     # ---------- context manager ----------
 
     async def __aenter__(self) -> "SQLAlchemyUnitOfWork":
@@ -133,6 +157,9 @@ class SQLAlchemyUnitOfWork:
         self._user_action_repo = UserActionRepository(self._session)
         self._global_setting_repo = GlobalSettingRepository(self._session)
         self._mailing_repo = MailingRepository(self._session)
+        self._utm_campaign_repo = UtmCampaignRepository(self._session)
+        self._utm_click_repo = UtmClickRepository(self._session)
+        self._utm_registration_repo = UtmRegistrationRepository(self._session)
         return self
 
     async def __aexit__(self, exc_type, exc_val, traceback) -> bool:
@@ -159,6 +186,9 @@ class SQLAlchemyUnitOfWork:
             self._user_action_repo = None
             self._global_setting_repo = None
             self._mailing_repo = None
+            self._utm_campaign_repo = None
+            self._utm_click_repo = None
+            self._utm_registration_repo = None
 
         return False
 

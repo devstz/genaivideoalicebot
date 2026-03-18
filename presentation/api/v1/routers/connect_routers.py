@@ -7,6 +7,7 @@ from .admin.templates import templates_router
 from .admin.generations import generations_router
 from .admin.mailings import mailings_router
 from .admin.packs import packs_router
+from .admin.utm import utm_router
 
 def connect_routers(app: FastAPI) -> None:
     init_public_health_router(app)
@@ -16,3 +17,4 @@ def connect_routers(app: FastAPI) -> None:
     app.include_router(generations_router, prefix="/api/v1/admin")
     app.include_router(mailings_router, prefix="/api/v1/admin")
     app.include_router(packs_router, prefix="/api/v1/admin")
+    app.include_router(utm_router, prefix="/api/v1/admin")

@@ -10,6 +10,7 @@ from aiogram.utils.deep_linking import decode_payload
 from db.models import User as UserDB
 from db.models import Referral
 from db.uow import SQLAlchemyUnitOfWork
+from services.utm_service import UtmService
 
 logger = getLogger(__name__)
 
@@ -19,8 +20,8 @@ class UserMiddleware(BaseMiddleware):
         super().__init__()
         self._locks: dict[int, asyncio.Lock] = defaultdict(asyncio.Lock)
 
-    def _extract_referral_code(self, event: TelegramObject) -> str | None:
-        """Extract referral code from /start deep link payload."""
+    def _extract_start_payload(self, event: TelegramObject) -> str | None:
+        """Extract decoded /start deep link payload."""
         if not isinstance(event, Update) or not event.message or not event.message.text:
             return None
         text = event.message.text
@@ -31,11 +32,28 @@ class UserMiddleware(BaseMiddleware):
             decoded = decode_payload(raw_payload)
         except Exception:
             decoded = raw_payload
+        return decoded
+
+    def _extract_referral_code(self, event: TelegramObject) -> str | None:
+        """Extract referral code from /start deep link payload."""
+        decoded = self._extract_start_payload(event)
+        if not decoded:
+            return None
 
         # Support both "ref_CODE" and just raw code
         if decoded.startswith("ref_"):
             return decoded[4:]
         return decoded
+
+    def _extract_utm_start_code(self, event: TelegramObject) -> str | None:
+        payload = self._extract_start_payload(event)
+        if not payload:
+            return None
+        if payload.startswith("auth_") or payload.startswith("ref_"):
+            return None
+        if payload.startswith("utm_"):
+            return payload[4:]
+        return payload
 
     async def _apply_referral(self, uow: SQLAlchemyUnitOfWork, new_user: UserDB, referral_code: str) -> None:
         """Create referral pair and give +1 gen to referrer."""
@@ -68,6 +86,7 @@ class UserMiddleware(BaseMiddleware):
 
         async with self._locks[tg_user.id]:
             db_user = await uow.user_repo.get(tg_user.id)
+            is_new_user = False
 
             if db_user is None:
                 try:
@@ -81,6 +100,7 @@ class UserMiddleware(BaseMiddleware):
                             language_code=tg_user.language_code,
                         )
                     )
+                    is_new_user = True
                     await uow.user_balance_repo.get_or_create(tg_user.id)
 
                     # Process referral right after user creation
@@ -118,6 +138,22 @@ class UserMiddleware(BaseMiddleware):
                     changed = True
                 if changed:
                     await uow.user_repo.update(db_user)
+
+            utm_start_code = self._extract_utm_start_code(event)
+            if utm_start_code:
+                campaign = await UtmService.resolve_campaign_by_start_code(uow, start_code=utm_start_code)
+                if campaign:
+                    if is_new_user:
+                        await UtmService.track_registration_if_new(
+                            uow,
+                            campaign_id=campaign.id,
+                            user_id=db_user.user_id,
+                        )
+                    await UtmService.track_click_if_new(
+                        uow,
+                        campaign_id=campaign.id,
+                        user_id=db_user.user_id,
+                    )
 
             data.update(user=db_user)
 

@@ -9,3 +9,6 @@ from .mailing_repo import MailingRepository as MailingRepository
 from .referral_repo import ReferralRepository as ReferralRepository
 from .user_action_repo import UserActionRepository as UserActionRepository
 from .global_setting_repo import GlobalSettingRepository as GlobalSettingRepository
+from .utm_campaign_repo import UtmCampaignRepository as UtmCampaignRepository
+from .utm_click_repo import UtmClickRepository as UtmClickRepository
+from .utm_registration_repo import UtmRegistrationRepository as UtmRegistrationRepository
