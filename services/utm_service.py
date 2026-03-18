@@ -187,7 +187,7 @@ class UtmService:
 
     @staticmethod
     async def delete_campaign(uow: SQLAlchemyUnitOfWork, campaign: UtmCampaign) -> None:
-        uow.utm_campaign_repo.delete(campaign)
+        await uow.utm_campaign_repo.delete(campaign)
 
     @staticmethod
     async def get_campaign_registrations(

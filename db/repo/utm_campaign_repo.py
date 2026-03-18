@@ -84,5 +84,5 @@ class UtmCampaignRepository:
         await self.session.flush()
         return campaign
 
-    def delete(self, campaign: UtmCampaign) -> None:
-        self.session.delete(campaign)
+    async def delete(self, campaign: UtmCampaign) -> None:
+        await self.session.delete(campaign)
