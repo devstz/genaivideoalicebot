@@ -18,6 +18,7 @@ class GenerationCD(CallbackData, prefix="gen"):
 
 class PaymentCD(CallbackData, prefix="pay"):
     pack_id: int
+    action: str = "start"
 
 class ConfirmCD(CallbackData, prefix="confirm"):
     action: str

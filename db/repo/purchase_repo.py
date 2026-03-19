@@ -15,6 +15,16 @@ class PurchaseRepository:
         result = await self.session.execute(stmt)
         return list(result.scalars().all())
 
+    async def get(self, purchase_id: int) -> Purchase | None:
+        stmt = select(Purchase).where(Purchase.id == purchase_id)
+        result = await self.session.execute(stmt)
+        return result.scalars().first()
+
+    async def get_by_external_invoice_id(self, external_invoice_id: str) -> Purchase | None:
+        stmt = select(Purchase).where(Purchase.external_invoice_id == external_invoice_id).order_by(Purchase.id.desc())
+        result = await self.session.execute(stmt)
+        return result.scalars().first()
+
     async def add(self, purchase: Purchase) -> Purchase:
         self.session.add(purchase)
         await self.session.flush()

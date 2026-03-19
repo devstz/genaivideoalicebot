@@ -162,10 +162,20 @@ class VideoGenerationWorker:
             if task.template_id is not None:
                 template = await uow.template_repo.get(task.template_id)
                 if template:
-                    parts = [template.base_prompt]
-                    if task.user_prompt and task.user_prompt.strip():
-                        parts.append(task.user_prompt.strip())
-                    prompt = "\n".join(parts)
+                    base_prompt = (template.base_prompt or "").strip()
+                    additional_text = (task.user_prompt or "").strip()
+
+                    if "{additional_text}" in base_prompt:
+                        prompt = base_prompt.replace("{additional_text}", additional_text).strip()
+                    else:
+                        # Backward compatibility for templates without placeholder.
+                        parts = [base_prompt]
+                        if additional_text:
+                            parts.append(additional_text)
+                        prompt = "\n".join(part for part in parts if part).strip()
+
+                    if not prompt:
+                        prompt = "cinematic video"
                     negative_prompt = template.negative_prompt
                 else:
                     prompt = task.user_prompt or "cinematic video"

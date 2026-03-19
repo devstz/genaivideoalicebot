@@ -31,6 +31,9 @@ BTN_PROFILE = "👤 Profile"
 BTN_BACK = "🔙 Back"
 BTN_BUY_PACK = "{name} — {price} RUB ({count} pcs)"
 BTN_MOCK_PAY = "✅ Pay (Test)"
+BTN_LAVA_PAY = "💳 Pay with Lava"
+BTN_PAY_OPEN_LINK = "🔗 Open payment page"
+BTN_PAY_SKIP_EMAIL = "⏭ Skip email"
 BTN_SKIP = "⏭ Skip"
 BTN_CONFIRM = "✅ Confirm"
 BTN_CUSTOM_PROMPT = "✨ Create your own"
@@ -132,6 +135,21 @@ PAYMENT_SUCCESS = (
     "Generations have been added to your balance. "
     "Start animating photos now! 🚀"
 )
+PAYMENT_ENTER_EMAIL = (
+    "📧 <b>Enter your email for payment</b>\n\n"
+    "The receipt from the payment system will be sent to this email.\n"
+    "You can skip, but then no receipt will be delivered."
+)
+PAYMENT_INVALID_EMAIL = "❌ Invalid email format. Please try again."
+PAYMENT_EMAIL_SKIPPED_WARNING = "⚠️ You skipped email. A technical address will be used for payment."
+PAYMENT_CREATED_OPEN_LINK = (
+    "💳 Payment link has been created.\n\n"
+    "Open the link below and complete the payment.\n"
+    "Generations will be credited automatically after confirmation."
+)
+PAYMENT_PROVIDER_UNAVAILABLE = "❌ Payment provider is temporarily unavailable."
+PAYMENT_OFFER_NOT_CONFIGURED = "❌ This pack has no Lava.top offerId configured."
+PAYMENT_CONFIRMED_NOTIFY = "✅ Payment confirmed! <b>{count}</b> generations were credited."
 
 # --- Referrals ---
 REFERRAL_APPLIED = "🎉 You signed up via a referral link! Bonus credited."

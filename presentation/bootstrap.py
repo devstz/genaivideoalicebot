@@ -87,18 +87,19 @@ def _configure_cors(app: FastAPI) -> None:
 
 def create_app() -> FastAPI:
     """Create and configure the FastAPI application."""
-    
+    settings = get_settings()
+
     app = FastAPI(
         title="AI Video Bot API",
         version="1.0.0",
         redirect_slashes=False,
-        lifespan=lifespan
+        lifespan=lifespan,
+        root_path=settings.API_ROOT_PATH,
     )
 
     _configure_cors(app)
     connect_routers(app)
 
-    settings = get_settings()
     media_dir = Path(settings.MEDIA_ROOT).resolve()
     if media_dir.exists():
         app.mount("/media", StaticFiles(directory=str(media_dir)), name="media")

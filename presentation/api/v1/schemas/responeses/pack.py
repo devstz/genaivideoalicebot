@@ -17,6 +17,7 @@ class PackRead(BaseModel):
     icon: str = "payments"
     is_active: bool = True
     is_bestseller: bool = False
+    lava_offer_id: Optional[str] = None
     created_at: Optional[datetime] = None
 
 
@@ -28,6 +29,7 @@ class PackCreate(BaseModel):
     icon: str = "payments"
     is_active: bool = True
     is_bestseller: bool = False
+    lava_offer_id: Optional[str] = None
 
 
 class PackUpdate(BaseModel):
@@ -38,3 +40,4 @@ class PackUpdate(BaseModel):
     icon: Optional[str] = None
     is_active: Optional[bool] = None
     is_bestseller: Optional[bool] = None
+    lava_offer_id: Optional[str] = None

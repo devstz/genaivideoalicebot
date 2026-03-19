@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException
 from presentation.dependencies.security import get_current_admin
 from presentation.dependencies import get_uow_dependency
@@ -9,8 +11,23 @@ from presentation.api.v1.schemas.responeses.pack import PackRead, PackCreate, Pa
 from db.uow import SQLAlchemyUnitOfWork
 from db.models.user import User
 from db.models.pack import Pack
+from services.providers.payment.lava_provider import LavaPaymentProvider
+
+logger = logging.getLogger(__name__)
 
 packs_router = APIRouter(prefix="/packs", tags=["Admin Packs"])
+
+
+async def _sync_price_from_lava(lava_offer_id: str | None) -> float | None:
+    """Fetch the price from Lava catalog for a given offerId. Returns None on any failure."""
+    if not lava_offer_id:
+        return None
+    try:
+        provider = LavaPaymentProvider()
+        return await provider.get_offer_price(lava_offer_id)
+    except Exception as exc:
+        logger.warning("Failed to fetch price from Lava for offer %s: %s", lava_offer_id, exc)
+        return None
 
 
 def _model_to_read(p: Pack) -> PackRead:
@@ -23,6 +40,7 @@ def _model_to_read(p: Pack) -> PackRead:
         icon=p.icon,
         is_active=p.is_active,
         is_bestseller=p.is_bestseller,
+        lava_offer_id=p.lava_offer_id,
         created_at=p.created_at,
     )
 
@@ -54,14 +72,21 @@ async def create_pack(
     uow: SQLAlchemyUnitOfWork = Depends(get_uow_dependency),
     admin: User = Depends(get_current_admin),
 ):
+    lava_offer_id = payload.lava_offer_id or None
+    price = payload.price
+    lava_price = await _sync_price_from_lava(lava_offer_id)
+    if lava_price is not None:
+        price = lava_price
+
     pack = Pack(
         name=payload.name,
         description=payload.description or None,
         generations_count=payload.generations_count,
-        price=payload.price,
+        price=price,
         icon=payload.icon or "payments",
         is_active=payload.is_active if payload.is_active is not None else True,
         is_bestseller=payload.is_bestseller or False,
+        lava_offer_id=lava_offer_id,
     )
     pack = await uow.pack_repo.add(pack)
     return _model_to_read(pack)
@@ -93,6 +118,14 @@ async def update_pack(
         updates["is_active"] = payload.is_active
     if payload.is_bestseller is not None:
         updates["is_bestseller"] = payload.is_bestseller
+    if payload.lava_offer_id is not None:
+        updates["lava_offer_id"] = payload.lava_offer_id or None
+
+    new_offer_id = updates.get("lava_offer_id", pack.lava_offer_id)
+    if new_offer_id:
+        lava_price = await _sync_price_from_lava(new_offer_id)
+        if lava_price is not None:
+            updates["price"] = lava_price
 
     if updates:
         await uow.pack_repo.update(pack, **updates)

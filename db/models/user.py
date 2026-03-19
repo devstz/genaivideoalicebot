@@ -33,6 +33,7 @@ class User(Base, TimestampMixin, ModelHelpersMixin):
     first_name: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
     last_name: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
     language_code: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
+    email: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     meta: Mapped[Optional[dict[str, Any]]] = mapped_column(
         JSONB,
         nullable=True,

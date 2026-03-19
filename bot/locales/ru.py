@@ -32,6 +32,9 @@ BTN_SETTINGS = "⚙️ Настройки"
 BTN_BACK = "🔙 Назад"
 BTN_BUY_PACK = "{name} — {price} ₽ ({count} шт.)"
 BTN_MOCK_PAY = "✅ Оплатить (Тест)"
+BTN_LAVA_PAY = "💳 Оплатить через Lava"
+BTN_PAY_OPEN_LINK = "🔗 Открыть оплату"
+BTN_PAY_SKIP_EMAIL = "⏭ Пропустить email"
 BTN_SKIP = "⏭ Пропустить"
 BTN_CONFIRM = "✅ Подтвердить"
 BTN_CUSTOM_PROMPT = "✨ Придумать свой"
@@ -155,6 +158,21 @@ PAYMENT_SUCCESS = (
     "Генерации уже на вашем балансе. "
     "Скорее оживляйте фото! 🚀"
 )
+PAYMENT_ENTER_EMAIL = (
+    "📧 <b>Укажите email для оплаты</b>\n\n"
+    "На этот email придет чек от платежной системы.\n"
+    "Можно пропустить, но тогда чек не будет доставлен."
+)
+PAYMENT_INVALID_EMAIL = "❌ Неверный формат email. Попробуйте еще раз."
+PAYMENT_EMAIL_SKIPPED_WARNING = "⚠️ Вы пропустили email. Для оплаты будет использован технический адрес."
+PAYMENT_CREATED_OPEN_LINK = (
+    "💳 Ссылка на оплату сформирована.\n\n"
+    "Нажмите кнопку ниже и завершите оплату.\n"
+    "После подтверждения генерации начислятся автоматически."
+)
+PAYMENT_PROVIDER_UNAVAILABLE = "❌ Платежный провайдер временно недоступен."
+PAYMENT_OFFER_NOT_CONFIGURED = "❌ Для этого пакета не задан offerId Lava.top."
+PAYMENT_CONFIRMED_NOTIFY = "✅ Оплата подтверждена! Вам начислено <b>{count}</b> генераций."
 
 # --- Referrals ---
 REFERRAL_APPLIED = "🎉 Вы зарегистрировались по реферальной ссылке! Бонус начислен."

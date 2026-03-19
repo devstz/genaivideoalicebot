@@ -12,3 +12,8 @@ class GenerationStates(StatesGroup):
 class ChangePasswordStates(StatesGroup):
     waiting_current_password = State()
     waiting_new_password = State()
+
+
+class PaymentStates(StatesGroup):
+    waiting_email = State()
+    waiting_payment = State()

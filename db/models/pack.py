@@ -11,6 +11,7 @@ from .base import Base, TimestampMixin, ModelHelpersMixin, IdPkMixin
 class Pack(Base, TimestampMixin, ModelHelpersMixin, IdPkMixin):
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     description: Mapped[Optional[str]] = mapped_column(String(255))
+    lava_offer_id: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
     generations_count: Mapped[int] = mapped_column(nullable=False)
     price: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true", nullable=False)

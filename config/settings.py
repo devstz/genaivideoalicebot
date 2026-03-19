@@ -13,6 +13,10 @@ class Config(BaseSettings):
     MAX_CONCURRENT_GENERATIONS: int = 10
     MAX_ACTIVE_GENERATIONS_PER_USER: int = 1
     ADMIN_PASSWORD_MIN_LENGTH: int = 8
+    LAVA_API_KEY: str = ""
+    LAVA_WEBHOOK_SECRET: str = ""
+    PAYMENT_PROVIDER: str = "mock"
+    API_ROOT_PATH: str = ""
 
     model_config = SettingsConfigDict(
         env_file='.env',

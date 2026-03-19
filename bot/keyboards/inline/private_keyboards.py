@@ -4,7 +4,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from bot.locales.ru import (
     BTN_AGREEMENT, BTN_ACCEPT_AGREEMENT,
     BTN_REVIVE_PHOTO, BTN_PACKS, BTN_PROFILE,
-    BTN_BACK, BTN_BUY_PACK, BTN_MOCK_PAY,
+    BTN_BACK, BTN_BUY_PACK, BTN_MOCK_PAY, BTN_LAVA_PAY, BTN_PAY_OPEN_LINK, BTN_PAY_SKIP_EMAIL,
     BTN_SKIP, BTN_CONFIRM, BTN_CUSTOM_PROMPT,
     BTN_SETTINGS, BTN_CHANGE_PASSWORD, BTN_TOGGLE_2FA_ON, BTN_TOGGLE_2FA_OFF, BTN_SETTINGS_REFRESH
 )
@@ -73,7 +73,31 @@ def packs_kb(packs: list[Pack]) -> InlineKeyboardMarkup:
 
 def payment_mock_kb(pack_id: int) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
-    builder.button(text=BTN_MOCK_PAY, callback_data=PaymentCD(pack_id=pack_id))
+    builder.button(text=BTN_MOCK_PAY, callback_data=PaymentCD(pack_id=pack_id, action="mock"))
+    builder.button(text=BTN_BACK, callback_data=MainMenuCD(action="packs"))
+    builder.adjust(1)
+    return builder.as_markup()
+
+
+def payment_lava_kb(pack_id: int) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    builder.button(text=BTN_LAVA_PAY, callback_data=PaymentCD(pack_id=pack_id, action="lava"))
+    builder.button(text=BTN_BACK, callback_data=MainMenuCD(action="packs"))
+    builder.adjust(1)
+    return builder.as_markup()
+
+
+def payment_email_kb() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    builder.button(text=BTN_PAY_SKIP_EMAIL, callback_data=ConfirmCD(action="pay_skip_email"))
+    builder.button(text=BTN_BACK, callback_data=MainMenuCD(action="packs"))
+    builder.adjust(1)
+    return builder.as_markup()
+
+
+def payment_checkout_kb(payment_url: str) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    builder.button(text=BTN_PAY_OPEN_LINK, url=payment_url)
     builder.button(text=BTN_BACK, callback_data=MainMenuCD(action="packs"))
     builder.adjust(1)
     return builder.as_markup()
