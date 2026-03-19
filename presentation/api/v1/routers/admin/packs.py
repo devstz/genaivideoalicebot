@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
 from presentation.dependencies.security import get_current_admin
@@ -18,16 +19,45 @@ logger = logging.getLogger(__name__)
 packs_router = APIRouter(prefix="/packs", tags=["Admin Packs"])
 
 
-async def _sync_price_from_lava(lava_offer_id: str | None) -> float | None:
-    """Fetch the price from Lava catalog for a given offerId. Returns None on any failure."""
+def _normalize_prices(raw: dict[str, Any] | None) -> dict[str, float]:
+    out: dict[str, float] = {}
+    if not raw:
+        return out
+    for k, v in raw.items():
+        if v is None:
+            continue
+        try:
+            out[str(k).upper()] = float(v)
+        except (TypeError, ValueError):
+            continue
+    return out
+
+
+async def _prices_from_lava(lava_offer_id: str | None) -> dict[str, float] | None:
     if not lava_offer_id:
         return None
     try:
         provider = LavaPaymentProvider()
-        return await provider.get_offer_price(lava_offer_id)
+        return await provider.get_offer_prices_by_currency(lava_offer_id)
     except Exception as exc:
-        logger.warning("Failed to fetch price from Lava for offer %s: %s", lava_offer_id, exc)
+        logger.warning("Failed to fetch Lava prices for offer %s: %s", lava_offer_id, exc)
         return None
+
+
+def _merge_prices(
+    base: dict[str, float],
+    from_lava: dict[str, float] | None,
+    *,
+    lava_offer_id: str | None,
+) -> dict[str, float]:
+    merged = dict(base)
+    if lava_offer_id and from_lava:
+        merged.update(from_lava)
+    return merged
+
+
+def _price_rub_column(prices: dict[str, float], fallback: float) -> float:
+    return float(prices.get("RUB", fallback))
 
 
 def _model_to_read(p: Pack) -> PackRead:
@@ -37,6 +67,7 @@ def _model_to_read(p: Pack) -> PackRead:
         description=p.description or "",
         generations_count=p.generations_count,
         price=float(p.price),
+        prices_by_currency=p.prices_by_currency if isinstance(p.prices_by_currency, dict) else None,
         icon=p.icon,
         is_active=p.is_active,
         is_bestseller=p.is_bestseller,
@@ -73,16 +104,20 @@ async def create_pack(
     admin: User = Depends(get_current_admin),
 ):
     lava_offer_id = payload.lava_offer_id or None
-    price = payload.price
-    lava_price = await _sync_price_from_lava(lava_offer_id)
-    if lava_price is not None:
-        price = lava_price
+    manual = _normalize_prices(payload.prices_by_currency)
+    if not manual:
+        manual = {"RUB": float(payload.price)}
+
+    lava_prices = await _prices_from_lava(lava_offer_id)
+    prices = _merge_prices(manual, lava_prices, lava_offer_id=lava_offer_id)
+    price_col = _price_rub_column(prices, float(payload.price))
 
     pack = Pack(
         name=payload.name,
         description=payload.description or None,
         generations_count=payload.generations_count,
-        price=price,
+        price=price_col,
+        prices_by_currency=prices or None,
         icon=payload.icon or "payments",
         is_active=payload.is_active if payload.is_active is not None else True,
         is_bestseller=payload.is_bestseller or False,
@@ -103,15 +138,13 @@ async def update_pack(
     if not pack:
         raise HTTPException(status_code=404, detail="Pack not found")
 
-    updates = {}
+    updates: dict[str, Any] = {}
     if payload.name is not None:
         updates["name"] = payload.name
     if payload.description is not None:
         updates["description"] = payload.description
     if payload.generations_count is not None:
         updates["generations_count"] = payload.generations_count
-    if payload.price is not None:
-        updates["price"] = payload.price
     if payload.icon is not None:
         updates["icon"] = payload.icon
     if payload.is_active is not None:
@@ -121,11 +154,21 @@ async def update_pack(
     if payload.lava_offer_id is not None:
         updates["lava_offer_id"] = payload.lava_offer_id or None
 
+    current_prices = _normalize_prices(pack.prices_by_currency if isinstance(pack.prices_by_currency, dict) else None)
+    if not current_prices:
+        current_prices = {"RUB": float(pack.price)}
+
+    if payload.prices_by_currency is not None:
+        current_prices = _normalize_prices(payload.prices_by_currency)
+
+    if payload.price is not None:
+        current_prices["RUB"] = float(payload.price)
+
     new_offer_id = updates.get("lava_offer_id", pack.lava_offer_id)
-    if new_offer_id:
-        lava_price = await _sync_price_from_lava(new_offer_id)
-        if lava_price is not None:
-            updates["price"] = lava_price
+    lava_prices = await _prices_from_lava(new_offer_id)
+    merged = _merge_prices(current_prices, lava_prices, lava_offer_id=new_offer_id)
+    updates["prices_by_currency"] = merged
+    updates["price"] = _price_rub_column(merged, float(pack.price))
 
     if updates:
         await uow.pack_repo.update(pack, **updates)

@@ -5,7 +5,7 @@ import logging
 from typing import Any, Mapping
 
 import httpx
-from lava_top_sdk import Currency, LavaClient, LavaClientConfig
+from lava_top_sdk import Currency, FeedVisibility, LavaClient, LavaClientConfig
 
 from config.settings import get_settings
 from db.models import Pack
@@ -17,8 +17,8 @@ logger = logging.getLogger(__name__)
 
 class LavaPaymentProvider(BasePaymentProvider):
     """
-    Lava.top: официальный lava-top-sdk (синхронный requests) + asyncio.to_thread.
-    Fallback на прямой HTTP (v2 invoice / сырой список продуктов), если SDK не совпал с ответом API.
+    Lava.top: актуальный API — POST /api/v3/invoice; запасные варианты v2 и SDK.
+    Список продуктов: feedVisibility=ALL (иначе скрытые из ленты не попадают в админку).
     """
 
     name = "lava"
@@ -47,34 +47,52 @@ class LavaPaymentProvider(BasePaymentProvider):
         if not pack.lava_offer_id:
             raise ValueError("Pack is not connected to Lava offerId")
 
-        try:
+        last_error: Exception | None = None
+        for name, coro_factory in (
+            ("v3", lambda: self._create_payment_http_v3(buyer_email=buyer_email, pack=pack)),
+            ("v2", lambda: self._create_payment_http_v2(buyer_email=buyer_email, pack=pack)),
+            ("sdk", lambda: self._create_payment_sdk(buyer_email=buyer_email, pack=pack)),
+        ):
+            try:
+                return await coro_factory()
+            except Exception as exc:
+                last_error = exc
+                logger.warning("Lava invoice via %s failed: %s", name, exc)
 
-            def _create() -> PaymentCreateResult:
-                inv = self._lava_client().create_one_time_payment(
-                    email=buyer_email,
-                    offer_id=pack.lava_offer_id,
-                    currency=Currency.RUB,
-                )
-                raw = inv.model_dump(mode="json")
-                return PaymentCreateResult(
-                    provider=self.name,
-                    invoice_id=inv.id,
-                    payment_url=inv.paymentUrl,
-                    status=(inv.status.value if hasattr(inv.status, "value") else str(inv.status)).lower(),
-                    amount=float(inv.amountTotal.amount),
-                    currency=inv.amountTotal.currency.value
-                    if hasattr(inv.amountTotal.currency, "value")
-                    else str(inv.amountTotal.currency),
-                    raw=raw,
-                )
+        assert last_error is not None
+        raise last_error
 
-            return await asyncio.to_thread(_create)
-        except Exception as exc:
-            logger.warning("Lava SDK invoice failed, HTTP v2 fallback: %s", exc)
-            return await self._create_payment_http_v2(buyer_email=buyer_email, pack=pack)
+    def _payment_result_from_invoice_json(self, data: dict[str, Any]) -> PaymentCreateResult:
+        amount_total = data.get("amountTotal") or {}
+        return PaymentCreateResult(
+            provider=self.name,
+            invoice_id=data.get("id"),
+            payment_url=data.get("paymentUrl"),
+            status=str(data.get("status") or "").lower(),
+            amount=float(amount_total.get("amount")) if amount_total.get("amount") is not None else None,
+            currency=amount_total.get("currency"),
+            raw=data,
+        )
+
+    async def _create_payment_http_v3(self, *, buyer_email: str, pack: Pack) -> PaymentCreateResult:
+        """Текущий контракт Lava (см. gate.lava.top/docs): минимальное тело без periodicity."""
+        payload = {
+            "email": buyer_email,
+            "offerId": pack.lava_offer_id,
+            "currency": "RUB",
+        }
+        headers = {
+            "X-Api-Key": self.settings.LAVA_API_KEY,
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        }
+        async with httpx.AsyncClient(timeout=20.0) as client:
+            response = await client.post(f"{self.api_base}/api/v3/invoice", json=payload, headers=headers)
+            response.raise_for_status()
+            data = response.json()
+        return self._payment_result_from_invoice_json(data)
 
     async def _create_payment_http_v2(self, *, buyer_email: str, pack: Pack) -> PaymentCreateResult:
-        # gate.lava.top отдаёт 404 на /api/v3/invoice; рабочий путь — /api/v2/invoice (как в lava-top-sdk).
         payload = {
             "email": buyer_email,
             "offerId": pack.lava_offer_id,
@@ -90,17 +108,29 @@ class LavaPaymentProvider(BasePaymentProvider):
             response = await client.post(f"{self.api_base}/api/v2/invoice", json=payload, headers=headers)
             response.raise_for_status()
             data = response.json()
+        return self._payment_result_from_invoice_json(data)
 
-        amount_total = data.get("amountTotal") or {}
-        return PaymentCreateResult(
-            provider=self.name,
-            invoice_id=data.get("id"),
-            payment_url=data.get("paymentUrl"),
-            status=str(data.get("status") or "").lower(),
-            amount=float(amount_total.get("amount")) if amount_total.get("amount") is not None else None,
-            currency=amount_total.get("currency"),
-            raw=data,
-        )
+    async def _create_payment_sdk(self, *, buyer_email: str, pack: Pack) -> PaymentCreateResult:
+        def _create() -> PaymentCreateResult:
+            inv = self._lava_client().create_one_time_payment(
+                email=buyer_email,
+                offer_id=pack.lava_offer_id,
+                currency=Currency.RUB,
+            )
+            raw = inv.model_dump(mode="json")
+            return PaymentCreateResult(
+                provider=self.name,
+                invoice_id=inv.id,
+                payment_url=inv.paymentUrl,
+                status=(inv.status.value if hasattr(inv.status, "value") else str(inv.status)).lower(),
+                amount=float(inv.amountTotal.amount),
+                currency=inv.amountTotal.currency.value
+                if hasattr(inv.amountTotal.currency, "value")
+                else str(inv.amountTotal.currency),
+                raw=raw,
+            )
+
+        return await asyncio.to_thread(_create)
 
     def parse_webhook(
         self,
@@ -140,7 +170,10 @@ class LavaPaymentProvider(BasePaymentProvider):
         try:
 
             def _list_sdk() -> dict[str, Any]:
-                products = self._lava_client().get_products()
+                products = self._lava_client().get_products(
+                    feed_visibility=FeedVisibility.ALL,
+                    show_all_subscription_periods=True,
+                )
                 return {"items": [p.model_dump(mode="json") for p in products]}
 
             return await asyncio.to_thread(_list_sdk)
@@ -151,13 +184,21 @@ class LavaPaymentProvider(BasePaymentProvider):
                 "Accept": "application/json",
             }
             async with httpx.AsyncClient(timeout=20.0) as client:
-                response = await client.get(f"{self.api_base}/api/v2/products", headers=headers)
+                response = await client.get(
+                    f"{self.api_base}/api/v2/products",
+                    headers=headers,
+                    params={
+                        "feedVisibility": "ALL",
+                        "showAllSubscriptionPeriods": "true",
+                    },
+                )
                 response.raise_for_status()
                 return response.json()
 
-    async def get_offer_price(self, offer_id: str) -> float | None:
-        """Fetch the first price amount for a given offerId from the Lava catalog."""
+    async def get_offer_prices_by_currency(self, offer_id: str) -> dict[str, float]:
+        """Все суммы ONE_TIME по валютам для offerId (RUB, USD, EUR, …)."""
         data = await self.list_products()
+        out: dict[str, float] = {}
         for item in (data.get("items") or []):
             product = item.get("data", item) if isinstance(item, dict) else item
             if not isinstance(product, dict):
@@ -165,9 +206,20 @@ class LavaPaymentProvider(BasePaymentProvider):
             for offer in (product.get("offers") or []):
                 if not isinstance(offer, dict) or str(offer.get("id", "")) != offer_id:
                     continue
-                prices = offer.get("prices") or []
-                if prices and isinstance(prices[0], dict):
-                    amount = prices[0].get("amount")
-                    if isinstance(amount, (int, float)):
-                        return float(amount)
-        return None
+                for p in offer.get("prices") or []:
+                    if not isinstance(p, dict):
+                        continue
+                    per = str(p.get("periodicity") or "ONE_TIME").upper()
+                    if per != "ONE_TIME":
+                        continue
+                    cur = str(p.get("currency") or "").upper()
+                    amt = p.get("amount")
+                    if cur and isinstance(amt, (int, float)):
+                        out[cur] = float(amt)
+                return out
+        return out
+
+    async def get_offer_price(self, offer_id: str) -> float | None:
+        """Сумма в RUB для обратной совместимости (mock price column)."""
+        prices = await self.get_offer_prices_by_currency(offer_id)
+        return prices.get("RUB") or (next(iter(prices.values())) if prices else None)

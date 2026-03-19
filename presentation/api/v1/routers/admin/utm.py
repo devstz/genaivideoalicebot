@@ -97,7 +97,8 @@ async def get_utm_summary(
         unique_clicks=metrics.unique_clicks,
         new_users=metrics.new_users,
         purchases=metrics.purchases,
-        revenue=metrics.revenue,
+        revenue_rub=metrics.revenue_rub,
+        revenue_usd=metrics.revenue_usd,
     )
 
 
@@ -131,7 +132,8 @@ async def export_utm_campaigns_csv(
             "unique_clicks",
             "registrations",
             "purchases",
-            "revenue",
+            "revenue_rub",
+            "revenue_usd",
             "created_at",
         ]
     )
@@ -146,7 +148,8 @@ async def export_utm_campaigns_csv(
                 metrics.unique_clicks,
                 metrics.new_users,
                 metrics.purchases,
-                metrics.revenue,
+                metrics.revenue_rub,
+                metrics.revenue_usd,
                 campaign.created_at.isoformat(),
             ]
         )
@@ -233,13 +236,19 @@ async def get_utm_campaign_stats(
     if not campaign:
         raise HTTPException(status_code=404, detail="UTM campaign not found")
 
-    metrics = await UtmService.get_metrics_for_campaign(uow, campaign_id, from_date=from_date, to_date=to_date)
+    metrics = await UtmService.get_metrics_for_campaign(
+        uow,
+        campaign_id,
+        from_date=from_date,
+        to_date=to_date,
+    )
     conversion = round((metrics.purchases / metrics.unique_clicks) * 100, 2) if metrics.unique_clicks else 0.0
     return UtmStatsResponse(
         unique_clicks=metrics.unique_clicks,
         new_users=metrics.new_users,
         purchases=metrics.purchases,
-        revenue=metrics.revenue,
+        revenue_rub=metrics.revenue_rub,
+        revenue_usd=metrics.revenue_usd,
         conversion=conversion,
     )
 
@@ -328,7 +337,8 @@ async def export_utm_campaign_csv(
     writer.writerow(["unique_clicks", export_data["summary"]["unique_clicks"]])
     writer.writerow(["new_users", export_data["summary"]["new_users"]])
     writer.writerow(["purchases", export_data["summary"]["purchases"]])
-    writer.writerow(["revenue", export_data["summary"]["revenue"]])
+    writer.writerow(["revenue_rub", export_data["summary"]["revenue_rub"]])
+    writer.writerow(["revenue_usd", export_data["summary"]["revenue_usd"]])
     writer.writerow([])
     writer.writerow(["user_id", "username", "full_name", "registered_at"])
     for registration in export_data["registrations"]:

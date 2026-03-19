@@ -10,6 +10,7 @@ from config.settings import get_settings
 from db.models import Pack, Purchase, User, UtmCampaign, UtmClick, UtmRegistration
 from db.uow import SQLAlchemyUnitOfWork
 from enums import PaymentStatus
+from services.revenue_aggregation import purchase_revenue_line_expr
 
 
 @dataclass
@@ -17,7 +18,8 @@ class UtmMetrics:
     unique_clicks: int = 0
     new_users: int = 0
     purchases: int = 0
-    revenue: float = 0.0
+    revenue_rub: float = 0.0
+    revenue_usd: float = 0.0
 
 
 class UtmService:
@@ -46,6 +48,34 @@ class UtmService:
             return value.astimezone(timezone.utc)
 
         return _ensure_tz(from_date), _ensure_tz(to_date)
+
+    @staticmethod
+    async def _sum_revenue_rub_usd(
+        uow: SQLAlchemyUnitOfWork,
+        purchase_where,
+        *,
+        join_utm_registration: bool,
+    ) -> tuple[float, float]:
+        line_rub = purchase_revenue_line_expr("RUB")
+        line_usd = purchase_revenue_line_expr("USD")
+        rub_from = (
+            select(func.sum(line_rub))
+            .select_from(Purchase)
+            .join(Pack, Purchase.pack_id == Pack.id)
+        )
+        usd_from = (
+            select(func.sum(line_usd))
+            .select_from(Purchase)
+            .join(Pack, Purchase.pack_id == Pack.id)
+        )
+        if join_utm_registration:
+            rub_from = rub_from.join(UtmRegistration, UtmRegistration.user_id == Purchase.user_id)
+            usd_from = usd_from.join(UtmRegistration, UtmRegistration.user_id == Purchase.user_id)
+        rub_stmt = rub_from.where(purchase_where)
+        usd_stmt = usd_from.where(purchase_where)
+        rub = UtmService._to_float(await uow.session.scalar(rub_stmt))
+        usd = UtmService._to_float(await uow.session.scalar(usd_stmt))
+        return rub, usd
 
     @staticmethod
     async def get_metrics_for_campaign(
@@ -79,22 +109,22 @@ class UtmService:
             .join(UtmRegistration, UtmRegistration.user_id == Purchase.user_id)
             .where(and_(*purchase_filters))
         )
-        revenue_stmt = (
-            select(func.sum(Pack.price))
-            .join(Purchase, Purchase.pack_id == Pack.id)
-            .join(UtmRegistration, UtmRegistration.user_id == Purchase.user_id)
-            .where(and_(*purchase_filters))
+        purchase_where = and_(*purchase_filters)
+        revenue_rub, revenue_usd = await UtmService._sum_revenue_rub_usd(
+            uow,
+            purchase_where,
+            join_utm_registration=True,
         )
 
         unique_clicks = int(await uow.session.scalar(clicks_stmt) or 0)
         new_users = int(await uow.session.scalar(regs_stmt) or 0)
         purchases = int(await uow.session.scalar(purchases_stmt) or 0)
-        revenue = UtmService._to_float(await uow.session.scalar(revenue_stmt))
         return UtmMetrics(
             unique_clicks=unique_clicks,
             new_users=new_users,
             purchases=purchases,
-            revenue=revenue,
+            revenue_rub=revenue_rub,
+            revenue_usd=revenue_usd,
         )
 
     @staticmethod
@@ -128,22 +158,22 @@ class UtmService:
             .join(UtmRegistration, UtmRegistration.user_id == Purchase.user_id)
             .where(and_(*purchase_filters))
         )
-        revenue_stmt = (
-            select(func.sum(Pack.price))
-            .join(Purchase, Purchase.pack_id == Pack.id)
-            .join(UtmRegistration, UtmRegistration.user_id == Purchase.user_id)
-            .where(and_(*purchase_filters))
+        purchase_where = and_(*purchase_filters)
+        revenue_rub, revenue_usd = await UtmService._sum_revenue_rub_usd(
+            uow,
+            purchase_where,
+            join_utm_registration=True,
         )
 
         unique_clicks = int(await uow.session.scalar(clicks_stmt) or 0)
         new_users = int(await uow.session.scalar(regs_stmt) or 0)
         purchases = int(await uow.session.scalar(purchases_stmt) or 0)
-        revenue = UtmService._to_float(await uow.session.scalar(revenue_stmt))
         return UtmMetrics(
             unique_clicks=unique_clicks,
             new_users=new_users,
             purchases=purchases,
-            revenue=revenue,
+            revenue_rub=revenue_rub,
+            revenue_usd=revenue_usd,
         )
 
     @staticmethod
@@ -173,7 +203,12 @@ class UtmService:
         )
         result: list[tuple[UtmCampaign, UtmMetrics]] = []
         for item in items:
-            metrics = await UtmService.get_metrics_for_campaign(uow, item.id, from_date=from_date, to_date=to_date)
+            metrics = await UtmService.get_metrics_for_campaign(
+                uow,
+                item.id,
+                from_date=from_date,
+                to_date=to_date,
+            )
             result.append((item, metrics))
         return result, total
 
@@ -232,6 +267,8 @@ class UtmService:
         period_value = (period or "day").strip().lower()
         now = datetime.now(timezone.utc)
         from_date, to_date = UtmService._date_bounds(from_date, to_date)
+        line_rub = purchase_revenue_line_expr("RUB")
+        line_usd = purchase_revenue_line_expr("USD")
 
         if period_value == "month":
             step = timedelta(days=30)
@@ -292,24 +329,32 @@ class UtmService:
                     )
                 )
             )
-            revenue_stmt = (
-                select(func.sum(Pack.price))
-                .join(Purchase, Purchase.pack_id == Pack.id)
+            period_purchase_where = and_(
+                UtmRegistration.utm_campaign_id == campaign_id,
+                Purchase.payment_status == PaymentStatus.CONFIRMED,
+                Purchase.created_at >= period_start,
+                Purchase.created_at < period_end,
+            )
+            rub_stmt = (
+                select(func.sum(line_rub))
+                .select_from(Purchase)
+                .join(Pack, Purchase.pack_id == Pack.id)
                 .join(UtmRegistration, UtmRegistration.user_id == Purchase.user_id)
-                .where(
-                    and_(
-                        UtmRegistration.utm_campaign_id == campaign_id,
-                        Purchase.payment_status == PaymentStatus.CONFIRMED,
-                        Purchase.created_at >= period_start,
-                        Purchase.created_at < period_end,
-                    )
-                )
+                .where(period_purchase_where)
+            )
+            usd_stmt = (
+                select(func.sum(line_usd))
+                .select_from(Purchase)
+                .join(Pack, Purchase.pack_id == Pack.id)
+                .join(UtmRegistration, UtmRegistration.user_id == Purchase.user_id)
+                .where(period_purchase_where)
             )
 
             clicks = int(await uow.session.scalar(clicks_stmt) or 0)
             regs = int(await uow.session.scalar(regs_stmt) or 0)
             purchases = int(await uow.session.scalar(purchases_stmt) or 0)
-            revenue = UtmService._to_float(await uow.session.scalar(revenue_stmt))
+            revenue_rub = UtmService._to_float(await uow.session.scalar(rub_stmt))
+            revenue_usd = UtmService._to_float(await uow.session.scalar(usd_stmt))
 
             series.append(
                 {
@@ -318,7 +363,8 @@ class UtmService:
                     "clicks": clicks,
                     "registrations": regs,
                     "purchases": purchases,
-                    "revenue": revenue,
+                    "revenue_rub": revenue_rub,
+                    "revenue_usd": revenue_usd,
                 }
             )
 
@@ -360,7 +406,8 @@ class UtmService:
                 "unique_clicks": metrics.unique_clicks,
                 "new_users": metrics.new_users,
                 "purchases": metrics.purchases,
-                "revenue": metrics.revenue,
+                "revenue_rub": metrics.revenue_rub,
+                "revenue_usd": metrics.revenue_usd,
             },
             "registrations": registrations,
         }
@@ -419,5 +466,6 @@ class UtmService:
             "unique_clicks": metrics.unique_clicks,
             "registrations": metrics.new_users,
             "purchases": metrics.purchases,
-            "revenue": metrics.revenue,
+            "revenue_rub": metrics.revenue_rub,
+            "revenue_usd": metrics.revenue_usd,
         }

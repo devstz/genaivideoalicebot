@@ -29,7 +29,7 @@ BTN_REVIVE_PHOTO = "🎬 Animate Photo"
 BTN_PACKS = "📦 Packs"
 BTN_PROFILE = "👤 Profile"
 BTN_BACK = "🔙 Back"
-BTN_BUY_PACK = "{name} — {price} RUB ({count} pcs)"
+BTN_BUY_PACK = "{name} — {price_line} ({count} pcs)"
 BTN_MOCK_PAY = "✅ Pay (Test)"
 BTN_LAVA_PAY = "💳 Pay with Lava"
 BTN_PAY_OPEN_LINK = "🔗 Open payment page"
@@ -126,8 +126,8 @@ PACK_DETAILS = (
     "📦 <b>{name}</b>\n\n"
     "{description}\n\n"
     "🎥 Generations: <b>{count}</b>\n"
-    "💰 Price: <b>{price} RUB</b>\n"
-    "📊 <i>Just {per_gen} RUB per generation</i>"
+    "💰 Price: <b>{price_line}</b>\n"
+    "📊 <i>Just {per_gen_line} per generation</i>"
 )
 
 PAYMENT_SUCCESS = (

@@ -1,13 +1,27 @@
 from __future__ import annotations
 from datetime import datetime, timedelta
-from sqlalchemy import select, func, desc, and_, case
+from decimal import Decimal
+
+from sqlalchemy import and_, case, desc, func, select
+
+from db.models import Generation, Pack, Purchase, Referral, Template, User, UserAction
 from db.uow import SQLAlchemyUnitOfWork
-from db.models import User, Generation, Purchase, Pack, Template, UserAction, Referral
-from enums import GenerationStatus, PaymentStatus, ActionType
+from enums import ActionType, GenerationStatus, PaymentStatus
+from services.revenue_aggregation import purchase_revenue_line_expr
+
 
 class MetricsService:
     @staticmethod
-    async def get_dashboard_metrics(uow: SQLAlchemyUnitOfWork, period: str = "week"):
+    def _to_float(value: Decimal | float | int | None) -> float:
+        if value is None:
+            return 0.0
+        return float(value)
+
+    @staticmethod
+    async def get_dashboard_metrics(
+        uow: SQLAlchemyUnitOfWork,
+        period: str = "week",
+    ):
         # 1. Users
         total_users = await uow.session.scalar(select(func.count(User.user_id))) or 0
         
@@ -27,29 +41,50 @@ class MetricsService:
             .where(Generation.status == GenerationStatus.COMPLETED)
         ) or 0
 
-        # 3. Revenue
+        # 3. Выручка отдельно RUB и USD (без смешивания и без EUR в отчёте)
+        line_rub = purchase_revenue_line_expr("RUB")
+        line_usd = purchase_revenue_line_expr("USD")
         month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
 
-        monthly_revenue_stmt = (
-            select(func.sum(Pack.price))
-            .join(Purchase, Purchase.pack_id == Pack.id)
-            .where(and_(
-                Purchase.payment_status == PaymentStatus.CONFIRMED,
-                Purchase.created_at >= month_start
-            ))
+        base_purchase_filters_month = and_(
+            Purchase.payment_status == PaymentStatus.CONFIRMED,
+            Purchase.created_at >= month_start,
         )
-        monthly_revenue = await uow.session.scalar(monthly_revenue_stmt) or 0
+        base_purchase_filters_today = and_(
+            Purchase.payment_status == PaymentStatus.CONFIRMED,
+            Purchase.created_at >= today_start,
+        )
 
-        today_revenue_stmt = (
-            select(func.sum(Pack.price))
-            .join(Purchase, Purchase.pack_id == Pack.id)
-            .where(and_(
-                Purchase.payment_status == PaymentStatus.CONFIRMED,
-                Purchase.created_at >= today_start
-            ))
+        monthly_rub_stmt = (
+            select(func.sum(line_rub))
+            .select_from(Purchase)
+            .join(Pack, Purchase.pack_id == Pack.id)
+            .where(base_purchase_filters_month)
         )
-        today_revenue = await uow.session.scalar(today_revenue_stmt) or 0
+        monthly_usd_stmt = (
+            select(func.sum(line_usd))
+            .select_from(Purchase)
+            .join(Pack, Purchase.pack_id == Pack.id)
+            .where(base_purchase_filters_month)
+        )
+        monthly_rub = MetricsService._to_float(await uow.session.scalar(monthly_rub_stmt))
+        monthly_usd = MetricsService._to_float(await uow.session.scalar(monthly_usd_stmt))
+
+        today_rub_stmt = (
+            select(func.sum(line_rub))
+            .select_from(Purchase)
+            .join(Pack, Purchase.pack_id == Pack.id)
+            .where(base_purchase_filters_today)
+        )
+        today_usd_stmt = (
+            select(func.sum(line_usd))
+            .select_from(Purchase)
+            .join(Pack, Purchase.pack_id == Pack.id)
+            .where(base_purchase_filters_today)
+        )
+        today_rub = MetricsService._to_float(await uow.session.scalar(today_rub_stmt))
+        today_usd = MetricsService._to_float(await uow.session.scalar(today_usd_stmt))
 
         # 4. Top Templates
         top_templates_stmt = (
@@ -116,16 +151,25 @@ class MetricsService:
             day_start = day_date.replace(hour=0, minute=0, second=0, microsecond=0)
             day_end = day_start + timedelta(days=1)
             
-            day_revenue_stmt = (
-                select(func.sum(Pack.price))
-                .join(Purchase, Purchase.pack_id == Pack.id)
-                .where(and_(
-                    Purchase.payment_status == PaymentStatus.CONFIRMED,
-                    Purchase.created_at >= day_start,
-                    Purchase.created_at < day_end
-                ))
+            day_filters = and_(
+                Purchase.payment_status == PaymentStatus.CONFIRMED,
+                Purchase.created_at >= day_start,
+                Purchase.created_at < day_end,
             )
-            day_revenue = await uow.session.scalar(day_revenue_stmt) or 0
+            day_rub_stmt = (
+                select(func.sum(line_rub))
+                .select_from(Purchase)
+                .join(Pack, Purchase.pack_id == Pack.id)
+                .where(day_filters)
+            )
+            day_usd_stmt = (
+                select(func.sum(line_usd))
+                .select_from(Purchase)
+                .join(Pack, Purchase.pack_id == Pack.id)
+                .where(day_filters)
+            )
+            day_rub = MetricsService._to_float(await uow.session.scalar(day_rub_stmt))
+            day_usd = MetricsService._to_float(await uow.session.scalar(day_usd_stmt))
             
             # Label based on period
             if days == 7:
@@ -134,11 +178,14 @@ class MetricsService:
             else:
                 label = day_start.strftime("%d.%m")
             
-            revenue_trend.append({
-                "label": label,
-                "value": int(day_revenue),
-                "fullDate": day_start.strftime("%Y-%m-%d")
-            })
+            revenue_trend.append(
+                {
+                    "label": label,
+                    "rub": round(day_rub, 2),
+                    "usd": round(day_usd, 2),
+                    "fullDate": day_start.strftime("%Y-%m-%d"),
+                }
+            )
 
         # 7. Performance (Avg Completion Time)
         avg_time_stmt = select(func.avg(Generation.updated_at - Generation.created_at)).where(Generation.status == GenerationStatus.COMPLETED)
@@ -158,7 +205,14 @@ class MetricsService:
             "metrics": {
                 "uniqueUsers": {"value": total_users, "change": f"DAU: {dau}", "isPositive": True},
                 "totalGenerations": {"value": total_gens, "change": f"SUCCESS: {completed_gens}", "isPositive": True},
-                "revenueMonth": {"value": f"{int(monthly_revenue)}₽", "change": f"TODAY: {int(today_revenue)}₽", "isPositive": True},
+                "revenueMonth": {
+                    "rub": round(monthly_rub, 2),
+                    "usd": round(monthly_usd, 2),
+                    "todayRub": round(today_rub, 2),
+                    "todayUsd": round(today_usd, 2),
+                    "change": "",
+                    "isPositive": True,
+                },
             },
             "topTemplates": top_templates,
             "systemHealth": [

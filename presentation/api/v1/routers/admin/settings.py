@@ -14,6 +14,9 @@ from presentation.dependencies.security import get_current_admin
 
 settings_router = APIRouter(prefix="/settings", tags=["Admin Settings"])
 
+DisplayCurrency = Literal["RUB", "USD", "EUR"]
+ADMIN_DISPLAY_CURRENCY_KEY = "admin_display_currency"
+
 
 class PaymentProviderRead(BaseModel):
     provider: Literal["mock", "lava"]
@@ -51,5 +54,35 @@ async def update_payment_settings(
 ):
     await uow.global_setting_repo.set("payment_provider", payload.provider)
     return await get_payment_settings(uow=uow, admin=admin)
+
+
+class AdminDisplayCurrencyRead(BaseModel):
+    admin_display_currency: DisplayCurrency
+
+
+class AdminDisplayCurrencyUpdate(BaseModel):
+    admin_display_currency: DisplayCurrency
+
+
+@settings_router.get("/display-currency", response_model=AdminDisplayCurrencyRead)
+async def get_display_currency(
+    uow: SQLAlchemyUnitOfWork = Depends(get_uow_dependency),
+    admin: User = Depends(get_current_admin),
+):
+    raw = await uow.global_setting_repo.get(ADMIN_DISPLAY_CURRENCY_KEY)
+    cur = (raw or "RUB").strip().upper()
+    if cur not in {"RUB", "USD", "EUR"}:
+        cur = "RUB"
+    return AdminDisplayCurrencyRead(admin_display_currency=cur)  # type: ignore[arg-type]
+
+
+@settings_router.put("/display-currency", response_model=AdminDisplayCurrencyRead)
+async def put_display_currency(
+    payload: AdminDisplayCurrencyUpdate,
+    uow: SQLAlchemyUnitOfWork = Depends(get_uow_dependency),
+    admin: User = Depends(get_current_admin),
+):
+    await uow.global_setting_repo.set(ADMIN_DISPLAY_CURRENCY_KEY, payload.admin_display_currency)
+    return await get_display_currency(uow=uow, admin=admin)
 
 

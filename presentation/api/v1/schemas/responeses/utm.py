@@ -23,7 +23,8 @@ class UtmCampaignRead(BaseModel):
     unique_clicks: int = 0
     registrations: int = 0
     purchases: int = 0
-    revenue: float = 0
+    revenue_rub: float = 0
+    revenue_usd: float = 0
 
 
 class UtmCampaignCreate(BaseModel):
@@ -57,7 +58,8 @@ class UtmSummaryResponse(BaseModel):
     unique_clicks: int
     new_users: int
     purchases: int
-    revenue: float
+    revenue_rub: float
+    revenue_usd: float
 
 
 class UtmStatsResponse(UtmSummaryResponse):
@@ -70,7 +72,8 @@ class UtmSeriesPoint(BaseModel):
     clicks: int
     registrations: int
     purchases: int
-    revenue: float
+    revenue_rub: float
+    revenue_usd: float
 
 
 class UtmSeriesResponse(BaseModel):

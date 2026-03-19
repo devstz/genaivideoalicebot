@@ -133,6 +133,7 @@ async def seed():
                 description=p["description"],
                 generations_count=p["generations_count"],
                 price=p["price"],
+                prices_by_currency={"RUB": float(p["price"])},
                 is_active=p["is_active"],
             )
             uow.session.add(pack)

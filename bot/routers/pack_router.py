@@ -34,15 +34,17 @@ class PackRouter(BaseRouter):
         self.callback_query.register(self.skip_payment_email, ConfirmCD.filter(F.action == "pay_skip_email"))
         self.message.register(self.handle_payment_email, PaymentStates.waiting_email)
 
-    async def show_packs(self, call: CallbackQuery, pack_service: PackService, i18n) -> None:
+    async def show_packs(self, call: CallbackQuery, pack_service: PackService, i18n, lang: str) -> None:
         packs = await pack_service.get_active_packs()
         if not packs:
             await call.answer(i18n.PACKS_EMPTY, show_alert=True)
             return
 
-        await call.message.edit_text(i18n.PACKS_LIST, reply_markup=packs_kb(packs))
+        await call.message.edit_text(i18n.PACKS_LIST, reply_markup=packs_kb(packs, i18n, lang=lang))
 
-    async def view_pack(self, call: CallbackQuery, callback_data: PackCD, pack_service: PackService, i18n) -> None:
+    async def view_pack(self, call: CallbackQuery, callback_data: PackCD, pack_service: PackService, i18n, lang: str) -> None:
+        from bot.utils.pack_display import pack_price_lines
+
         pack_id = callback_data.id
         pack = await pack_service.get_pack(pack_id)
         
@@ -50,15 +52,14 @@ class PackRouter(BaseRouter):
             await call.answer("❌", show_alert=True)
             return
 
-        price = int(pack.price)
-        per_gen = round(price / pack.generations_count)
+        price_line, per_gen_line = pack_price_lines(pack, lang)
 
         text = i18n.PACK_DETAILS.format(
             name=pack.name,
             description=pack.description or "",
             count=pack.generations_count,
-            price=price,
-            per_gen=per_gen,
+            price_line=price_line,
+            per_gen_line=per_gen_line,
         )
         
         provider = await pack_service.get_active_provider_name()

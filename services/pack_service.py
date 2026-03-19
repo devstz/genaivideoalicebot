@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-import logging
 
 from config.settings import get_settings
 from db.models import Pack
@@ -7,8 +6,6 @@ from db.uow import SQLAlchemyUnitOfWork
 from db.models import Purchase
 from enums import PaymentStatus
 from services.providers.payment import get_payment_provider
-
-logger = logging.getLogger(__name__)
 
 
 @dataclass(slots=True)
@@ -61,11 +58,6 @@ class PackService:
         provider_name = (force_provider or await self._get_active_provider_name()).strip().lower()
         provider = get_payment_provider(provider_name)
         provider_result = await provider.create_payment(user_id=user_id, pack=pack, buyer_email=buyer_email)
-
-        if provider_result.amount is not None and provider_result.provider != "mock":
-            if pack.price != provider_result.amount:
-                logger.info("Syncing pack %s price: %s → %s", pack.id, pack.price, provider_result.amount)
-                pack.price = provider_result.amount
 
         is_mock = provider_result.provider == "mock"
         initial_status = PaymentStatus.CONFIRMED if is_mock else PaymentStatus.PENDING

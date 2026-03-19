@@ -14,7 +14,8 @@ dashboard_router = APIRouter(prefix="/dashboard", tags=["Admin Dashboard"])
 async def get_dashboard_metrics(
     period: str = "week",
     uow: SQLAlchemyUnitOfWork = Depends(get_uow_dependency),
-    admin: User = Depends(get_current_admin)
+    admin: User = Depends(get_current_admin),
 ):
     from services.metrics_service import MetricsService
+
     return await MetricsService.get_dashboard_metrics(uow, period=period)

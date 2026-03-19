@@ -30,7 +30,7 @@ BTN_PACKS = "📦 Наборы"
 BTN_PROFILE = "👤 Профиль"
 BTN_SETTINGS = "⚙️ Настройки"
 BTN_BACK = "🔙 Назад"
-BTN_BUY_PACK = "{name} — {price} ₽ ({count} шт.)"
+BTN_BUY_PACK = "{name} — {price_line} ({count} шт.)"
 BTN_MOCK_PAY = "✅ Оплатить (Тест)"
 BTN_LAVA_PAY = "💳 Оплатить через Lava"
 BTN_PAY_OPEN_LINK = "🔗 Открыть оплату"
@@ -149,8 +149,8 @@ PACK_DETAILS = (
     "📦 <b>{name}</b>\n\n"
     "{description}\n\n"
     "🎥 Генераций: <b>{count}</b>\n"
-    "💰 Цена: <b>{price} ₽</b>\n"
-    "📊 <i>Всего {per_gen} ₽ за генерацию</i>"
+    "💰 Цена: <b>{price_line}</b>\n"
+    "📊 <i>Всего {per_gen_line} за генерацию</i>"
 )
 
 PAYMENT_SUCCESS = (

@@ -62,10 +62,17 @@ def skip_wishes_kb() -> InlineKeyboardMarkup:
     builder.adjust(2)
     return builder.as_markup()
 
-def packs_kb(packs: list[Pack]) -> InlineKeyboardMarkup:
+def packs_kb(packs: list[Pack], i18n, *, lang: str = "ru") -> InlineKeyboardMarkup:
+    from bot.utils.pack_display import format_price_line, pick_amount_and_currency
+
     builder = InlineKeyboardBuilder()
     for p in packs:
-        builder.button(text=BTN_BUY_PACK.format(name=p.name, price=str(int(p.price)), count=p.generations_count), callback_data=PackCD(id=p.id, action="view"))
+        amt, cur = pick_amount_and_currency(p, lang)
+        price_line = format_price_line(amt, cur)
+        builder.button(
+            text=i18n.BTN_BUY_PACK.format(name=p.name, price_line=price_line, count=p.generations_count),
+            callback_data=PackCD(id=p.id, action="view"),
+        )
     
     builder.adjust(1)
     builder.row(InlineKeyboardButton(text=BTN_BACK, callback_data=MainMenuCD(action="main").pack()))
