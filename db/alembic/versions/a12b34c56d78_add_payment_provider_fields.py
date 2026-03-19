@@ -12,7 +12,8 @@ import sqlalchemy as sa
 
 
 revision: str = "a12b34c56d78"
-down_revision: Union[str, Sequence[str], None] = "1d3e5f7a9b2c"
+# После 1d3e уже идёт 2b4c (UTM); иначе два head и `alembic upgrade head` падает.
+down_revision: Union[str, Sequence[str], None] = "2b4c6d8e9f01"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
