@@ -22,7 +22,7 @@ def agreement_kb(url: str) -> InlineKeyboardMarkup:
     builder.adjust(1)
     return builder.as_markup()
 
-def main_menu_kb() -> InlineKeyboardMarkup:
+def main_menu_kb(is_admin: bool = False) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     builder.button(text=BTN_REVIVE_PHOTO, callback_data=MainMenuCD(action="templates"))
     builder.button(text=BTN_POSTCARDS, callback_data=MainMenuCD(action="postcards"))
@@ -30,8 +30,11 @@ def main_menu_kb() -> InlineKeyboardMarkup:
     builder.button(text=BTN_PACKS, callback_data=MainMenuCD(action="packs"))
     builder.button(text=BTN_PROFILE, callback_data=MainMenuCD(action="profile"))
     builder.button(text=BTN_HELP, callback_data=MainMenuCD(action="help"))
-    builder.button(text=BTN_SETTINGS, callback_data=MainMenuCD(action="settings"))
-    builder.adjust(2, 1, 2, 2)
+    if is_admin:
+        builder.button(text=BTN_SETTINGS, callback_data=MainMenuCD(action="settings"))
+        builder.adjust(2, 1, 2, 2)
+    else:
+        builder.adjust(2, 1, 2, 1)
     return builder.as_markup()
 
 def templates_kb(templates: list[Template]) -> InlineKeyboardMarkup:

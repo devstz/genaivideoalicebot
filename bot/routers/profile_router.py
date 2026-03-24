@@ -12,6 +12,7 @@ from bot.states.private import ChangePasswordStates
 from config import get_settings
 from services.auth.password_service import PasswordService
 from services.user_service import UserService
+from db.models import User
 
 
 logger = logging.getLogger(__name__)
@@ -49,8 +50,8 @@ class ProfileRouter(BaseRouter):
         
         await call.message.edit_text(text, reply_markup=builder.as_markup(), disable_web_page_preview=True)
 
-    async def back_to_main(self, call: CallbackQuery, i18n) -> None:
-        await call.message.edit_text(i18n.WELCOME_MAIN, reply_markup=main_menu_kb())
+    async def back_to_main(self, call: CallbackQuery, user: User, i18n) -> None:
+        await call.message.edit_text(i18n.WELCOME_MAIN, reply_markup=main_menu_kb(is_admin=bool(user.admin_password_hash)))
 
     async def show_settings(self, call: CallbackQuery, user_service: UserService, i18n) -> None:
         profile = await user_service.get_profile_info(call.from_user.id)

@@ -16,14 +16,16 @@ from config.settings import get_settings
 
 templates_router = APIRouter(prefix="/templates", tags=["Admin Templates"])
 
-DEFAULT_IMAGE = "https://lh3.googleusercontent.com/aida-public/AB6AXuAGk5jAQZWsx1pwKk1ZfnRDTArPKzDzQofsxwX4xZDzAGBazgkACgh7tLlFq_PFXd7b31vyhmgdAk5GMhBSHtgvL-01i8k08jExi8rfFMimJXO2yaohNICK__ZDGzkr2g8yy3CH9IaL8EvbqQ-yTHAeCLBX6q3D-NWOd3nF7GBkSK5M-mlB0KdCoitGqaNl_6YA0QKBESbJXLD8nKLenXV-lyJCidLO152JT_nGbSvaqdrwYh_yIiA36g3lXA-mEclY96y9beGBhA"
-
+import uuid
+import shutil
+from pathlib import Path
+from fastapi import UploadFile, File
 
 def _model_to_read(t: Template) -> TemplateRead:
-    image = t.preview_image_path or DEFAULT_IMAGE
+    image = t.preview_image_path or ""
     if t.preview_image_path and not t.preview_image_path.startswith("http"):
         settings = get_settings()
-        image = f"/media/{t.preview_image_path}" if t.preview_image_path else DEFAULT_IMAGE
+        image = f"/media/{t.preview_image_path}"
     return TemplateRead(
         id=str(t.id),
         title=t.name,
@@ -34,6 +36,24 @@ def _model_to_read(t: Template) -> TemplateRead:
         negativePrompt=t.negative_prompt,
         templateType=getattr(t, "template_type", "preset") or "preset",
     )
+
+@templates_router.post("/upload")
+async def upload_template_image(
+    file: UploadFile = File(...),
+    admin: User = Depends(get_current_admin),
+):
+    settings = get_settings()
+    media_dir = Path(settings.MEDIA_ROOT) / "templates"
+    media_dir.mkdir(parents=True, exist_ok=True)
+    
+    ext = Path(file.filename).suffix if file.filename else ""
+    filename = f"{uuid.uuid4().hex}{ext}"
+    file_path = media_dir / filename
+    
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+        
+    return {"path": f"templates/{filename}"}
 
 
 @templates_router.get("", response_model=list[TemplateRead])

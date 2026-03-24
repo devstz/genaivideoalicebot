@@ -12,8 +12,8 @@ from .base import Base, TimestampMixin, ModelHelpersMixin, IdPkMixin
 class Template(Base, TimestampMixin, ModelHelpersMixin, IdPkMixin):
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     category: Mapped[str] = mapped_column(String(50), nullable=False)
-    preview_image_path: Mapped[Optional[str]] = mapped_column(String(255))
-    preview_video_path: Mapped[Optional[str]] = mapped_column(String(255))
+    preview_image_path: Mapped[Optional[str]] = mapped_column(Text)
+    preview_video_path: Mapped[Optional[str]] = mapped_column(Text)
     
     base_prompt: Mapped[str] = mapped_column(Text, nullable=False)
     negative_prompt: Mapped[Optional[str]] = mapped_column(Text)
