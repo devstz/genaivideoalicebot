@@ -26,8 +26,11 @@ AGREEMENT_ACCEPED = (
 BTN_AGREEMENT = "📖 Читать соглашение"
 BTN_ACCEPT_AGREEMENT = "✅ Принять"
 BTN_REVIVE_PHOTO = "🎬 Оживить фото"
+BTN_POSTCARDS = "🎉 Открытки"
+BTN_CUSTOM_PROMPT_MAIN = "✨ Создать свой сценарий"
 BTN_PACKS = "📦 Наборы"
-BTN_PROFILE = "👤 Профиль"
+BTN_PROFILE = "👤 Мой профиль"
+BTN_HELP = "❓ Помощь"
 BTN_SETTINGS = "⚙️ Настройки"
 BTN_BACK = "🔙 Назад"
 BTN_BUY_PACK = "{name} — {price_line} ({count} шт.)"
@@ -38,6 +41,20 @@ BTN_PAY_SKIP_EMAIL = "⏭ Пропустить email"
 BTN_SKIP = "⏭ Пропустить"
 BTN_CONFIRM = "✅ Подтвердить"
 BTN_CUSTOM_PROMPT = "✨ Придумать свой"
+
+# --- Postcards ---
+POSTCARD_LIST = (
+    "🎉 <b>Открытки</b>\n\n"
+    "Выберите поздравительный шаблон — оживите фото \n"
+    "и отправьте уникальную видео-открытку близким! 💌"
+)
+POSTCARD_EMPTY = "😔 Открытки временно недоступны. Заходите позже!"
+
+# --- Help ---
+HELP_TEXT = (
+    "❓ <b>Помощь</b>\n\n"
+    "По всем вопросам пишите в саппорт — @SpacePilgrim"
+)
 
 # --- Profile ---
 PROFILE_TEXT = (

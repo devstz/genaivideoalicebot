@@ -23,3 +23,7 @@ class PaymentCD(CallbackData, prefix="pay"):
 class ConfirmCD(CallbackData, prefix="confirm"):
     action: str
     target_id: int | None = None
+
+class PostcardCD(CallbackData, prefix="postcard"):
+    id: int
+    action: str

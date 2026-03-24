@@ -18,6 +18,7 @@ TEMPLATES = [
                        "Keep the expression warm and natural. {additional_text}",
         "negative_prompt": "blurry, distorted face, unnatural movements, creepy",
         "status": TemplateStatus.ACTIVE,
+        "template_type": "preset",
     },
     {
         "name": "💕 Романтика",
@@ -27,6 +28,7 @@ TEMPLATES = [
                        "a soft smile appears. {additional_text}",
         "negative_prompt": "blurry, distorted, ugly, deformed, glitch",
         "status": TemplateStatus.ACTIVE,
+        "template_type": "preset",
     },
     {
         "name": "🎭 Эмоции",
@@ -35,6 +37,7 @@ TEMPLATES = [
                        "then a gentle tear of happiness. Expressive and cinematic. {additional_text}",
         "negative_prompt": "blurry, distorted, unnatural expressions, creepy smile",
         "status": TemplateStatus.ACTIVE,
+        "template_type": "preset",
     },
     {
         "name": "🔄 Поворот головы",
@@ -43,6 +46,7 @@ TEMPLATES = [
                        "Natural and elegant movement. {additional_text}",
         "negative_prompt": "blurry, distorted, jerky motion, unnatural neck",
         "status": TemplateStatus.ACTIVE,
+        "template_type": "preset",
     },
     {
         "name": "🐾 Животные",
@@ -51,6 +55,7 @@ TEMPLATES = [
                        "blinking eyes, natural breathing movement. Cute and lifelike. {additional_text}",
         "negative_prompt": "blurry, distorted anatomy, unnatural movement, creepy",
         "status": TemplateStatus.ACTIVE,
+        "template_type": "preset",
     },
     {
         "name": "💃 Танец",
@@ -59,6 +64,7 @@ TEMPLATES = [
                        "rhythmic head bops, natural arm flow. Energetic and fun. {additional_text}",
         "negative_prompt": "blurry, broken limbs, unnatural pose, distorted body",
         "status": TemplateStatus.ACTIVE,
+        "template_type": "preset",
     },
     {
         "name": "🎬 Сюжетный клип",
@@ -68,6 +74,40 @@ TEMPLATES = [
                        "Smooth and realistic. {additional_text}",
         "negative_prompt": "blurry, distorted hands, unnatural objects, glitch artifacts",
         "status": TemplateStatus.ACTIVE,
+        "template_type": "preset",
+    },
+]
+
+POSTCARDS = [
+    {
+        "name": "🎂 С днём рождения",
+        "category": "birthday",
+        "base_prompt": "Create a festive birthday greeting animation: the person smiles joyfully, "
+                       "confetti falls around, birthday candles glow warmly. "
+                       "Celebratory and heartwarming mood. {additional_text}",
+        "negative_prompt": "blurry, distorted face, dark mood, scary",
+        "status": TemplateStatus.ACTIVE,
+        "template_type": "postcard",
+    },
+    {
+        "name": "💖 Сердечки",
+        "category": "hearts",
+        "base_prompt": "Animate a lovely scene: hearts float gently around the person, "
+                       "soft pink and red glowing particles, the person sends an air kiss. "
+                       "Romantic and sweet. {additional_text}",
+        "negative_prompt": "blurry, distorted, ugly, dark, scary",
+        "status": TemplateStatus.ACTIVE,
+        "template_type": "postcard",
+    },
+    {
+        "name": "🎉 Поздравляю!",
+        "category": "congrats",
+        "base_prompt": "Create a congratulatory animation: the person claps and celebrates, "
+                       "golden particles and ribbons fly around, bright festive atmosphere. "
+                       "Joyful and uplifting. {additional_text}",
+        "negative_prompt": "blurry, distorted, dark mood, creepy",
+        "status": TemplateStatus.ACTIVE,
+        "template_type": "postcard",
     },
 ]
 
@@ -122,9 +162,23 @@ async def seed():
                 base_prompt=t["base_prompt"],
                 negative_prompt=t["negative_prompt"],
                 status=t["status"],
+                template_type=t.get("template_type", "preset"),
                 ai_model_id=ai_model.id,
             )
             uow.session.add(template)
+
+        # 3.1 Postcards
+        for p in POSTCARDS:
+            postcard = Template(
+                name=p["name"],
+                category=p["category"],
+                base_prompt=p["base_prompt"],
+                negative_prompt=p["negative_prompt"],
+                status=p["status"],
+                template_type=p["template_type"],
+                ai_model_id=ai_model.id,
+            )
+            uow.session.add(postcard)
 
         # 4. Packs
         for p in PACKS:
@@ -138,7 +192,7 @@ async def seed():
             )
             uow.session.add(pack)
         
-    print(f"✅ Successfully seeded {len(TEMPLATES)} templates and {len(PACKS)} packs.")
+    print(f"✅ Successfully seeded {len(TEMPLATES)} templates, {len(POSTCARDS)} postcards, and {len(PACKS)} packs.")
 
 
 if __name__ == "__main__":

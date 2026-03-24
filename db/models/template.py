@@ -19,6 +19,7 @@ class Template(Base, TimestampMixin, ModelHelpersMixin, IdPkMixin):
     negative_prompt: Mapped[Optional[str]] = mapped_column(Text)
     
     status: Mapped[TemplateStatus] = mapped_column(String(20), default=TemplateStatus.HIDDEN, nullable=False)
+    template_type: Mapped[str] = mapped_column(String(20), default="preset", nullable=False, server_default="preset")
     
     ai_model_id: Mapped[int] = mapped_column(ForeignKey("aimodels.id"), nullable=False)
     ai_model: Mapped["AiModel"] = relationship(back_populates="templates")

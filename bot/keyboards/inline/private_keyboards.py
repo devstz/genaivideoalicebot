@@ -6,10 +6,11 @@ from bot.locales.ru import (
     BTN_REVIVE_PHOTO, BTN_PACKS, BTN_PROFILE,
     BTN_BACK, BTN_BUY_PACK, BTN_MOCK_PAY, BTN_LAVA_PAY, BTN_PAY_OPEN_LINK, BTN_PAY_SKIP_EMAIL,
     BTN_SKIP, BTN_CONFIRM, BTN_CUSTOM_PROMPT,
-    BTN_SETTINGS, BTN_CHANGE_PASSWORD, BTN_TOGGLE_2FA_ON, BTN_TOGGLE_2FA_OFF, BTN_SETTINGS_REFRESH
+    BTN_SETTINGS, BTN_CHANGE_PASSWORD, BTN_TOGGLE_2FA_ON, BTN_TOGGLE_2FA_OFF, BTN_SETTINGS_REFRESH,
+    BTN_POSTCARDS, BTN_HELP, BTN_CUSTOM_PROMPT_MAIN,
 )
 from bot.keyboards.callback_data.private import (
-    MainMenuCD, TemplateCD, PackCD, PaymentCD, ConfirmCD
+    MainMenuCD, TemplateCD, PackCD, PaymentCD, ConfirmCD, PostcardCD
 )
 from db.models import Template, Pack
 
@@ -24,19 +25,40 @@ def agreement_kb(url: str) -> InlineKeyboardMarkup:
 def main_menu_kb() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     builder.button(text=BTN_REVIVE_PHOTO, callback_data=MainMenuCD(action="templates"))
+    builder.button(text=BTN_POSTCARDS, callback_data=MainMenuCD(action="postcards"))
+    builder.button(text=BTN_CUSTOM_PROMPT_MAIN, callback_data=MainMenuCD(action="custom_prompt"))
     builder.button(text=BTN_PACKS, callback_data=MainMenuCD(action="packs"))
     builder.button(text=BTN_PROFILE, callback_data=MainMenuCD(action="profile"))
+    builder.button(text=BTN_HELP, callback_data=MainMenuCD(action="help"))
     builder.button(text=BTN_SETTINGS, callback_data=MainMenuCD(action="settings"))
-    builder.adjust(1, 2, 1)
+    builder.adjust(2, 1, 2, 2)
     return builder.as_markup()
 
 def templates_kb(templates: list[Template]) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
-    builder.button(text=BTN_CUSTOM_PROMPT, callback_data=MainMenuCD(action="custom_prompt"))
     for t in templates:
         builder.button(text=t.name, callback_data=TemplateCD(id=t.id, action="view"))
-    builder.adjust(1, 2)
+    builder.adjust(2)
     builder.row(InlineKeyboardButton(text=BTN_BACK, callback_data=MainMenuCD(action="main").pack()))
+    return builder.as_markup()
+
+def postcards_kb(postcards: list[Template]) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    for p in postcards:
+        builder.button(text=p.name, callback_data=PostcardCD(id=p.id, action="view"))
+    builder.adjust(2)
+    builder.row(InlineKeyboardButton(text=BTN_BACK, callback_data=MainMenuCD(action="main").pack()))
+    return builder.as_markup()
+
+def postcard_preview_kb(postcard_id: int, has_balance: bool) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    if has_balance:
+        builder.button(text=BTN_CONFIRM, callback_data=PostcardCD(id=postcard_id, action="start_gen"))
+    else:
+        builder.button(text=BTN_PACKS, callback_data=MainMenuCD(action="packs"))
+    
+    builder.button(text=BTN_BACK, callback_data=MainMenuCD(action="postcards"))
+    builder.adjust(1)
     return builder.as_markup()
 
 def template_preview_kb(template_id: int, has_balance: bool) -> InlineKeyboardMarkup:

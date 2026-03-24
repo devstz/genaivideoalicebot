@@ -15,6 +15,7 @@ class TemplateRead(BaseModel):
     status: str
     image: str
     negativePrompt: Optional[str] = None
+    templateType: str = "preset"
 
 
 class TemplateCreate(BaseModel):
@@ -24,6 +25,7 @@ class TemplateCreate(BaseModel):
     status: str = "active"
     image: Optional[str] = None
     negativePrompt: Optional[str] = None
+    templateType: str = "preset"
 
 
 class TemplateUpdate(BaseModel):
@@ -33,3 +35,4 @@ class TemplateUpdate(BaseModel):
     status: Optional[str] = None
     image: Optional[str] = None
     negativePrompt: Optional[str] = None
+    templateType: Optional[str] = None

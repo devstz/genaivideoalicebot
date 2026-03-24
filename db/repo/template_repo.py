@@ -33,9 +33,30 @@ class TemplateRepository:
         result = await self.session.execute(stmt)
         return list(result.scalars().all())
 
+    async def list_active_by_type(self, template_type: str) -> list[Template]:
+        stmt = select(Template).where(
+            Template.status == TemplateStatus.ACTIVE,
+            Template.template_type == template_type,
+        )
+        result = await self.session.execute(stmt)
+        return list(result.scalars().all())
+
+    async def list_all_by_type(self, template_type: str) -> list[Template]:
+        stmt = select(Template).where(Template.template_type == template_type).order_by(Template.id)
+        result = await self.session.execute(stmt)
+        return list(result.scalars().all())
+
     async def list_distinct_categories(self) -> list[str]:
         from sqlalchemy import distinct
         stmt = select(distinct(Template.category)).where(Template.category.isnot(None)).order_by(Template.category)
+        result = await self.session.execute(stmt)
+        return [r[0] for r in result.scalars().all() if r[0]]
+
+    async def list_distinct_categories_by_type(self, template_type: str) -> list[str]:
+        stmt = select(distinct(Template.category)).where(
+            Template.category.isnot(None),
+            Template.template_type == template_type,
+        ).order_by(Template.category)
         result = await self.session.execute(stmt)
         return [r[0] for r in result.scalars().all() if r[0]]
 

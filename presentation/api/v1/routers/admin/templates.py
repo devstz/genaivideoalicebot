@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException
+from typing import Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query
 from presentation.dependencies.security import get_current_admin
 from presentation.dependencies import get_uow_dependency
 from presentation.api.v1.schemas.responeses.template import TemplateRead, TemplateCreate, TemplateUpdate
@@ -30,24 +32,33 @@ def _model_to_read(t: Template) -> TemplateRead:
         status=t.status.value if hasattr(t.status, "value") else str(t.status),
         image=image,
         negativePrompt=t.negative_prompt,
+        templateType=getattr(t, "template_type", "preset") or "preset",
     )
 
 
 @templates_router.get("", response_model=list[TemplateRead])
 async def list_templates(
+    template_type: Optional[str] = Query(None, alias="templateType"),
     uow: SQLAlchemyUnitOfWork = Depends(get_uow_dependency),
     admin: User = Depends(get_current_admin),
 ):
-    templates = await uow.template_repo.list_all()
+    if template_type:
+        templates = await uow.template_repo.list_all_by_type(template_type)
+    else:
+        templates = await uow.template_repo.list_all()
     return [_model_to_read(t) for t in templates]
 
 
 @templates_router.get("/categories", response_model=list[str])
 async def list_categories(
+    template_type: Optional[str] = Query(None, alias="templateType"),
     uow: SQLAlchemyUnitOfWork = Depends(get_uow_dependency),
     admin: User = Depends(get_current_admin),
 ):
-    categories = await uow.template_repo.list_distinct_categories()
+    if template_type:
+        categories = await uow.template_repo.list_distinct_categories_by_type(template_type)
+    else:
+        categories = await uow.template_repo.list_distinct_categories()
     return categories or ["face", "motion", "animals", "scene"]
 
 
@@ -90,6 +101,7 @@ async def create_template(
         status=status_enum,
         preview_image_path=payload.image,
         ai_model_id=ai_model.id,
+        template_type=payload.templateType or "preset",
     )
     template = await uow.template_repo.add(template)
     return _model_to_read(template)
@@ -121,6 +133,8 @@ async def update_template(
         template.preview_image_path = payload.image
     if payload.negativePrompt is not None:
         template.negative_prompt = payload.negativePrompt
+    if payload.templateType is not None:
+        template.template_type = payload.templateType
 
     return _model_to_read(template)
 
