@@ -20563,3 +20563,1244 @@ WHERE generations.status IN ($1::VARCHAR, $2::VARCHAR)]
 2026-03-13 20:56:16,334 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
 2026-03-13 20:56:16,336 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8635578862)
 2026-03-13 20:56:40,509 - aiogram.dispatcher - INFO - Connection established (tryings = 1, bot id = 8635578862)
+2026-03-19 20:43:23,199 - presentation.bootstrap - INFO - Initializing Telegram Bot...
+2026-03-19 20:43:23,199 - bot.builder.bot_manager - INFO - Init Bot Manager
+2026-03-19 20:43:23,766 - bot.builder.dispatcher_manager - INFO - Default commands set up successfully
+2026-03-19 20:43:23,766 - bot.builder.dispatcher_manager - INFO - Dispatcher Manager initialized
+2026-03-19 20:43:23,766 - presentation.bootstrap - INFO - Starting bot polling in background...
+2026-03-19 20:43:23,767 - services.generation_worker - INFO - VideoGenerationWorker started.
+2026-03-19 20:43:23,767 - aiogram.dispatcher - INFO - Start polling
+2026-03-19 20:43:23,850 - aiogram.dispatcher - INFO - Run polling for bot @aividedobot id=8635578862 - 'aividedobot'
+2026-03-19 20:44:28,953 - httpx - INFO - HTTP Request: GET https://gate.lava.top/api/v2/products "HTTP/1.1 200 OK"
+2026-03-19 20:46:58,183 - httpx - INFO - HTTP Request: GET https://gate.lava.top/api/v2/products "HTTP/1.1 200 OK"
+2026-03-19 20:50:12,296 - httpx - INFO - HTTP Request: GET https://gate.lava.top/api/v2/products "HTTP/1.1 200 OK"
+2026-03-19 20:50:22,456 - httpx - INFO - HTTP Request: GET https://gate.lava.top/api/v2/products "HTTP/1.1 200 OK"
+2026-03-19 20:55:58,786 - httpx - INFO - HTTP Request: GET https://gate.lava.top/api/v2/products "HTTP/1.1 200 OK"
+2026-03-19 20:56:04,949 - httpx - INFO - HTTP Request: GET https://gate.lava.top/api/v2/products "HTTP/1.1 200 OK"
+2026-03-19 20:56:26,005 - aiogram.event - INFO - Update id=83163207 is handled. Duration 203 ms by bot id=8635578862
+2026-03-19 20:56:27,916 - aiogram.event - INFO - Update id=83163208 is handled. Duration 71 ms by bot id=8635578862
+2026-03-19 20:56:29,519 - aiogram.event - INFO - Update id=83163209 is handled. Duration 152 ms by bot id=8635578862
+2026-03-19 20:56:31,313 - httpx - INFO - HTTP Request: POST https://gate.lava.top/api/v3/invoice "HTTP/1.1 404 Not Found"
+2026-03-19 20:56:31,315 - bot.routers.pack_router - ERROR - Failed to create Lava payment
+Traceback (most recent call last):
+  File "/app/bot/routers/pack_router.py", line 164, in _create_lava_payment
+    result = await pack_service.create_purchase(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/services/pack_service.py", line 63, in create_purchase
+    provider_result = await provider.create_payment(user_id=user_id, pack=pack, buyer_email=buyer_email)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/services/providers/payment/lava_provider.py", line 39, in create_payment
+    response.raise_for_status()
+  File "/usr/local/lib/python3.11/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://gate.lava.top/api/v3/invoice'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-03-19 20:56:31,381 - aiogram.event - INFO - Update id=83163210 is handled. Duration 273 ms by bot id=8635578862
+2026-03-19 20:58:13,020 - aiogram.event - INFO - Update id=83163211 is handled. Duration 78 ms by bot id=8635578862
+2026-03-19 20:58:21,013 - presentation.bootstrap - INFO - Stopping VideoGenerationWorker...
+2026-03-19 20:58:21,014 - services.generation_worker - INFO - VideoGenerationWorker stopping...
+2026-03-19 20:58:21,014 - presentation.bootstrap - INFO - Stopping Telegram Bot...
+2026-03-19 20:58:21,014 - aiogram.dispatcher - INFO - Polling stopped
+2026-03-19 20:58:21,015 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-03-19 20:58:21,015 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8635578862)
+2026-03-19 20:58:21,266 - aiogram.dispatcher - INFO - Polling stopped for bot @aividedobot id=8635578862 - 'aividedobot'
+2026-03-19 20:58:29,459 - presentation.bootstrap - INFO - Initializing Telegram Bot...
+2026-03-19 20:58:29,459 - bot.builder.bot_manager - INFO - Init Bot Manager
+2026-03-19 20:58:29,828 - bot.builder.dispatcher_manager - INFO - Default commands set up successfully
+2026-03-19 20:58:29,835 - bot.builder.dispatcher_manager - INFO - Dispatcher Manager initialized
+2026-03-19 20:58:29,835 - presentation.bootstrap - INFO - Starting bot polling in background...
+2026-03-19 20:58:29,838 - services.generation_worker - INFO - VideoGenerationWorker started.
+2026-03-19 20:58:29,843 - aiogram.dispatcher - INFO - Start polling
+2026-03-19 20:58:29,948 - aiogram.dispatcher - INFO - Run polling for bot @aividedobot id=8635578862 - 'aividedobot'
+2026-03-19 20:58:30,188 - aiogram.event - INFO - Update id=83163212 is handled. Duration 182 ms by bot id=8635578862
+2026-03-19 20:58:51,314 - aiogram.event - INFO - Update id=83163213 is handled. Duration 96 ms by bot id=8635578862
+2026-03-19 20:58:53,028 - aiogram.event - INFO - Update id=83163214 is handled. Duration 107 ms by bot id=8635578862
+2026-03-19 20:58:53,901 - aiogram.event - INFO - Update id=83163215 is handled. Duration 88 ms by bot id=8635578862
+2026-03-19 20:58:55,012 - lava_client - INFO - Creating one-time payment | {'email': 'user_7783714338@autogeneracia21.ru', 'offer_id': '605f58e0-8a1b-4bd6-a0a9-d470a2f38217', 'currency': 'RUB'}
+2026-03-19 20:58:55,013 - lava_client - INFO - Creating invoice | {'email': 'user_7783714338@autogeneracia21.ru', 'offer_id': '605f58e0-8a1b-4bd6-a0a9-d470a2f38217', 'currency': 'RUB'}
+2026-03-19 20:58:55,145 - lava_client - WARNING - Request failed, retrying in 1s | {'attempt': 1}
+2026-03-19 20:58:56,269 - lava_client - ERROR - Request failed after 2 attempts: 404 Client Error: Not Found for url: https://gate.lava.top/api/v2/invoice
+2026-03-19 20:58:56,270 - services.providers.payment.lava_provider - WARNING - Lava SDK invoice failed, HTTP v2 fallback: Request failed
+2026-03-19 20:58:56,442 - httpx - INFO - HTTP Request: POST https://gate.lava.top/api/v2/invoice "HTTP/1.1 404 Not Found"
+2026-03-19 20:58:56,443 - bot.routers.pack_router - ERROR - Failed to create Lava payment
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/lava_top_sdk/client.py", line 136, in _make_request
+    response.raise_for_status()
+  File "/usr/local/lib/python3.11/site-packages/requests/models.py", line 1026, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: Not Found for url: https://gate.lava.top/api/v2/invoice
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/app/services/providers/payment/lava_provider.py", line 71, in create_payment
+    return await asyncio.to_thread(_create)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/services/providers/payment/lava_provider.py", line 53, in _create
+    inv = self._lava_client().create_one_time_payment(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/lava_top_sdk/client.py", line 244, in create_one_time_payment
+    return self.create_invoice(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/lava_top_sdk/client.py", line 217, in create_invoice
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/lava_top_sdk/client.py", line 147, in _make_request
+    raise APIError("Request failed", {"error": str(e)}) from e
+lava_top_sdk.client.APIError: Request failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app/bot/routers/pack_router.py", line 164, in _create_lava_payment
+    result = await pack_service.create_purchase(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/services/pack_service.py", line 63, in create_purchase
+    provider_result = await provider.create_payment(user_id=user_id, pack=pack, buyer_email=buyer_email)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/services/providers/payment/lava_provider.py", line 74, in create_payment
+    return await self._create_payment_http_v2(buyer_email=buyer_email, pack=pack)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/services/providers/payment/lava_provider.py", line 91, in _create_payment_http_v2
+    response.raise_for_status()
+  File "/usr/local/lib/python3.11/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://gate.lava.top/api/v2/invoice'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2026-03-19 20:58:56,499 - aiogram.event - INFO - Update id=83163216 is handled. Duration 1494 ms by bot id=8635578862
+2026-03-19 21:04:33,586 - lava_client - INFO - Fetching products list | {'params': {'feedVisibility': 'ONLY_VISIBLE', 'showAllSubscriptionPeriods': 'false'}}
+2026-03-19 21:04:33,757 - lava_client - INFO - Products retrieved | {'count': 0}
+2026-03-19 21:07:44,470 - lava_client - INFO - Fetching products list | {'params': {'feedVisibility': 'ONLY_VISIBLE', 'showAllSubscriptionPeriods': 'false'}}
+2026-03-19 21:07:44,615 - lava_client - INFO - Products retrieved | {'count': 1}
+2026-03-19 21:07:50,250 - lava_client - INFO - Fetching products list | {'params': {'feedVisibility': 'ONLY_VISIBLE', 'showAllSubscriptionPeriods': 'false'}}
+2026-03-19 21:07:50,412 - lava_client - INFO - Products retrieved | {'count': 1}
+2026-03-19 21:08:25,083 - lava_client - INFO - Fetching products list | {'params': {'feedVisibility': 'ONLY_VISIBLE', 'showAllSubscriptionPeriods': 'false'}}
+2026-03-19 21:08:25,228 - lava_client - INFO - Products retrieved | {'count': 1}
+2026-03-19 21:08:25,887 - lava_client - INFO - Fetching products list | {'params': {'feedVisibility': 'ONLY_VISIBLE', 'showAllSubscriptionPeriods': 'false'}}
+2026-03-19 21:08:26,047 - lava_client - INFO - Products retrieved | {'count': 1}
+2026-03-19 21:39:43,022 - presentation.bootstrap - INFO - Stopping VideoGenerationWorker...
+2026-03-19 21:39:43,056 - services.generation_worker - INFO - VideoGenerationWorker stopping...
+2026-03-19 21:39:43,056 - presentation.bootstrap - INFO - Stopping Telegram Bot...
+2026-03-19 21:39:43,058 - aiogram.dispatcher - INFO - Polling stopped
+2026-03-19 21:39:43,112 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-03-19 21:39:43,112 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8635578862)
+2026-03-19 21:39:43,411 - aiogram.dispatcher - INFO - Polling stopped for bot @aividedobot id=8635578862 - 'aividedobot'
+2026-03-19 21:39:57,393 - presentation.bootstrap - INFO - Initializing Telegram Bot...
+2026-03-19 21:39:57,393 - bot.builder.bot_manager - INFO - Init Bot Manager
+2026-03-19 21:39:57,821 - bot.builder.dispatcher_manager - INFO - Default commands set up successfully
+2026-03-19 21:39:57,821 - bot.builder.dispatcher_manager - INFO - Dispatcher Manager initialized
+2026-03-19 21:39:57,821 - presentation.bootstrap - INFO - Starting bot polling in background...
+2026-03-19 21:39:57,821 - services.generation_worker - INFO - VideoGenerationWorker started.
+2026-03-19 21:39:57,822 - aiogram.dispatcher - INFO - Start polling
+2026-03-19 21:39:57,889 - aiogram.dispatcher - INFO - Run polling for bot @aividedobot id=8635578862 - 'aividedobot'
+2026-03-19 21:40:49,248 - lava_client - INFO - Fetching products list | {'params': {'feedVisibility': 'ALL', 'showAllSubscriptionPeriods': 'true'}}
+2026-03-19 21:40:49,497 - lava_client - INFO - Products retrieved | {'count': 1}
+2026-03-19 21:41:14,393 - aiogram.event - INFO - Update id=83163217 is handled. Duration 167 ms by bot id=8635578862
+2026-03-19 21:41:23,364 - lava_client - INFO - Fetching products list | {'params': {'feedVisibility': 'ALL', 'showAllSubscriptionPeriods': 'true'}}
+2026-03-19 21:41:23,548 - lava_client - INFO - Products retrieved | {'count': 1}
+2026-03-19 21:41:26,089 - lava_client - INFO - Fetching products list | {'params': {'feedVisibility': 'ALL', 'showAllSubscriptionPeriods': 'true'}}
+2026-03-19 21:41:26,263 - lava_client - INFO - Products retrieved | {'count': 1}
+2026-03-19 21:41:26,736 - lava_client - INFO - Fetching products list | {'params': {'feedVisibility': 'ALL', 'showAllSubscriptionPeriods': 'true'}}
+2026-03-19 21:41:26,906 - lava_client - INFO - Products retrieved | {'count': 1}
+2026-03-19 21:41:29,819 - aiogram.event - INFO - Update id=83163218 is handled. Duration 70 ms by bot id=8635578862
+2026-03-19 21:41:30,733 - aiogram.event - INFO - Update id=83163219 is handled. Duration 75 ms by bot id=8635578862
+2026-03-19 21:41:31,535 - aiogram.event - INFO - Update id=83163220 is handled. Duration 64 ms by bot id=8635578862
+2026-03-19 21:41:32,876 - aiogram.event - INFO - Update id=83163221 is handled. Duration 66 ms by bot id=8635578862
+2026-03-19 21:41:35,809 - httpx - INFO - HTTP Request: POST https://gate.lava.top/api/v3/invoice "HTTP/1.1 201 Created"
+2026-03-19 21:41:35,887 - aiogram.event - INFO - Update id=83163222 is handled. Duration 1837 ms by bot id=8635578862
+2026-03-19 21:41:53,406 - aiogram.event - INFO - Update id=83163223 is handled. Duration 75 ms by bot id=8635578862
+2026-03-19 21:42:15,015 - lava_client - INFO - Fetching products list | {'params': {'feedVisibility': 'ALL', 'showAllSubscriptionPeriods': 'true'}}
+2026-03-19 21:42:15,194 - lava_client - INFO - Products retrieved | {'count': 1}
+2026-03-19 21:42:17,493 - lava_client - INFO - Fetching products list | {'params': {'feedVisibility': 'ALL', 'showAllSubscriptionPeriods': 'true'}}
+2026-03-19 21:42:17,619 - lava_client - INFO - Products retrieved | {'count': 1}
+2026-03-19 21:42:17,767 - lava_client - INFO - Fetching products list | {'params': {'feedVisibility': 'ALL', 'showAllSubscriptionPeriods': 'true'}}
+2026-03-19 21:42:17,926 - lava_client - INFO - Products retrieved | {'count': 1}
+2026-03-19 21:42:20,307 - aiogram.event - INFO - Update id=83163224 is handled. Duration 99 ms by bot id=8635578862
+2026-03-19 21:42:21,177 - aiogram.event - INFO - Update id=83163225 is handled. Duration 94 ms by bot id=8635578862
+2026-03-19 21:42:22,300 - aiogram.event - INFO - Update id=83163226 is handled. Duration 91 ms by bot id=8635578862
+2026-03-19 21:42:24,192 - aiogram.event - INFO - Update id=83163227 is handled. Duration 62 ms by bot id=8635578862
+2026-03-19 21:42:26,835 - aiogram.event - INFO - Update id=83163228 is handled. Duration 93 ms by bot id=8635578862
+2026-03-19 21:42:28,698 - aiogram.event - INFO - Update id=83163229 is handled. Duration 69 ms by bot id=8635578862
+2026-03-19 21:42:31,798 - aiogram.event - INFO - Update id=83163230 is handled. Duration 87 ms by bot id=8635578862
+2026-03-19 21:42:35,358 - aiogram.event - INFO - Update id=83163231 is handled. Duration 78 ms by bot id=8635578862
+2026-03-19 21:42:45,148 - aiogram.event - INFO - Update id=83163232 is handled. Duration 80 ms by bot id=8635578862
+2026-03-19 21:42:47,609 - aiogram.event - INFO - Update id=83163233 is handled. Duration 99 ms by bot id=8635578862
+2026-03-19 21:42:49,028 - aiogram.event - INFO - Update id=83163234 is handled. Duration 77 ms by bot id=8635578862
+2026-03-19 21:43:21,261 - aiogram.event - INFO - Update id=83163235 is handled. Duration 73 ms by bot id=8635578862
+2026-03-19 21:43:22,047 - aiogram.event - INFO - Update id=83163236 is handled. Duration 71 ms by bot id=8635578862
+2026-03-19 21:43:22,777 - aiogram.event - INFO - Update id=83163237 is handled. Duration 66 ms by bot id=8635578862
+2026-03-19 21:43:24,599 - aiogram.event - INFO - Update id=83163238 is handled. Duration 79 ms by bot id=8635578862
+2026-03-20 03:54:22,607 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2026-03-20 03:54:22,607 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8635578862)
+2026-03-20 03:55:23,654 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 03:55:23,654 - aiogram.dispatcher - WARNING - Sleep for 1.376028 seconds and try again... (tryings = 1, bot id = 8635578862)
+2026-03-20 03:56:25,081 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 03:56:25,082 - aiogram.dispatcher - WARNING - Sleep for 1.799473 seconds and try again... (tryings = 2, bot id = 8635578862)
+2026-03-20 03:57:26,929 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 03:57:26,929 - aiogram.dispatcher - WARNING - Sleep for 2.286794 seconds and try again... (tryings = 3, bot id = 8635578862)
+2026-03-20 03:58:29,258 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 03:58:29,259 - aiogram.dispatcher - WARNING - Sleep for 2.841752 seconds and try again... (tryings = 4, bot id = 8635578862)
+2026-03-20 03:59:32,146 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 03:59:32,148 - aiogram.dispatcher - WARNING - Sleep for 3.570504 seconds and try again... (tryings = 5, bot id = 8635578862)
+2026-03-20 04:00:35,765 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:00:35,765 - aiogram.dispatcher - WARNING - Sleep for 4.682503 seconds and try again... (tryings = 6, bot id = 8635578862)
+2026-03-20 04:01:40,495 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:01:40,496 - aiogram.dispatcher - WARNING - Sleep for 4.876817 seconds and try again... (tryings = 7, bot id = 8635578862)
+2026-03-20 04:02:45,417 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:02:45,417 - aiogram.dispatcher - WARNING - Sleep for 5.033566 seconds and try again... (tryings = 8, bot id = 8635578862)
+2026-03-20 04:03:50,499 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:03:50,499 - aiogram.dispatcher - WARNING - Sleep for 5.012789 seconds and try again... (tryings = 9, bot id = 8635578862)
+2026-03-20 04:04:55,555 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:04:55,555 - aiogram.dispatcher - WARNING - Sleep for 5.052617 seconds and try again... (tryings = 10, bot id = 8635578862)
+2026-03-20 04:06:00,655 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:06:00,655 - aiogram.dispatcher - WARNING - Sleep for 4.734317 seconds and try again... (tryings = 11, bot id = 8635578862)
+2026-03-20 04:07:05,437 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:07:05,437 - aiogram.dispatcher - WARNING - Sleep for 4.935638 seconds and try again... (tryings = 12, bot id = 8635578862)
+2026-03-20 04:08:10,421 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:08:10,421 - aiogram.dispatcher - WARNING - Sleep for 4.927352 seconds and try again... (tryings = 13, bot id = 8635578862)
+2026-03-20 04:09:15,397 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:09:15,397 - aiogram.dispatcher - WARNING - Sleep for 5.004300 seconds and try again... (tryings = 14, bot id = 8635578862)
+2026-03-20 04:10:20,445 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:10:20,445 - aiogram.dispatcher - WARNING - Sleep for 4.984209 seconds and try again... (tryings = 15, bot id = 8635578862)
+2026-03-20 04:11:25,478 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:11:25,478 - aiogram.dispatcher - WARNING - Sleep for 4.952984 seconds and try again... (tryings = 16, bot id = 8635578862)
+2026-03-20 04:12:30,479 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:12:30,479 - aiogram.dispatcher - WARNING - Sleep for 4.856338 seconds and try again... (tryings = 17, bot id = 8635578862)
+2026-03-20 04:13:35,380 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:13:35,380 - aiogram.dispatcher - WARNING - Sleep for 5.094616 seconds and try again... (tryings = 18, bot id = 8635578862)
+2026-03-20 04:14:40,522 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:14:40,523 - aiogram.dispatcher - WARNING - Sleep for 4.989542 seconds and try again... (tryings = 19, bot id = 8635578862)
+2026-03-20 04:15:45,559 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:15:45,559 - aiogram.dispatcher - WARNING - Sleep for 5.030410 seconds and try again... (tryings = 20, bot id = 8635578862)
+2026-03-20 04:16:50,638 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:16:50,638 - aiogram.dispatcher - WARNING - Sleep for 4.914095 seconds and try again... (tryings = 21, bot id = 8635578862)
+2026-03-20 04:17:55,600 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:17:55,600 - aiogram.dispatcher - WARNING - Sleep for 5.235631 seconds and try again... (tryings = 22, bot id = 8635578862)
+2026-03-20 04:19:00,887 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:19:00,887 - aiogram.dispatcher - WARNING - Sleep for 5.046150 seconds and try again... (tryings = 23, bot id = 8635578862)
+2026-03-20 04:20:05,980 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:20:05,981 - aiogram.dispatcher - WARNING - Sleep for 4.889086 seconds and try again... (tryings = 24, bot id = 8635578862)
+2026-03-20 04:21:10,917 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:21:10,918 - aiogram.dispatcher - WARNING - Sleep for 4.919214 seconds and try again... (tryings = 25, bot id = 8635578862)
+2026-03-20 04:22:15,887 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:22:15,887 - aiogram.dispatcher - WARNING - Sleep for 5.010758 seconds and try again... (tryings = 26, bot id = 8635578862)
+2026-03-20 04:23:20,947 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:23:20,947 - aiogram.dispatcher - WARNING - Sleep for 5.169210 seconds and try again... (tryings = 27, bot id = 8635578862)
+2026-03-20 04:24:26,167 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:24:26,168 - aiogram.dispatcher - WARNING - Sleep for 5.042091 seconds and try again... (tryings = 28, bot id = 8635578862)
+2026-03-20 04:25:31,270 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:25:31,270 - aiogram.dispatcher - WARNING - Sleep for 5.051836 seconds and try again... (tryings = 29, bot id = 8635578862)
+2026-03-20 04:26:36,374 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:26:36,375 - aiogram.dispatcher - WARNING - Sleep for 4.977594 seconds and try again... (tryings = 30, bot id = 8635578862)
+2026-03-20 04:27:41,395 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:27:41,395 - aiogram.dispatcher - WARNING - Sleep for 5.047053 seconds and try again... (tryings = 31, bot id = 8635578862)
+2026-03-20 04:28:46,486 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:28:46,486 - aiogram.dispatcher - WARNING - Sleep for 4.970994 seconds and try again... (tryings = 32, bot id = 8635578862)
+2026-03-20 04:29:51,502 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:29:51,502 - aiogram.dispatcher - WARNING - Sleep for 5.143899 seconds and try again... (tryings = 33, bot id = 8635578862)
+2026-03-20 04:30:56,692 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:30:56,692 - aiogram.dispatcher - WARNING - Sleep for 4.921011 seconds and try again... (tryings = 34, bot id = 8635578862)
+2026-03-20 04:32:01,664 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:32:01,664 - aiogram.dispatcher - WARNING - Sleep for 5.042529 seconds and try again... (tryings = 35, bot id = 8635578862)
+2026-03-20 04:33:06,751 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:33:06,751 - aiogram.dispatcher - WARNING - Sleep for 5.014724 seconds and try again... (tryings = 36, bot id = 8635578862)
+2026-03-20 04:34:11,814 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:34:11,814 - aiogram.dispatcher - WARNING - Sleep for 5.044745 seconds and try again... (tryings = 37, bot id = 8635578862)
+2026-03-20 04:35:16,906 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:35:16,907 - aiogram.dispatcher - WARNING - Sleep for 4.835471 seconds and try again... (tryings = 38, bot id = 8635578862)
+2026-03-20 04:36:21,790 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:36:21,790 - aiogram.dispatcher - WARNING - Sleep for 4.902963 seconds and try again... (tryings = 39, bot id = 8635578862)
+2026-03-20 04:37:26,740 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:37:26,740 - aiogram.dispatcher - WARNING - Sleep for 5.201500 seconds and try again... (tryings = 40, bot id = 8635578862)
+2026-03-20 04:38:31,988 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:38:31,988 - aiogram.dispatcher - WARNING - Sleep for 5.000994 seconds and try again... (tryings = 41, bot id = 8635578862)
+2026-03-20 04:39:37,037 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:39:37,037 - aiogram.dispatcher - WARNING - Sleep for 5.065263 seconds and try again... (tryings = 42, bot id = 8635578862)
+2026-03-20 04:40:42,148 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:40:42,149 - aiogram.dispatcher - WARNING - Sleep for 5.044962 seconds and try again... (tryings = 43, bot id = 8635578862)
+2026-03-20 04:41:47,240 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:41:47,240 - aiogram.dispatcher - WARNING - Sleep for 5.006257 seconds and try again... (tryings = 44, bot id = 8635578862)
+2026-03-20 04:42:52,295 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:42:52,295 - aiogram.dispatcher - WARNING - Sleep for 5.082194 seconds and try again... (tryings = 45, bot id = 8635578862)
+2026-03-20 04:43:57,425 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:43:57,425 - aiogram.dispatcher - WARNING - Sleep for 4.939275 seconds and try again... (tryings = 46, bot id = 8635578862)
+2026-03-20 04:45:02,415 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:45:02,415 - aiogram.dispatcher - WARNING - Sleep for 4.958792 seconds and try again... (tryings = 47, bot id = 8635578862)
+2026-03-20 04:46:07,421 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:46:07,421 - aiogram.dispatcher - WARNING - Sleep for 5.015415 seconds and try again... (tryings = 48, bot id = 8635578862)
+2026-03-20 04:47:12,484 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:47:12,484 - aiogram.dispatcher - WARNING - Sleep for 4.906950 seconds and try again... (tryings = 49, bot id = 8635578862)
+2026-03-20 04:48:17,438 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:48:17,439 - aiogram.dispatcher - WARNING - Sleep for 4.906052 seconds and try again... (tryings = 50, bot id = 8635578862)
+2026-03-20 04:49:22,395 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:49:22,395 - aiogram.dispatcher - WARNING - Sleep for 4.922633 seconds and try again... (tryings = 51, bot id = 8635578862)
+2026-03-20 04:50:27,367 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:50:27,367 - aiogram.dispatcher - WARNING - Sleep for 4.904926 seconds and try again... (tryings = 52, bot id = 8635578862)
+2026-03-20 04:51:32,320 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:51:32,320 - aiogram.dispatcher - WARNING - Sleep for 4.955895 seconds and try again... (tryings = 53, bot id = 8635578862)
+2026-03-20 04:52:37,319 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:52:37,319 - aiogram.dispatcher - WARNING - Sleep for 4.985305 seconds and try again... (tryings = 54, bot id = 8635578862)
+2026-03-20 04:53:42,352 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:53:42,353 - aiogram.dispatcher - WARNING - Sleep for 4.991676 seconds and try again... (tryings = 55, bot id = 8635578862)
+2026-03-20 04:54:47,388 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:54:47,389 - aiogram.dispatcher - WARNING - Sleep for 5.135350 seconds and try again... (tryings = 56, bot id = 8635578862)
+2026-03-20 04:55:52,573 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:55:52,573 - aiogram.dispatcher - WARNING - Sleep for 4.848785 seconds and try again... (tryings = 57, bot id = 8635578862)
+2026-03-20 04:56:57,469 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:56:57,469 - aiogram.dispatcher - WARNING - Sleep for 5.065597 seconds and try again... (tryings = 58, bot id = 8635578862)
+2026-03-20 04:58:02,581 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:58:02,581 - aiogram.dispatcher - WARNING - Sleep for 5.024499 seconds and try again... (tryings = 59, bot id = 8635578862)
+2026-03-20 04:59:07,652 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 04:59:07,652 - aiogram.dispatcher - WARNING - Sleep for 4.944480 seconds and try again... (tryings = 60, bot id = 8635578862)
+2026-03-20 05:00:12,643 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:00:12,643 - aiogram.dispatcher - WARNING - Sleep for 4.965191 seconds and try again... (tryings = 61, bot id = 8635578862)
+2026-03-20 05:01:17,656 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:01:17,657 - aiogram.dispatcher - WARNING - Sleep for 4.932369 seconds and try again... (tryings = 62, bot id = 8635578862)
+2026-03-20 05:02:22,635 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:02:22,636 - aiogram.dispatcher - WARNING - Sleep for 4.868968 seconds and try again... (tryings = 63, bot id = 8635578862)
+2026-03-20 05:03:27,555 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:03:27,557 - aiogram.dispatcher - WARNING - Sleep for 5.100803 seconds and try again... (tryings = 64, bot id = 8635578862)
+2026-03-20 05:04:32,704 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:04:32,705 - aiogram.dispatcher - WARNING - Sleep for 5.116815 seconds and try again... (tryings = 65, bot id = 8635578862)
+2026-03-20 05:05:37,866 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:05:37,866 - aiogram.dispatcher - WARNING - Sleep for 4.895228 seconds and try again... (tryings = 66, bot id = 8635578862)
+2026-03-20 05:06:42,809 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:06:42,809 - aiogram.dispatcher - WARNING - Sleep for 5.048135 seconds and try again... (tryings = 67, bot id = 8635578862)
+2026-03-20 05:07:47,904 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:07:47,905 - aiogram.dispatcher - WARNING - Sleep for 5.083777 seconds and try again... (tryings = 68, bot id = 8635578862)
+2026-03-20 05:08:53,036 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:08:53,037 - aiogram.dispatcher - WARNING - Sleep for 4.985157 seconds and try again... (tryings = 69, bot id = 8635578862)
+2026-03-20 05:09:58,069 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:09:58,069 - aiogram.dispatcher - WARNING - Sleep for 5.155578 seconds and try again... (tryings = 70, bot id = 8635578862)
+2026-03-20 05:11:03,272 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:11:03,273 - aiogram.dispatcher - WARNING - Sleep for 4.975735 seconds and try again... (tryings = 71, bot id = 8635578862)
+2026-03-20 05:12:08,297 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:12:08,297 - aiogram.dispatcher - WARNING - Sleep for 4.780987 seconds and try again... (tryings = 72, bot id = 8635578862)
+2026-03-20 05:13:13,128 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:13:13,129 - aiogram.dispatcher - WARNING - Sleep for 5.116231 seconds and try again... (tryings = 73, bot id = 8635578862)
+2026-03-20 05:14:18,293 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:14:18,293 - aiogram.dispatcher - WARNING - Sleep for 4.820647 seconds and try again... (tryings = 74, bot id = 8635578862)
+2026-03-20 05:15:23,161 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:15:23,162 - aiogram.dispatcher - WARNING - Sleep for 5.024877 seconds and try again... (tryings = 75, bot id = 8635578862)
+2026-03-20 05:16:28,234 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:16:28,235 - aiogram.dispatcher - WARNING - Sleep for 5.096234 seconds and try again... (tryings = 76, bot id = 8635578862)
+2026-03-20 05:17:33,379 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:17:33,379 - aiogram.dispatcher - WARNING - Sleep for 5.017224 seconds and try again... (tryings = 77, bot id = 8635578862)
+2026-03-20 05:18:38,444 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:18:38,444 - aiogram.dispatcher - WARNING - Sleep for 5.008343 seconds and try again... (tryings = 78, bot id = 8635578862)
+2026-03-20 05:19:43,499 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:19:43,500 - aiogram.dispatcher - WARNING - Sleep for 5.069327 seconds and try again... (tryings = 79, bot id = 8635578862)
+2026-03-20 05:20:48,620 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:20:48,620 - aiogram.dispatcher - WARNING - Sleep for 4.943380 seconds and try again... (tryings = 80, bot id = 8635578862)
+2026-03-20 05:21:53,613 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:21:53,614 - aiogram.dispatcher - WARNING - Sleep for 4.994305 seconds and try again... (tryings = 81, bot id = 8635578862)
+2026-03-20 05:22:58,650 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:22:58,651 - aiogram.dispatcher - WARNING - Sleep for 5.222860 seconds and try again... (tryings = 82, bot id = 8635578862)
+2026-03-20 05:24:03,924 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:24:03,925 - aiogram.dispatcher - WARNING - Sleep for 5.018002 seconds and try again... (tryings = 83, bot id = 8635578862)
+2026-03-20 05:25:08,989 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:25:08,989 - aiogram.dispatcher - WARNING - Sleep for 4.942752 seconds and try again... (tryings = 84, bot id = 8635578862)
+2026-03-20 05:26:13,987 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:26:13,987 - aiogram.dispatcher - WARNING - Sleep for 4.895622 seconds and try again... (tryings = 85, bot id = 8635578862)
+2026-03-20 05:27:18,927 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:27:18,927 - aiogram.dispatcher - WARNING - Sleep for 4.816497 seconds and try again... (tryings = 86, bot id = 8635578862)
+2026-03-20 05:28:23,790 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:28:23,790 - aiogram.dispatcher - WARNING - Sleep for 5.015155 seconds and try again... (tryings = 87, bot id = 8635578862)
+2026-03-20 05:29:28,856 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:29:28,857 - aiogram.dispatcher - WARNING - Sleep for 4.850690 seconds and try again... (tryings = 88, bot id = 8635578862)
+2026-03-20 05:30:33,759 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:30:33,760 - aiogram.dispatcher - WARNING - Sleep for 4.883334 seconds and try again... (tryings = 89, bot id = 8635578862)
+2026-03-20 05:31:38,690 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:31:38,691 - aiogram.dispatcher - WARNING - Sleep for 4.908858 seconds and try again... (tryings = 90, bot id = 8635578862)
+2026-03-20 05:32:43,644 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:32:43,645 - aiogram.dispatcher - WARNING - Sleep for 4.993253 seconds and try again... (tryings = 91, bot id = 8635578862)
+2026-03-20 05:33:48,682 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:33:48,683 - aiogram.dispatcher - WARNING - Sleep for 5.126144 seconds and try again... (tryings = 92, bot id = 8635578862)
+2026-03-20 05:34:53,851 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:34:53,852 - aiogram.dispatcher - WARNING - Sleep for 4.922093 seconds and try again... (tryings = 93, bot id = 8635578862)
+2026-03-20 05:35:58,821 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:35:58,821 - aiogram.dispatcher - WARNING - Sleep for 5.104452 seconds and try again... (tryings = 94, bot id = 8635578862)
+2026-03-20 05:37:03,973 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:37:03,973 - aiogram.dispatcher - WARNING - Sleep for 5.017302 seconds and try again... (tryings = 95, bot id = 8635578862)
+2026-03-20 05:38:09,039 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:38:09,039 - aiogram.dispatcher - WARNING - Sleep for 5.019710 seconds and try again... (tryings = 96, bot id = 8635578862)
+2026-03-20 05:39:14,107 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:39:14,108 - aiogram.dispatcher - WARNING - Sleep for 4.876929 seconds and try again... (tryings = 97, bot id = 8635578862)
+2026-03-20 05:40:19,031 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:40:19,031 - aiogram.dispatcher - WARNING - Sleep for 4.891270 seconds and try again... (tryings = 98, bot id = 8635578862)
+2026-03-20 05:41:23,969 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:41:23,969 - aiogram.dispatcher - WARNING - Sleep for 5.105266 seconds and try again... (tryings = 99, bot id = 8635578862)
+2026-03-20 05:42:29,117 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:42:29,117 - aiogram.dispatcher - WARNING - Sleep for 5.237353 seconds and try again... (tryings = 100, bot id = 8635578862)
+2026-03-20 05:43:34,399 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:43:34,400 - aiogram.dispatcher - WARNING - Sleep for 5.037284 seconds and try again... (tryings = 101, bot id = 8635578862)
+2026-03-20 05:44:39,487 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:44:39,487 - aiogram.dispatcher - WARNING - Sleep for 4.993651 seconds and try again... (tryings = 102, bot id = 8635578862)
+2026-03-20 05:45:44,532 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:45:44,532 - aiogram.dispatcher - WARNING - Sleep for 5.236989 seconds and try again... (tryings = 103, bot id = 8635578862)
+2026-03-20 05:46:49,814 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:46:49,814 - aiogram.dispatcher - WARNING - Sleep for 5.004628 seconds and try again... (tryings = 104, bot id = 8635578862)
+2026-03-20 05:47:54,865 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:47:54,866 - aiogram.dispatcher - WARNING - Sleep for 4.878376 seconds and try again... (tryings = 105, bot id = 8635578862)
+2026-03-20 05:48:59,796 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:48:59,797 - aiogram.dispatcher - WARNING - Sleep for 5.016759 seconds and try again... (tryings = 106, bot id = 8635578862)
+2026-03-20 05:50:04,860 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:50:04,861 - aiogram.dispatcher - WARNING - Sleep for 4.995916 seconds and try again... (tryings = 107, bot id = 8635578862)
+2026-03-20 05:51:09,904 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:51:09,904 - aiogram.dispatcher - WARNING - Sleep for 5.078201 seconds and try again... (tryings = 108, bot id = 8635578862)
+2026-03-20 05:52:15,026 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:52:15,027 - aiogram.dispatcher - WARNING - Sleep for 4.904182 seconds and try again... (tryings = 109, bot id = 8635578862)
+2026-03-20 05:53:19,979 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:53:19,979 - aiogram.dispatcher - WARNING - Sleep for 4.908331 seconds and try again... (tryings = 110, bot id = 8635578862)
+2026-03-20 05:54:24,934 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:54:24,935 - aiogram.dispatcher - WARNING - Sleep for 4.940085 seconds and try again... (tryings = 111, bot id = 8635578862)
+2026-03-20 05:55:29,923 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:55:29,923 - aiogram.dispatcher - WARNING - Sleep for 5.006981 seconds and try again... (tryings = 112, bot id = 8635578862)
+2026-03-20 05:56:34,983 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:56:34,983 - aiogram.dispatcher - WARNING - Sleep for 5.007768 seconds and try again... (tryings = 113, bot id = 8635578862)
+2026-03-20 05:57:40,037 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:57:40,037 - aiogram.dispatcher - WARNING - Sleep for 4.986873 seconds and try again... (tryings = 114, bot id = 8635578862)
+2026-03-20 05:58:45,072 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:58:45,073 - aiogram.dispatcher - WARNING - Sleep for 5.133784 seconds and try again... (tryings = 115, bot id = 8635578862)
+2026-03-20 05:59:50,254 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 05:59:50,254 - aiogram.dispatcher - WARNING - Sleep for 5.051761 seconds and try again... (tryings = 116, bot id = 8635578862)
+2026-03-20 06:00:55,354 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:00:55,355 - aiogram.dispatcher - WARNING - Sleep for 5.029790 seconds and try again... (tryings = 117, bot id = 8635578862)
+2026-03-20 06:02:00,432 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:02:00,432 - aiogram.dispatcher - WARNING - Sleep for 4.982673 seconds and try again... (tryings = 118, bot id = 8635578862)
+2026-03-20 06:03:05,462 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:03:05,463 - aiogram.dispatcher - WARNING - Sleep for 5.096802 seconds and try again... (tryings = 119, bot id = 8635578862)
+2026-03-20 06:04:10,605 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:04:10,605 - aiogram.dispatcher - WARNING - Sleep for 4.876189 seconds and try again... (tryings = 120, bot id = 8635578862)
+2026-03-20 06:05:15,529 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:05:15,529 - aiogram.dispatcher - WARNING - Sleep for 5.129374 seconds and try again... (tryings = 121, bot id = 8635578862)
+2026-03-20 06:06:20,702 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:06:20,703 - aiogram.dispatcher - WARNING - Sleep for 5.047209 seconds and try again... (tryings = 122, bot id = 8635578862)
+2026-03-20 06:07:25,798 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:07:25,805 - aiogram.dispatcher - WARNING - Sleep for 5.048971 seconds and try again... (tryings = 123, bot id = 8635578862)
+2026-03-20 06:08:30,902 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:08:30,902 - aiogram.dispatcher - WARNING - Sleep for 4.940315 seconds and try again... (tryings = 124, bot id = 8635578862)
+2026-03-20 06:09:35,887 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:09:35,887 - aiogram.dispatcher - WARNING - Sleep for 5.084888 seconds and try again... (tryings = 125, bot id = 8635578862)
+2026-03-20 06:10:41,019 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:10:41,019 - aiogram.dispatcher - WARNING - Sleep for 5.174219 seconds and try again... (tryings = 126, bot id = 8635578862)
+2026-03-20 06:11:46,244 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:11:46,244 - aiogram.dispatcher - WARNING - Sleep for 4.992794 seconds and try again... (tryings = 127, bot id = 8635578862)
+2026-03-20 06:12:51,287 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:12:51,288 - aiogram.dispatcher - WARNING - Sleep for 5.008857 seconds and try again... (tryings = 128, bot id = 8635578862)
+2026-03-20 06:13:56,346 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:13:56,346 - aiogram.dispatcher - WARNING - Sleep for 5.083068 seconds and try again... (tryings = 129, bot id = 8635578862)
+2026-03-20 06:15:01,477 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:15:01,477 - aiogram.dispatcher - WARNING - Sleep for 4.802635 seconds and try again... (tryings = 130, bot id = 8635578862)
+2026-03-20 06:16:06,323 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:16:06,324 - aiogram.dispatcher - WARNING - Sleep for 4.941113 seconds and try again... (tryings = 131, bot id = 8635578862)
+2026-03-20 06:17:11,313 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:17:11,314 - aiogram.dispatcher - WARNING - Sleep for 4.739071 seconds and try again... (tryings = 132, bot id = 8635578862)
+2026-03-20 06:18:16,099 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:18:16,100 - aiogram.dispatcher - WARNING - Sleep for 5.146469 seconds and try again... (tryings = 133, bot id = 8635578862)
+2026-03-20 06:19:21,293 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:19:21,294 - aiogram.dispatcher - WARNING - Sleep for 4.792993 seconds and try again... (tryings = 134, bot id = 8635578862)
+2026-03-20 06:20:26,131 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:20:26,132 - aiogram.dispatcher - WARNING - Sleep for 4.869009 seconds and try again... (tryings = 135, bot id = 8635578862)
+2026-03-20 06:21:31,046 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:21:31,046 - aiogram.dispatcher - WARNING - Sleep for 5.258843 seconds and try again... (tryings = 136, bot id = 8635578862)
+2026-03-20 06:22:36,350 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:22:36,350 - aiogram.dispatcher - WARNING - Sleep for 4.929013 seconds and try again... (tryings = 137, bot id = 8635578862)
+2026-03-20 06:23:41,333 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:23:41,333 - aiogram.dispatcher - WARNING - Sleep for 4.948814 seconds and try again... (tryings = 138, bot id = 8635578862)
+2026-03-20 06:24:46,330 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:24:46,330 - aiogram.dispatcher - WARNING - Sleep for 5.075736 seconds and try again... (tryings = 139, bot id = 8635578862)
+2026-03-20 06:25:51,455 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:25:51,455 - aiogram.dispatcher - WARNING - Sleep for 5.051911 seconds and try again... (tryings = 140, bot id = 8635578862)
+2026-03-20 06:26:56,565 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:26:56,565 - aiogram.dispatcher - WARNING - Sleep for 5.055962 seconds and try again... (tryings = 141, bot id = 8635578862)
+2026-03-20 06:28:01,670 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:28:01,670 - aiogram.dispatcher - WARNING - Sleep for 4.969526 seconds and try again... (tryings = 142, bot id = 8635578862)
+2026-03-20 06:29:06,688 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:29:06,689 - aiogram.dispatcher - WARNING - Sleep for 5.033521 seconds and try again... (tryings = 143, bot id = 8635578862)
+2026-03-20 06:30:11,771 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:30:11,771 - aiogram.dispatcher - WARNING - Sleep for 4.968746 seconds and try again... (tryings = 144, bot id = 8635578862)
+2026-03-20 06:31:16,789 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:31:16,789 - aiogram.dispatcher - WARNING - Sleep for 4.922908 seconds and try again... (tryings = 145, bot id = 8635578862)
+2026-03-20 06:32:21,759 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:32:21,759 - aiogram.dispatcher - WARNING - Sleep for 4.766317 seconds and try again... (tryings = 146, bot id = 8635578862)
+2026-03-20 06:33:26,573 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-20 06:33:26,574 - aiogram.dispatcher - WARNING - Sleep for 4.919440 seconds and try again... (tryings = 147, bot id = 8635578862)
+2026-03-20 06:33:42,602 - aiogram.dispatcher - INFO - Connection established (tryings = 148, bot id = 8635578862)
+2026-03-21 20:20:14,353 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientOSError: [Errno 104] Connection reset by peer
+2026-03-21 20:20:14,353 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8635578862)
+2026-03-21 20:20:28,595 - aiogram.dispatcher - INFO - Connection established (tryings = 1, bot id = 8635578862)
+2026-03-21 21:43:31,637 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientOSError: [Errno 104] Connection reset by peer
+2026-03-21 21:43:31,638 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8635578862)
+2026-03-21 21:43:43,995 - aiogram.dispatcher - INFO - Connection established (tryings = 1, bot id = 8635578862)
+2026-03-21 22:45:21,716 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientOSError: [Errno 104] Connection reset by peer
+2026-03-21 22:45:21,716 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8635578862)
+2026-03-21 22:45:34,873 - aiogram.dispatcher - INFO - Connection established (tryings = 1, bot id = 8635578862)
+2026-03-21 22:45:34,920 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientOSError: [Errno 104] Connection reset by peer
+2026-03-21 22:45:34,920 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8635578862)
+2026-03-21 22:45:47,094 - aiogram.dispatcher - INFO - Connection established (tryings = 1, bot id = 8635578862)
+2026-03-21 22:53:40,388 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientOSError: [Errno 104] Connection reset by peer
+2026-03-21 22:53:40,388 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8635578862)
+2026-03-21 22:53:53,795 - aiogram.dispatcher - INFO - Connection established (tryings = 1, bot id = 8635578862)
+2026-03-21 22:58:36,239 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientOSError: [Errno 104] Connection reset by peer
+2026-03-21 22:58:36,240 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8635578862)
+2026-03-21 22:58:50,548 - aiogram.dispatcher - INFO - Connection established (tryings = 1, bot id = 8635578862)
+2026-03-22 16:11:29,607 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2026-03-22 16:11:29,607 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8635578862)
+2026-03-22 16:12:19,036 - aiogram.dispatcher - INFO - Connection established (tryings = 1, bot id = 8635578862)
+2026-03-22 17:14:36,098 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-22 17:14:36,098 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8635578862)
+2026-03-22 17:15:47,608 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2026-03-22 17:15:47,608 - aiogram.dispatcher - WARNING - Sleep for 1.112671 seconds and try again... (tryings = 1, bot id = 8635578862)
+2026-03-22 17:16:06,669 - aiogram.dispatcher - INFO - Connection established (tryings = 2, bot id = 8635578862)
+2026-03-22 19:31:28,496 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientConnectorError: Cannot connect to host api.telegram.org:443 ssl:default [None]
+2026-03-22 19:31:28,497 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8635578862)
+2026-03-22 19:31:42,077 - aiogram.dispatcher - INFO - Connection established (tryings = 1, bot id = 8635578862)
+2026-03-22 20:32:39,606 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2026-03-22 20:32:39,607 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8635578862)
+2026-03-22 20:33:51,607 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2026-03-22 20:33:51,608 - aiogram.dispatcher - WARNING - Sleep for 1.258613 seconds and try again... (tryings = 1, bot id = 8635578862)
+2026-03-22 20:35:03,606 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2026-03-22 20:35:03,607 - aiogram.dispatcher - WARNING - Sleep for 1.548162 seconds and try again... (tryings = 2, bot id = 8635578862)
+2026-03-22 20:36:15,607 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2026-03-22 20:36:15,607 - aiogram.dispatcher - WARNING - Sleep for 2.115375 seconds and try again... (tryings = 3, bot id = 8635578862)
+2026-03-22 20:37:28,607 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2026-03-22 20:37:28,607 - aiogram.dispatcher - WARNING - Sleep for 2.674649 seconds and try again... (tryings = 4, bot id = 8635578862)
+2026-03-22 20:37:41,440 - aiogram.dispatcher - INFO - Connection established (tryings = 5, bot id = 8635578862)
+2026-03-23 11:59:08,401 - aiogram.event - INFO - Update id=83163239 is handled. Duration 227 ms by bot id=8635578862
+2026-03-23 11:59:39,030 - aiogram.event - INFO - Update id=83163240 is handled. Duration 196 ms by bot id=8635578862
+2026-03-23 11:59:45,471 - aiogram.event - INFO - Update id=83163241 is handled. Duration 126 ms by bot id=8635578862
+2026-03-23 11:59:47,350 - aiogram.event - INFO - Update id=83163242 is handled. Duration 223 ms by bot id=8635578862
+2026-03-23 11:59:50,203 - aiogram.event - INFO - Update id=83163243 is handled. Duration 242 ms by bot id=8635578862
+2026-03-23 11:59:57,769 - aiogram.event - INFO - Update id=83163244 is handled. Duration 80 ms by bot id=8635578862
+2026-03-23 11:59:59,290 - aiogram.event - INFO - Update id=83163245 is handled. Duration 131 ms by bot id=8635578862
+2026-03-23 12:00:03,313 - aiogram.event - INFO - Update id=83163246 is handled. Duration 99 ms by bot id=8635578862
+2026-03-23 12:00:09,206 - aiogram.event - INFO - Update id=83163247 is handled. Duration 152 ms by bot id=8635578862
+2026-03-23 12:12:04,005 - aiogram.event - INFO - Update id=83163248 is not handled. Duration 4 ms by bot id=8635578862
+2026-03-23 12:12:43,325 - aiogram.event - INFO - Update id=83163249 is not handled. Duration 8 ms by bot id=8635578862
+2026-03-23 20:00:01,926 - aiogram.event - INFO - Update id=83163250 is handled. Duration 458 ms by bot id=8635578862
+2026-03-23 20:00:03,322 - aiogram.event - INFO - Update id=83163251 is handled. Duration 182 ms by bot id=8635578862
+2026-03-23 20:00:04,944 - aiogram.event - INFO - Update id=83163252 is handled. Duration 224 ms by bot id=8635578862
+2026-03-23 20:00:06,268 - aiogram.event - INFO - Update id=83163253 is handled. Duration 146 ms by bot id=8635578862
+2026-03-23 20:00:06,948 - aiogram.event - INFO - Update id=83163254 is handled. Duration 210 ms by bot id=8635578862
+2026-03-23 20:00:08,047 - aiogram.event - INFO - Update id=83163255 is handled. Duration 110 ms by bot id=8635578862
+2026-03-23 20:00:08,248 - aiogram.event - INFO - Update id=83163256 is handled. Duration 170 ms by bot id=8635578862
+2026-03-23 20:00:09,914 - aiogram.event - INFO - Update id=83163257 is handled. Duration 126 ms by bot id=8635578862
+2026-03-23 20:00:10,535 - aiogram.event - INFO - Update id=83163258 is handled. Duration 497 ms by bot id=8635578862
+2026-03-23 20:00:11,210 - aiogram.event - INFO - Update id=83163259 is handled. Duration 85 ms by bot id=8635578862
+2026-03-23 20:00:12,461 - aiogram.event - INFO - Update id=83163260 is handled. Duration 158 ms by bot id=8635578862
+2026-03-23 20:00:14,050 - aiogram.event - INFO - Update id=83163261 is handled. Duration 75 ms by bot id=8635578862
+2026-03-23 20:00:19,488 - aiogram.event - INFO - Update id=83163262 is handled. Duration 172 ms by bot id=8635578862
+2026-03-23 20:00:19,685 - aiogram.event - INFO - Update id=83163263 is not handled. Duration 9 ms by bot id=8635578862
+2026-03-23 20:00:27,318 - aiogram.event - INFO - Update id=83163264 is not handled. Duration 6 ms by bot id=8635578862
+2026-03-23 20:00:29,008 - aiogram.event - INFO - Update id=83163265 is handled. Duration 75 ms by bot id=8635578862
+2026-03-23 20:00:31,692 - aiogram.event - INFO - Update id=83163266 is handled. Duration 156 ms by bot id=8635578862
+2026-03-23 20:00:32,005 - aiogram.event - INFO - Update id=83163267 is handled. Duration 81 ms by bot id=8635578862
+2026-03-23 20:00:36,615 - aiogram.event - INFO - Update id=83163268 is handled. Duration 152 ms by bot id=8635578862
+2026-03-23 20:00:47,692 - aiogram.event - INFO - Update id=83163269 is handled. Duration 621 ms by bot id=8635578862
+2026-03-23 20:00:50,949 - aiogram.event - INFO - Update id=83163270 is handled. Duration 112 ms by bot id=8635578862
+2026-03-23 20:00:53,087 - aiogram.event - INFO - Update id=83163271 is handled. Duration 178 ms by bot id=8635578862
+2026-03-23 20:00:54,102 - aiogram.event - INFO - Update id=83163272 is handled. Duration 84 ms by bot id=8635578862
+2026-03-23 20:00:56,671 - httpx - INFO - HTTP Request: POST https://gate.lava.top/api/v3/invoice "HTTP/1.1 201 Created"
+2026-03-23 20:00:56,856 - aiogram.event - INFO - Update id=83163273 is handled. Duration 1628 ms by bot id=8635578862
+2026-03-23 20:01:03,501 - aiogram.event - INFO - Update id=83163274 is handled. Duration 88 ms by bot id=8635578862
+2026-03-23 20:01:06,142 - aiogram.event - INFO - Update id=83163275 is handled. Duration 161 ms by bot id=8635578862
+2026-03-23 20:01:07,049 - aiogram.event - INFO - Update id=83163276 is handled. Duration 83 ms by bot id=8635578862
+2026-03-23 20:01:09,450 - httpx - INFO - HTTP Request: POST https://gate.lava.top/api/v3/invoice "HTTP/1.1 201 Created"
+2026-03-23 20:01:09,612 - aiogram.event - INFO - Update id=83163277 is handled. Duration 1657 ms by bot id=8635578862
+2026-03-23 20:01:34,188 - aiogram.event - INFO - Update id=83163278 is handled. Duration 112 ms by bot id=8635578862
+2026-03-23 20:01:35,763 - aiogram.event - INFO - Update id=83163279 is handled. Duration 174 ms by bot id=8635578862
+2026-03-23 20:01:37,036 - aiogram.event - INFO - Update id=83163280 is handled. Duration 179 ms by bot id=8635578862
+2026-03-23 20:01:38,246 - aiogram.event - INFO - Update id=83163281 is handled. Duration 166 ms by bot id=8635578862
+2026-03-23 20:01:42,263 - aiogram.event - INFO - Update id=83163282 is handled. Duration 95 ms by bot id=8635578862
+2026-03-23 20:01:43,514 - aiogram.event - INFO - Update id=83163283 is handled. Duration 460 ms by bot id=8635578862
+2026-03-23 20:11:45,091 - aiogram.event - INFO - Update id=83163284 is handled. Duration 346 ms by bot id=8635578862
+2026-03-24 16:35:49,480 - presentation.bootstrap - INFO - Stopping VideoGenerationWorker...
+2026-03-24 16:35:49,503 - services.generation_worker - INFO - VideoGenerationWorker stopping...
+2026-03-24 16:35:49,503 - presentation.bootstrap - INFO - Stopping Telegram Bot...
+2026-03-24 16:35:49,503 - aiogram.dispatcher - INFO - Polling stopped
+2026-03-24 16:35:49,545 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-03-24 16:35:49,545 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8635578862)
+2026-03-24 16:35:49,833 - aiogram.dispatcher - INFO - Polling stopped for bot @aividedobot id=8635578862 - 'aividedobot'
+2026-03-24 16:36:05,291 - presentation.bootstrap - INFO - Initializing Telegram Bot...
+2026-03-24 16:36:05,291 - bot.builder.bot_manager - INFO - Init Bot Manager
+2026-03-24 16:36:07,129 - bot.builder.dispatcher_manager - INFO - Default commands set up successfully
+2026-03-24 16:36:07,130 - bot.builder.dispatcher_manager - INFO - Dispatcher Manager initialized
+2026-03-24 16:36:07,130 - presentation.bootstrap - INFO - Starting bot polling in background...
+2026-03-24 16:36:07,130 - services.generation_worker - INFO - VideoGenerationWorker started.
+2026-03-24 16:36:07,130 - aiogram.dispatcher - INFO - Start polling
+2026-03-24 16:36:07,282 - aiogram.dispatcher - INFO - Run polling for bot @aividedobot id=8635578862 - 'aividedobot'
+2026-03-24 16:37:20,632 - aiogram.event - INFO - Update id=83163285 is handled. Duration 279 ms by bot id=8635578862
+2026-03-24 16:37:30,606 - aiogram.event - INFO - Update id=83163286 is handled. Duration 189 ms by bot id=8635578862
+2026-03-24 16:37:37,484 - aiogram.event - INFO - Update id=83163287 is handled. Duration 86 ms by bot id=8635578862
+2026-03-24 16:38:03,252 - aiogram.event - INFO - Update id=83163288 is handled. Duration 645 ms by bot id=8635578862
+2026-03-24 16:38:10,309 - aiogram.event - INFO - Update id=83163289 is not handled. Duration 73 ms by bot id=8635578862
+2026-03-24 16:38:10,309 - aiogram.event - ERROR - Cause exception while process update id=83163289 by bot id=8635578862
+TelegramBadRequest: Telegram server says - Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot/middlewares/update/uow_middleware.py", line 19, in __call__
+    result = await handler(event, data)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot/middlewares/update/user_middleware.py", line 160, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot/middlewares/update/i18n_middleware.py", line 41, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot/middlewares/update/service_middleware.py", line 34, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot/middlewares/update/user_action_middleware.py", line 49, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 161, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 153, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 189, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 161, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 153, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 189, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 161, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 153, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 181, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/app/bot/routers/profile_router.py", line 69, in show_settings
+    await call.message.edit_text(text, reply_markup=settings_kb(user.admin_require_telegram_2fa))
+  File "/usr/local/lib/python3.11/site-packages/aiogram/methods/base.py", line 82, in emit
+    return await bot(self)
+           ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/client/bot.py", line 488, in __call__
+    return await self.session(self, method, timeout=request_timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/client/session/base.py", line 259, in __call__
+    return cast(TelegramType, await middleware(bot, method))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/client/session/aiohttp.py", line 177, in make_request
+    response = self.check_response(
+               ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/client/session/base.py", line 121, in check_response
+    raise TelegramBadRequest(method=method, message=description)
+aiogram.exceptions.TelegramBadRequest: Telegram server says - Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message
+2026-03-24 16:38:16,083 - aiogram.event - INFO - Update id=83163290 is handled. Duration 215 ms by bot id=8635578862
+2026-03-24 16:38:17,240 - aiogram.event - INFO - Update id=83163291 is handled. Duration 80 ms by bot id=8635578862
+2026-03-24 16:38:18,681 - aiogram.event - INFO - Update id=83163292 is handled. Duration 366 ms by bot id=8635578862
+2026-03-24 16:38:19,462 - aiogram.event - INFO - Update id=83163293 is handled. Duration 126 ms by bot id=8635578862
+2026-03-24 16:44:52,639 - presentation.bootstrap - INFO - Stopping VideoGenerationWorker...
+2026-03-24 16:44:52,639 - services.generation_worker - INFO - VideoGenerationWorker stopping...
+2026-03-24 16:44:52,639 - presentation.bootstrap - INFO - Stopping Telegram Bot...
+2026-03-24 16:44:52,639 - aiogram.dispatcher - INFO - Polling stopped
+2026-03-24 16:44:52,640 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-03-24 16:44:52,640 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8635578862)
+2026-03-24 16:44:52,892 - aiogram.dispatcher - INFO - Polling stopped for bot @aividedobot id=8635578862 - 'aividedobot'
+2026-03-24 16:45:01,318 - presentation.bootstrap - INFO - Initializing Telegram Bot...
+2026-03-24 16:45:01,318 - bot.builder.bot_manager - INFO - Init Bot Manager
+2026-03-24 16:45:03,516 - bot.builder.dispatcher_manager - INFO - Default commands set up successfully
+2026-03-24 16:45:03,516 - bot.builder.dispatcher_manager - INFO - Dispatcher Manager initialized
+2026-03-24 16:45:03,516 - presentation.bootstrap - INFO - Starting bot polling in background...
+2026-03-24 16:45:03,517 - services.generation_worker - INFO - VideoGenerationWorker started.
+2026-03-24 16:45:03,517 - aiogram.dispatcher - INFO - Start polling
+2026-03-24 16:45:03,669 - aiogram.dispatcher - INFO - Run polling for bot @aividedobot id=8635578862 - 'aividedobot'
+2026-03-24 16:45:21,787 - aiogram.event - INFO - Update id=83163294 is handled. Duration 1363 ms by bot id=8635578862
+2026-03-24 16:45:24,008 - aiogram.event - INFO - Update id=83163295 is handled. Duration 326 ms by bot id=8635578862
+2026-03-24 16:45:26,038 - aiogram.event - INFO - Update id=83163296 is handled. Duration 205 ms by bot id=8635578862
+2026-03-24 16:45:28,851 - aiogram.event - INFO - Update id=83163297 is not handled. Duration 20 ms by bot id=8635578862
+2026-03-24 16:45:28,852 - aiogram.event - ERROR - Cause exception while process update id=83163297 by bot id=8635578862
+ProgrammingError: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column templates.template_type does not exist
+[SQL: SELECT templates.name, templates.category, templates.preview_image_path, templates.preview_video_path, templates.base_prompt, templates.negative_prompt, templates.status, templates.template_type, templates.ai_model_id, templates.created_at, templates.updated_at, templates.id 
+FROM templates 
+WHERE templates.status = $1::VARCHAR AND templates.template_type = $2::VARCHAR]
+[parameters: (<TemplateStatus.ACTIVE: 'active'>, 'postcard')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 526, in _prepare_and_execute
+    prepared_stmt, attributes = await adapt_connection._prepare(
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 773, in _prepare
+    prepared_stmt = await self._connection.prepare(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 638, in prepare
+    return await self._prepare(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 657, in _prepare
+    stmt = await self._get_statement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 443, in _get_statement
+    statement = await self._protocol.prepare(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 165, in prepare
+asyncpg.exceptions.UndefinedColumnError: column templates.template_type does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 585, in execute
+    self._adapt_connection.await_(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 563, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 513, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 797, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.ProgrammingError: <class 'asyncpg.exceptions.UndefinedColumnError'>: column templates.template_type does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot/middlewares/update/uow_middleware.py", line 19, in __call__
+    result = await handler(event, data)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot/middlewares/update/user_middleware.py", line 160, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot/middlewares/update/i18n_middleware.py", line 41, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot/middlewares/update/service_middleware.py", line 34, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot/middlewares/update/user_action_middleware.py", line 49, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 161, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 153, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 189, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 161, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 153, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 189, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 161, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 153, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 181, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/app/bot/routers/postcard_router.py", line 31, in show_postcards
+    postcards = await template_service.get_active_postcards()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/services/template_service.py", line 15, in get_active_postcards
+    return await self.uow.template_repo.list_active_by_type("postcard")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/db/repo/template_repo.py", line 41, in list_active_by_type
+    result = await self.session.execute(stmt)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 449, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1419, in execute
+    return meth(
+           ^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 585, in execute
+    self._adapt_connection.await_(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 563, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 513, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 797, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.ProgrammingError: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column templates.template_type does not exist
+[SQL: SELECT templates.name, templates.category, templates.preview_image_path, templates.preview_video_path, templates.base_prompt, templates.negative_prompt, templates.status, templates.template_type, templates.ai_model_id, templates.created_at, templates.updated_at, templates.id 
+FROM templates 
+WHERE templates.status = $1::VARCHAR AND templates.template_type = $2::VARCHAR]
+[parameters: (<TemplateStatus.ACTIVE: 'active'>, 'postcard')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-24 16:51:14,127 - aiogram.event - INFO - Update id=83163298 is handled. Duration 154 ms by bot id=8635578862
+2026-03-24 16:51:18,343 - aiogram.event - INFO - Update id=83163299 is handled. Duration 155 ms by bot id=8635578862
+2026-03-24 16:52:14,474 - aiogram.event - INFO - Update id=83163300 is handled. Duration 260 ms by bot id=8635578862
+2026-03-24 16:52:16,097 - aiogram.event - INFO - Update id=83163301 is handled. Duration 170 ms by bot id=8635578862
+2026-03-24 16:52:18,893 - aiogram.event - INFO - Update id=83163302 is handled. Duration 182 ms by bot id=8635578862
+2026-03-24 16:52:20,152 - aiogram.event - INFO - Update id=83163303 is handled. Duration 192 ms by bot id=8635578862
+2026-03-24 16:52:23,338 - aiogram.event - INFO - Update id=83163304 is handled. Duration 218 ms by bot id=8635578862
+2026-03-24 16:53:02,965 - aiogram.event - INFO - Update id=83163305 is handled. Duration 175 ms by bot id=8635578862
+2026-03-24 16:53:12,898 - aiogram.event - INFO - Update id=83163306 is handled. Duration 168 ms by bot id=8635578862
+2026-03-24 16:53:14,238 - aiogram.event - INFO - Update id=83163307 is handled. Duration 186 ms by bot id=8635578862
+2026-03-24 17:16:23,781 - presentation.bootstrap - INFO - Stopping VideoGenerationWorker...
+2026-03-24 17:16:23,792 - services.generation_worker - INFO - VideoGenerationWorker stopping...
+2026-03-24 17:16:23,792 - presentation.bootstrap - INFO - Stopping Telegram Bot...
+2026-03-24 17:16:23,792 - aiogram.dispatcher - INFO - Polling stopped
+2026-03-24 17:16:23,793 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-03-24 17:16:23,793 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8635578862)
+2026-03-24 17:16:24,073 - aiogram.dispatcher - INFO - Polling stopped for bot @aividedobot id=8635578862 - 'aividedobot'
+2026-03-24 17:40:19,340 - presentation.bootstrap - INFO - Initializing Telegram Bot...
+2026-03-24 17:40:19,340 - bot.builder.bot_manager - INFO - Init Bot Manager
+2026-03-24 17:40:20,333 - bot.builder.dispatcher_manager - INFO - Default commands set up successfully
+2026-03-24 17:40:20,333 - bot.builder.dispatcher_manager - INFO - Dispatcher Manager initialized
+2026-03-24 17:40:20,333 - presentation.bootstrap - INFO - Starting bot polling in background...
+2026-03-24 17:40:20,333 - services.generation_worker - INFO - VideoGenerationWorker started.
+2026-03-24 17:40:20,334 - aiogram.dispatcher - INFO - Start polling
+2026-03-24 17:40:20,853 - aiogram.dispatcher - INFO - Run polling for bot @aividedobot id=8635578862 - 'aividedobot'
+2026-03-24 17:41:34,177 - aiogram.event - INFO - Update id=83163308 is handled. Duration 184 ms by bot id=8635578862
+2026-03-24 17:41:42,047 - aiogram.event - INFO - Update id=83163309 is handled. Duration 522 ms by bot id=8635578862
+2026-03-24 17:41:43,257 - aiogram.event - INFO - Update id=83163310 is handled. Duration 99 ms by bot id=8635578862
+2026-03-24 18:45:44,000 - aiogram.event - INFO - Update id=83163311 is handled. Duration 220 ms by bot id=8635578862
+2026-03-24 18:45:52,866 - aiogram.event - INFO - Update id=83163312 is handled. Duration 136 ms by bot id=8635578862
+2026-03-24 19:28:48,279 - aiogram.event - INFO - Update id=83163313 is handled. Duration 201 ms by bot id=8635578862
+2026-03-24 19:28:54,348 - aiogram.event - INFO - Update id=83163314 is handled. Duration 170 ms by bot id=8635578862
+2026-03-24 19:29:01,394 - aiogram.event - INFO - Update id=83163315 is handled. Duration 116 ms by bot id=8635578862
+2026-03-24 19:29:04,183 - aiogram.event - INFO - Update id=83163316 is handled. Duration 185 ms by bot id=8635578862
+2026-03-24 19:29:05,183 - aiogram.event - INFO - Update id=83163317 is handled. Duration 110 ms by bot id=8635578862
+2026-03-24 19:29:07,820 - aiogram.event - INFO - Update id=83163318 is handled. Duration 516 ms by bot id=8635578862
+2026-03-24 19:29:09,245 - aiogram.event - INFO - Update id=83163319 is handled. Duration 73 ms by bot id=8635578862
+2026-03-24 19:29:12,803 - aiogram.event - INFO - Update id=83163320 is handled. Duration 191 ms by bot id=8635578862
+2026-03-24 19:29:15,627 - aiogram.event - INFO - Update id=83163321 is handled. Duration 96 ms by bot id=8635578862
+2026-03-24 19:29:17,026 - aiogram.event - INFO - Update id=83163322 is handled. Duration 208 ms by bot id=8635578862
+2026-03-24 19:29:18,231 - aiogram.event - INFO - Update id=83163323 is handled. Duration 80 ms by bot id=8635578862
+2026-03-24 19:29:21,149 - aiogram.event - INFO - Update id=83163324 is handled. Duration 230 ms by bot id=8635578862
+2026-03-24 19:29:23,892 - aiogram.event - INFO - Update id=83163325 is handled. Duration 83 ms by bot id=8635578862
+2026-03-24 19:29:24,295 - aiogram.event - INFO - Update id=83163326 is handled. Duration 176 ms by bot id=8635578862
+2026-03-24 19:29:25,766 - aiogram.event - INFO - Update id=83163327 is handled. Duration 91 ms by bot id=8635578862
+2026-03-24 19:29:27,164 - aiogram.event - INFO - Update id=83163328 is handled. Duration 188 ms by bot id=8635578862
+2026-03-24 19:29:28,098 - aiogram.event - INFO - Update id=83163329 is handled. Duration 79 ms by bot id=8635578862
+2026-03-24 19:29:29,146 - aiogram.event - INFO - Update id=83163330 is handled. Duration 340 ms by bot id=8635578862
+2026-03-24 19:29:32,802 - aiogram.event - INFO - Update id=83163331 is handled. Duration 122 ms by bot id=8635578862
+2026-03-24 19:29:32,836 - aiogram.event - INFO - Update id=83163332 is not handled. Duration 7 ms by bot id=8635578862
+2026-03-24 19:29:36,938 - aiogram.event - INFO - Update id=83163333 is handled. Duration 81 ms by bot id=8635578862
+2026-03-24 19:29:39,680 - aiogram.event - INFO - Update id=83163334 is handled. Duration 703 ms by bot id=8635578862
+2026-03-24 19:29:41,844 - aiogram.event - INFO - Update id=83163335 is handled. Duration 104 ms by bot id=8635578862
+2026-03-24 19:29:43,589 - aiogram.event - INFO - Update id=83163336 is handled. Duration 176 ms by bot id=8635578862
+2026-03-24 19:29:46,352 - httpx - INFO - HTTP Request: POST https://gate.lava.top/api/v3/invoice "HTTP/1.1 201 Created"
+2026-03-24 19:29:46,471 - aiogram.event - INFO - Update id=83163337 is handled. Duration 1689 ms by bot id=8635578862
+2026-03-24 19:30:05,477 - aiogram.event - INFO - Update id=83163338 is handled. Duration 164 ms by bot id=8635578862
+2026-03-24 19:30:06,549 - aiogram.event - INFO - Update id=83163339 is handled. Duration 156 ms by bot id=8635578862
+2026-03-24 19:30:12,327 - aiogram.event - INFO - Update id=83163340 is handled. Duration 175 ms by bot id=8635578862
+2026-03-24 19:30:15,013 - aiogram.event - INFO - Update id=83163341 is handled. Duration 85 ms by bot id=8635578862
+2026-03-24 19:30:16,290 - aiogram.event - INFO - Update id=83163342 is handled. Duration 270 ms by bot id=8635578862
+2026-03-24 19:30:17,475 - aiogram.event - INFO - Update id=83163343 is handled. Duration 179 ms by bot id=8635578862
+2026-03-24 19:30:19,037 - aiogram.event - INFO - Update id=83163344 is handled. Duration 525 ms by bot id=8635578862
+2026-03-24 19:30:20,064 - aiogram.event - INFO - Update id=83163345 is handled. Duration 73 ms by bot id=8635578862
+2026-03-24 19:30:27,777 - aiogram.event - INFO - Update id=83163346 is handled. Duration 232 ms by bot id=8635578862
+2026-03-24 19:30:28,637 - aiogram.event - INFO - Update id=83163347 is handled. Duration 88 ms by bot id=8635578862
+2026-03-24 19:30:29,368 - aiogram.event - INFO - Update id=83163348 is handled. Duration 166 ms by bot id=8635578862
+2026-03-24 19:30:30,519 - aiogram.event - INFO - Update id=83163349 is handled. Duration 92 ms by bot id=8635578862
+2026-03-24 19:30:37,113 - aiogram.event - INFO - Update id=83163350 is handled. Duration 193 ms by bot id=8635578862
+2026-03-24 19:30:38,493 - aiogram.event - INFO - Update id=83163351 is handled. Duration 101 ms by bot id=8635578862
+2026-03-24 19:30:40,947 - aiogram.event - INFO - Update id=83163352 is handled. Duration 166 ms by bot id=8635578862
+2026-03-24 19:30:42,026 - aiogram.event - INFO - Update id=83163353 is handled. Duration 90 ms by bot id=8635578862
+2026-03-24 19:30:43,372 - aiogram.event - INFO - Update id=83163354 is handled. Duration 227 ms by bot id=8635578862
+2026-03-24 19:30:44,531 - aiogram.event - INFO - Update id=83163355 is handled. Duration 85 ms by bot id=8635578862
+2026-03-24 19:30:45,843 - aiogram.event - INFO - Update id=83163356 is handled. Duration 176 ms by bot id=8635578862
+2026-03-24 19:30:48,349 - aiogram.event - INFO - Update id=83163357 is handled. Duration 119 ms by bot id=8635578862
+2026-03-24 19:30:49,323 - aiogram.event - INFO - Update id=83163358 is handled. Duration 698 ms by bot id=8635578862
+2026-03-24 19:30:49,404 - aiogram.event - INFO - Update id=83163359 is not handled. Duration 230 ms by bot id=8635578862
+2026-03-24 19:30:49,404 - aiogram.event - ERROR - Cause exception while process update id=83163359 by bot id=8635578862
+TelegramBadRequest: Telegram server says - Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot/middlewares/update/uow_middleware.py", line 19, in __call__
+    result = await handler(event, data)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot/middlewares/update/user_middleware.py", line 160, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot/middlewares/update/i18n_middleware.py", line 41, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot/middlewares/update/service_middleware.py", line 34, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot/middlewares/update/user_action_middleware.py", line 49, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 161, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 153, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 189, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 161, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 153, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 189, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 161, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 153, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 181, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/app/bot/routers/pack_router.py", line 43, in show_packs
+    await call.message.edit_text(i18n.PACKS_LIST, reply_markup=packs_kb(packs, i18n, lang=lang))
+  File "/usr/local/lib/python3.11/site-packages/aiogram/methods/base.py", line 82, in emit
+    return await bot(self)
+           ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/client/bot.py", line 488, in __call__
+    return await self.session(self, method, timeout=request_timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/client/session/base.py", line 259, in __call__
+    return cast(TelegramType, await middleware(bot, method))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/client/session/aiohttp.py", line 177, in make_request
+    response = self.check_response(
+               ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/client/session/base.py", line 121, in check_response
+    raise TelegramBadRequest(method=method, message=description)
+aiogram.exceptions.TelegramBadRequest: Telegram server says - Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message
+2026-03-24 19:30:50,140 - aiogram.event - INFO - Update id=83163360 is handled. Duration 92 ms by bot id=8635578862
+2026-03-24 19:30:50,214 - aiogram.event - INFO - Update id=83163361 is not handled. Duration 78 ms by bot id=8635578862
+2026-03-24 19:30:50,214 - aiogram.event - ERROR - Cause exception while process update id=83163361 by bot id=8635578862
+TelegramBadRequest: Telegram server says - Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/middlewares/error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/fsm/middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot/middlewares/update/uow_middleware.py", line 19, in __call__
+    result = await handler(event, data)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot/middlewares/update/user_middleware.py", line 160, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot/middlewares/update/i18n_middleware.py", line 41, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot/middlewares/update/service_middleware.py", line 34, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/bot/middlewares/update/user_action_middleware.py", line 49, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 161, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 153, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 189, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 161, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 153, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 189, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 161, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 153, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/router.py", line 181, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/event/telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/dispatcher/event/handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/app/bot/routers/profile_router.py", line 54, in back_to_main
+    await call.message.edit_text(i18n.WELCOME_MAIN, reply_markup=main_menu_kb(is_admin=bool(user.admin_password_hash)))
+  File "/usr/local/lib/python3.11/site-packages/aiogram/methods/base.py", line 82, in emit
+    return await bot(self)
+           ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/client/bot.py", line 488, in __call__
+    return await self.session(self, method, timeout=request_timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/client/session/base.py", line 259, in __call__
+    return cast(TelegramType, await middleware(bot, method))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/client/session/aiohttp.py", line 177, in make_request
+    response = self.check_response(
+               ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/aiogram/client/session/base.py", line 121, in check_response
+    raise TelegramBadRequest(method=method, message=description)
+aiogram.exceptions.TelegramBadRequest: Telegram server says - Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message
+2026-03-24 19:32:25,300 - aiogram.event - INFO - Update id=83163362 is handled. Duration 230 ms by bot id=8635578862
+2026-03-24 19:32:26,628 - aiogram.event - INFO - Update id=83163363 is handled. Duration 196 ms by bot id=8635578862
+2026-03-24 19:32:27,758 - aiogram.event - INFO - Update id=83163364 is handled. Duration 124 ms by bot id=8635578862
+2026-03-24 19:32:30,478 - aiogram.event - INFO - Update id=83163365 is handled. Duration 113 ms by bot id=8635578862
+2026-03-24 19:32:36,456 - aiogram.event - INFO - Update id=83163366 is handled. Duration 99 ms by bot id=8635578862
+2026-03-24 19:32:38,048 - aiogram.event - INFO - Update id=83163367 is handled. Duration 176 ms by bot id=8635578862
+2026-03-24 19:32:43,765 - aiogram.event - INFO - Update id=83163368 is handled. Duration 93 ms by bot id=8635578862
+2026-03-24 19:32:44,827 - aiogram.event - INFO - Update id=83163369 is handled. Duration 85 ms by bot id=8635578862
+2026-03-24 19:32:45,696 - aiogram.event - INFO - Update id=83163370 is handled. Duration 85 ms by bot id=8635578862
+2026-03-24 19:32:46,375 - aiogram.event - INFO - Update id=83163371 is handled. Duration 118 ms by bot id=8635578862
+2026-03-24 19:32:47,852 - aiogram.event - INFO - Update id=83163372 is handled. Duration 85 ms by bot id=8635578862
+2026-03-24 19:37:57,614 - aiogram.event - INFO - Update id=83163373 is handled. Duration 96 ms by bot id=8635578862
+2026-03-24 19:37:58,925 - aiogram.event - INFO - Update id=83163374 is handled. Duration 84 ms by bot id=8635578862
+2026-03-24 19:38:01,982 - aiogram.event - INFO - Update id=83163375 is handled. Duration 82 ms by bot id=8635578862
+2026-03-24 19:38:03,016 - aiogram.event - INFO - Update id=83163376 is handled. Duration 77 ms by bot id=8635578862
+2026-03-24 19:38:05,450 - aiogram.event - INFO - Update id=83163377 is handled. Duration 91 ms by bot id=8635578862
+2026-03-24 19:38:06,843 - aiogram.event - INFO - Update id=83163378 is handled. Duration 204 ms by bot id=8635578862
+2026-03-24 19:38:07,886 - aiogram.event - INFO - Update id=83163379 is handled. Duration 137 ms by bot id=8635578862
+2026-03-24 19:38:09,296 - aiogram.event - INFO - Update id=83163380 is handled. Duration 97 ms by bot id=8635578862
+2026-03-24 19:38:10,373 - aiogram.event - INFO - Update id=83163381 is handled. Duration 154 ms by bot id=8635578862
+2026-03-24 19:38:11,199 - aiogram.event - INFO - Update id=83163382 is handled. Duration 114 ms by bot id=8635578862
+2026-03-24 19:38:13,849 - httpx - INFO - HTTP Request: POST https://gate.lava.top/api/v3/invoice "HTTP/1.1 201 Created"
+2026-03-24 19:38:13,947 - aiogram.event - INFO - Update id=83163383 is handled. Duration 1883 ms by bot id=8635578862
+2026-03-24 19:38:26,786 - aiogram.event - INFO - Update id=83163384 is handled. Duration 3 ms by bot id=8635578862
+2026-03-24 19:38:32,044 - aiogram.event - INFO - Update id=83163385 is handled. Duration 95 ms by bot id=8635578862
+2026-03-24 19:38:33,129 - aiogram.event - INFO - Update id=83163386 is handled. Duration 81 ms by bot id=8635578862
+2026-03-24 19:38:39,077 - aiogram.event - INFO - Update id=83163387 is handled. Duration 97 ms by bot id=8635578862
+2026-03-24 19:38:41,258 - aiogram.event - INFO - Update id=83163388 is handled. Duration 95 ms by bot id=8635578862
+2026-03-24 19:38:41,447 - aiogram.event - INFO - Update id=83163389 is handled. Duration 221 ms by bot id=8635578862
+2026-03-24 19:38:43,039 - aiogram.event - INFO - Update id=83163390 is handled. Duration 93 ms by bot id=8635578862
+2026-03-24 19:38:43,093 - aiogram.event - INFO - Update id=83163391 is handled. Duration 85 ms by bot id=8635578862
+2026-03-24 19:38:43,862 - aiogram.event - INFO - Update id=83163392 is handled. Duration 106 ms by bot id=8635578862
+2026-03-24 19:38:46,818 - aiogram.event - INFO - Update id=83163393 is handled. Duration 110 ms by bot id=8635578862
+2026-03-24 19:38:49,719 - aiogram.event - INFO - Update id=83163394 is handled. Duration 185 ms by bot id=8635578862
+2026-03-24 19:38:50,146 - aiogram.event - INFO - Update id=83163395 is handled. Duration 105 ms by bot id=8635578862
+2026-03-24 19:38:52,332 - aiogram.event - INFO - Update id=83163396 is handled. Duration 79 ms by bot id=8635578862
+2026-03-24 19:38:55,707 - aiogram.event - INFO - Update id=83163397 is handled. Duration 87 ms by bot id=8635578862
+2026-03-24 19:38:57,072 - aiogram.event - INFO - Update id=83163398 is handled. Duration 86 ms by bot id=8635578862
+2026-03-24 19:38:59,053 - aiogram.event - INFO - Update id=83163399 is handled. Duration 88 ms by bot id=8635578862
+2026-03-24 19:39:00,305 - aiogram.event - INFO - Update id=83163400 is handled. Duration 98 ms by bot id=8635578862
+2026-03-24 19:39:01,353 - aiogram.event - INFO - Update id=83163401 is handled. Duration 89 ms by bot id=8635578862
+2026-03-24 19:39:04,089 - httpx - INFO - HTTP Request: POST https://gate.lava.top/api/v3/invoice "HTTP/1.1 201 Created"
+2026-03-24 19:39:04,203 - aiogram.event - INFO - Update id=83163402 is handled. Duration 1802 ms by bot id=8635578862
+2026-03-24 19:39:05,589 - aiogram.event - INFO - Update id=83163403 is handled. Duration 134 ms by bot id=8635578862
+2026-03-24 19:39:22,882 - aiogram.event - INFO - Update id=83163404 is handled. Duration 182 ms by bot id=8635578862
+2026-03-24 19:39:53,674 - aiogram.event - INFO - Update id=83163405 is handled. Duration 95 ms by bot id=8635578862
+2026-03-24 19:41:56,310 - aiogram.event - INFO - Update id=83163407 is handled. Duration 110 ms by bot id=8635578862
+2026-03-24 19:42:00,828 - aiogram.event - INFO - Update id=83163408 is handled. Duration 158 ms by bot id=8635578862
+2026-03-24 19:42:40,642 - aiogram.event - INFO - Update id=83163409 is handled. Duration 101 ms by bot id=8635578862
+2026-03-24 19:42:43,126 - aiogram.event - INFO - Update id=83163410 is handled. Duration 154 ms by bot id=8635578862
+2026-03-24 19:42:44,510 - aiogram.event - INFO - Update id=83163411 is handled. Duration 91 ms by bot id=8635578862
+2026-03-24 19:42:50,597 - aiogram.event - INFO - Update id=83163412 is not handled. Duration 7 ms by bot id=8635578862
+2026-03-24 19:42:55,462 - aiogram.event - INFO - Update id=83163413 is handled. Duration 103 ms by bot id=8635578862
+2026-03-24 19:43:28,040 - aiogram.event - INFO - Update id=83163414 is handled. Duration 4 ms by bot id=8635578862
+2026-03-24 19:43:58,198 - aiogram.event - INFO - Update id=83163415 is handled. Duration 99 ms by bot id=8635578862
+2026-03-24 19:44:59,549 - aiogram.event - INFO - Update id=83163417 is handled. Duration 6 ms by bot id=8635578862
+2026-03-24 19:48:47,472 - aiogram.event - INFO - Update id=83163419 is handled. Duration 93 ms by bot id=8635578862
+2026-03-24 19:53:28,363 - presentation.bootstrap - INFO - Initializing Telegram Bot...
+2026-03-24 19:53:28,363 - bot.builder.bot_manager - INFO - Init Bot Manager
+2026-03-24 19:53:28,788 - bot.builder.dispatcher_manager - INFO - Default commands set up successfully
+2026-03-24 19:53:28,788 - bot.builder.dispatcher_manager - INFO - Dispatcher Manager initialized
+2026-03-24 19:53:28,788 - presentation.bootstrap - INFO - Starting bot polling in background...
+2026-03-24 19:53:28,788 - services.generation_worker - INFO - VideoGenerationWorker started.
+2026-03-24 19:53:28,788 - aiogram.dispatcher - INFO - Start polling
+2026-03-24 19:53:28,854 - aiogram.dispatcher - INFO - Run polling for bot @aividedobot id=8635578862 - 'aividedobot'
+2026-03-24 19:54:23,298 - presentation.bootstrap - INFO - Stopping VideoGenerationWorker...
+2026-03-24 19:54:23,298 - services.generation_worker - INFO - VideoGenerationWorker stopping...
+2026-03-24 19:54:23,298 - presentation.bootstrap - INFO - Stopping Telegram Bot...
+2026-03-24 19:54:23,298 - aiogram.dispatcher - INFO - Polling stopped
+2026-03-24 19:54:23,299 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-03-24 19:54:23,299 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8635578862)
+2026-03-24 19:54:23,551 - aiogram.dispatcher - INFO - Polling stopped for bot @aividedobot id=8635578862 - 'aividedobot'
+2026-03-24 19:54:32,563 - presentation.bootstrap - INFO - Initializing Telegram Bot...
+2026-03-24 19:54:32,563 - bot.builder.bot_manager - INFO - Init Bot Manager
+2026-03-24 19:54:33,417 - bot.builder.dispatcher_manager - INFO - Default commands set up successfully
+2026-03-24 19:54:33,417 - bot.builder.dispatcher_manager - INFO - Dispatcher Manager initialized
+2026-03-24 19:54:33,418 - presentation.bootstrap - INFO - Starting bot polling in background...
+2026-03-24 19:54:33,418 - services.generation_worker - INFO - VideoGenerationWorker started.
+2026-03-24 19:54:33,418 - aiogram.dispatcher - INFO - Start polling
+2026-03-24 19:54:33,563 - aiogram.dispatcher - INFO - Run polling for bot @aividedobot id=8635578862 - 'aividedobot'
+2026-03-24 19:58:48,542 - aiogram.event - INFO - Update id=83163420 is handled. Duration 228 ms by bot id=8635578862
+2026-03-24 20:00:25,547 - presentation.bootstrap - INFO - Stopping VideoGenerationWorker...
+2026-03-24 20:00:25,547 - services.generation_worker - INFO - VideoGenerationWorker stopping...
+2026-03-24 20:00:25,547 - presentation.bootstrap - INFO - Stopping Telegram Bot...
+2026-03-24 20:00:25,547 - aiogram.dispatcher - INFO - Polling stopped
+2026-03-24 20:00:25,548 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-03-24 20:00:25,549 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8635578862)
+2026-03-24 20:00:25,801 - aiogram.dispatcher - INFO - Polling stopped for bot @aividedobot id=8635578862 - 'aividedobot'
+2026-03-24 20:00:34,425 - presentation.bootstrap - INFO - Initializing Telegram Bot...
+2026-03-24 20:00:34,425 - bot.builder.bot_manager - INFO - Init Bot Manager
+2026-03-24 20:00:35,291 - bot.builder.dispatcher_manager - INFO - Default commands set up successfully
+2026-03-24 20:00:35,292 - bot.builder.dispatcher_manager - INFO - Dispatcher Manager initialized
+2026-03-24 20:00:35,292 - presentation.bootstrap - INFO - Starting bot polling in background...
+2026-03-24 20:00:35,292 - services.generation_worker - INFO - VideoGenerationWorker started.
+2026-03-24 20:00:35,293 - aiogram.dispatcher - INFO - Start polling
+2026-03-24 20:00:35,441 - aiogram.dispatcher - INFO - Run polling for bot @aividedobot id=8635578862 - 'aividedobot'
