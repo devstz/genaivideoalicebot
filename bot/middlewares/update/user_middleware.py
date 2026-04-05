@@ -3,7 +3,7 @@ from collections import defaultdict
 from logging import getLogger
 from typing import Any, Awaitable, Callable
 
-from aiogram import BaseMiddleware
+from aiogram import BaseMiddleware, Bot
 from aiogram.types import TelegramObject, User, Update
 from aiogram.utils.deep_linking import decode_payload
 
@@ -55,7 +55,7 @@ class UserMiddleware(BaseMiddleware):
             return payload[4:]
         return payload
 
-    async def _apply_referral(self, uow: SQLAlchemyUnitOfWork, new_user: UserDB, referral_code: str) -> None:
+    async def _apply_referral(self, uow: SQLAlchemyUnitOfWork, new_user: UserDB, referral_code: str, bot: Bot) -> None:
         """Create referral pair and give +1 gen to referrer."""
         referrer = await uow.user_repo.get_by_referral_code(referral_code)
         if not referrer:
@@ -74,6 +74,15 @@ class UserMiddleware(BaseMiddleware):
         await uow.referral_repo.add(referral)
         await uow.user_balance_repo.add_generations(referrer.user_id, 1)
         logger.info("Referral applied: user %s -> referrer %s (+1 gen)", new_user.user_id, referrer.user_id)
+
+        # Notify referrer about the bonus
+        try:
+            await bot.send_message(
+                referrer.user_id,
+                "По вашей ссылке запустили бота! Вам доступна 1 бесплатная генерация! 🎁",
+            )
+        except Exception:
+            logger.warning("Failed to notify referrer %s about referral bonus", referrer.user_id)
 
     async def __call__(
         self,
@@ -106,7 +115,7 @@ class UserMiddleware(BaseMiddleware):
                     # Process referral right after user creation
                     ref_code = self._extract_referral_code(event)
                     if ref_code:
-                        await self._apply_referral(uow, db_user, ref_code)
+                        await self._apply_referral(uow, db_user, ref_code, data["bot"])
 
                 except Exception:
                     logger.exception("Error creating user %s, retrying get", tg_user.id)

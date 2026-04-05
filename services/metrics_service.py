@@ -115,7 +115,7 @@ class MetricsService:
 
         # 5. Conversion Funnel (Updated logic)
         # Category 1: Total Active (sent at least one action)
-        total_active_stmt = select(func.count(func.distinct(UserAction.user_id)))
+        total_active_stmt = select(func.count(User.user_id))
         total_active_count = await uow.session.scalar(total_active_stmt) or 0
 
         # Category 2: Referral Users (users who invited someone)
@@ -130,7 +130,7 @@ class MetricsService:
         buyers_count = await uow.session.scalar(buyers_stmt) or 0
 
         # Proportions relative to active users (or total users if active is 0)
-        base_count = total_active_count if total_active_count > 0 else (total_users if total_users > 0 else 1)
+        base_count = total_active_count if total_active_count > 0 else 1
         
         referral_perc = min(100, int((referral_count / base_count) * 100))
         buyers_perc = min(100, int((buyers_count / base_count) * 100))

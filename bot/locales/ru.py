@@ -12,8 +12,9 @@ WELCOME_FIRST = (
 
 WELCOME_MAIN = (
     "🎬 <b>Главное меню</b>\n\n"
-    "Оживите любое фото за пару кликов.\n"
-    "Выберите действие:"
+    "Оживите любое фото за пару кликов.\n\n"
+    "🎁 Получите 1 бесплатную генерацию за приглашение друга!\n"
+    "Нажмите «Мой профиль» для подробностей"
 )
 
 AGREEMENT_ACCEPED = (
@@ -32,6 +33,7 @@ BTN_PACKS = "📦 Наборы"
 BTN_PROFILE = "👤 Мой профиль"
 BTN_HELP = "❓ Помощь"
 BTN_SETTINGS = "⚙️ Настройки"
+BTN_DASHBOARD = "📊 Дашборд"
 BTN_BACK = "🔙 Назад"
 BTN_BUY_PACK = "{name} — {price_line} ({count} шт.)"
 BTN_MOCK_PAY = "✅ Оплатить (Тест)"
@@ -61,10 +63,12 @@ PROFILE_TEXT = (
     "👤 <b>Ваш профиль</b>\n\n"
     "🆔 ID: <code>{user_id}</code>\n"
     "🎥 Генераций на балансе: <b>{balance}</b>\n\n"
+    "🎁 <b>Получите бесплатную генерацию!</b>\n"
+    "Ваш друг должен запустить бота по вашей ссылке ниже\n\n"
     "🔗 <b>Ваша реферальная ссылка:</b>\n"
     "<code>{ref_link}</code>\n\n"
     "👥 Приглашено друзей: <b>{ref_count}</b>\n"
-    "💎 <i>За каждого друга — бесплатная генерация!</i>"
+    "💎 <i>За приглашение друга — бесплатная генерация</i>"
 )
 
 SETTINGS_TEXT = (
@@ -198,6 +202,25 @@ NEW_REFERRAL_BONUS = "🎉 По вашей ссылке пришёл новый 
 # --- Errors ---
 ERROR_GENERIC = "❌ Произошла ошибка. Пожалуйста, попробуйте позже."
 ERROR_NOT_PHOTO = "❌ Пожалуйста, отправьте именно фотографию (не файл, не документ)."
+
+# --- Dashboard ---
+DASHBOARD_TITLE = "Дашборд"
+DASHBOARD_USERS = "Пользователи"
+DASHBOARD_GENERATIONS = "Генерации"
+DASHBOARD_REVENUE = "Выручка за месяц"
+DASHBOARD_TODAY = "Сегодня"
+DASHBOARD_PERFORMANCE = "Производительность"
+DASHBOARD_AVG_TIME = "Среднее время"
+DASHBOARD_STATUS = "Статус"
+DASHBOARD_TOP_TEMPLATES = "Топ шаблоны"
+DASHBOARD_BALANCE = "Баланс"
+DASHBOARD_CREDITS = "кредиты"
+DASHBOARD_REMAINING = "Осталось генераций"
+DASHBOARD_MODEL = "Модель"
+DASHBOARD_PIAPI_UNAVAILABLE = "PiAPI недоступен"
+DASHBOARD_METRICS_UNAVAILABLE = "Метрики недоступны"
+BTN_DASHBOARD_REFRESH = "🔄 Обновить"
+BTN_DASHBOARD_BACK = "🔙 Назад"
 
 STATUS_MESSAGES = {
     GenerationStatus.PENDING: "⏳ В очереди...",

@@ -6,6 +6,7 @@ from .template_router import TemplateRouter
 from .postcard_router import PostcardRouter
 from .pack_router import PackRouter
 from .profile_router import ProfileRouter
+from .dashboard_router import DashboardRouter
 
 
 class PrivateRouter(BaseRouter):
@@ -20,5 +21,6 @@ class PrivateRouter(BaseRouter):
             TemplateRouter(),
             PostcardRouter(),
             PackRouter(),
-            ProfileRouter()
+            ProfileRouter(),
+            DashboardRouter()
         )

@@ -6,7 +6,7 @@ from bot.locales.ru import (
     BTN_REVIVE_PHOTO, BTN_PACKS, BTN_PROFILE,
     BTN_BACK, BTN_BUY_PACK, BTN_MOCK_PAY, BTN_LAVA_PAY, BTN_PAY_OPEN_LINK, BTN_PAY_SKIP_EMAIL,
     BTN_SKIP, BTN_CONFIRM, BTN_CUSTOM_PROMPT,
-    BTN_SETTINGS, BTN_CHANGE_PASSWORD, BTN_TOGGLE_2FA_ON, BTN_TOGGLE_2FA_OFF, BTN_SETTINGS_REFRESH,
+    BTN_SETTINGS, BTN_DASHBOARD, BTN_CHANGE_PASSWORD, BTN_TOGGLE_2FA_ON, BTN_TOGGLE_2FA_OFF, BTN_SETTINGS_REFRESH,
     BTN_POSTCARDS, BTN_HELP, BTN_CUSTOM_PROMPT_MAIN,
 )
 from bot.keyboards.callback_data.private import (
@@ -32,7 +32,8 @@ def main_menu_kb(is_admin: bool = False) -> InlineKeyboardMarkup:
     builder.button(text=BTN_HELP, callback_data=MainMenuCD(action="help"))
     if is_admin:
         builder.button(text=BTN_SETTINGS, callback_data=MainMenuCD(action="settings"))
-        builder.adjust(2, 1, 2, 2)
+        builder.button(text=BTN_DASHBOARD, callback_data=MainMenuCD(action="dashboard"))
+        builder.adjust(2, 1, 2, 1, 2)
     else:
         builder.adjust(2, 1, 2, 1)
     return builder.as_markup()
@@ -151,4 +152,12 @@ def settings_kb(twofa_enabled: bool) -> InlineKeyboardMarkup:
     builder.button(text=BTN_SETTINGS_REFRESH, callback_data=MainMenuCD(action="settings"))
     builder.button(text=BTN_BACK, callback_data=MainMenuCD(action="main"))
     builder.adjust(1, 1, 2)
+    return builder.as_markup()
+
+
+def dashboard_kb() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    builder.button(text="🔄 Обновить", callback_data=MainMenuCD(action="dashboard_refresh"))
+    builder.button(text="🔙 Назад", callback_data=MainMenuCD(action="main"))
+    builder.adjust(2)
     return builder.as_markup()

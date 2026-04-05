@@ -22,10 +22,22 @@ from pathlib import Path
 from fastapi import UploadFile, File
 
 def _model_to_read(t: Template) -> TemplateRead:
-    image = t.preview_image_path or ""
-    if t.preview_image_path and not t.preview_image_path.startswith("http"):
-        settings = get_settings()
-        image = f"/media/{t.preview_image_path}"
+    image = ""
+    if t.preview_image_path:
+        if t.preview_image_path.startswith("http"):
+            image = t.preview_image_path
+        elif t.preview_image_path.startswith("/"):
+            image = t.preview_image_path
+        else:
+            image = f"/media/{t.preview_image_path}"
+    video = None
+    if t.preview_video_path:
+        if t.preview_video_path.startswith("http"):
+            video = t.preview_video_path
+        elif t.preview_video_path.startswith("/"):
+            video = t.preview_video_path
+        else:
+            video = f"/media/{t.preview_video_path}"
     return TemplateRead(
         id=str(t.id),
         title=t.name,
@@ -33,6 +45,7 @@ def _model_to_read(t: Template) -> TemplateRead:
         category=t.category,
         status=t.status.value if hasattr(t.status, "value") else str(t.status),
         image=image,
+        video=video,
         negativePrompt=t.negative_prompt,
         templateType=getattr(t, "template_type", "preset") or "preset",
     )
@@ -120,6 +133,7 @@ async def create_template(
         negative_prompt=payload.negativePrompt,
         status=status_enum,
         preview_image_path=payload.image,
+        preview_video_path=payload.video,
         ai_model_id=ai_model.id,
         template_type=payload.templateType or "preset",
     )
@@ -151,11 +165,14 @@ async def update_template(
             pass
     if payload.image is not None:
         template.preview_image_path = payload.image
+    if payload.video is not None:
+        template.preview_video_path = payload.video
     if payload.negativePrompt is not None:
         template.negative_prompt = payload.negativePrompt
     if payload.templateType is not None:
         template.template_type = payload.templateType
 
+    await uow.session.flush()
     return _model_to_read(template)
 
 

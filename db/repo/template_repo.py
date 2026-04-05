@@ -65,5 +65,5 @@ class TemplateRepository:
         await self.session.flush()
         return template
 
-    def delete(self, template: Template) -> None:
-        self.session.delete(template)
+    async def delete(self, template: Template) -> None:
+        await self.session.delete(template)

@@ -102,6 +102,14 @@ def create_app() -> FastAPI:
 
     media_dir = Path(settings.MEDIA_ROOT).resolve()
     if media_dir.exists():
-        app.mount("/media", StaticFiles(directory=str(media_dir)), name="media")
+        from fastapi.responses import FileResponse
+
+        @app.get("/media/{file_path:path}")
+        async def serve_media(file_path: str):
+            full = media_dir / file_path
+            if not full.resolve().is_relative_to(media_dir) or not full.is_file():
+                from fastapi import HTTPException
+                raise HTTPException(status_code=404, detail="Not Found")
+            return FileResponse(str(full))
 
     return app

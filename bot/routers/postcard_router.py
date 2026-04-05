@@ -9,6 +9,7 @@ from bot.keyboards.inline.private_keyboards import (
 )
 from bot.keyboards.callback_data.private import MainMenuCD, PostcardCD, ConfirmCD
 from bot.states.private import GenerationStates
+from bot.routers.helper import edit_message
 from services.template_service import TemplateService
 from services.user_service import UserService
 from services.generation_service import GenerationService
@@ -33,7 +34,7 @@ class PostcardRouter(BaseRouter):
             await call.answer(i18n.POSTCARD_EMPTY, show_alert=True)
             return
 
-        await call.message.edit_text(i18n.POSTCARD_LIST, reply_markup=postcards_kb(postcards))
+        await edit_message(call, text=i18n.POSTCARD_LIST, reply_markup=postcards_kb(postcards))
 
     async def show_help(self, call: CallbackQuery, i18n) -> None:
         from aiogram.types import InlineKeyboardButton
@@ -42,7 +43,7 @@ class PostcardRouter(BaseRouter):
         builder = InlineKeyboardBuilder()
         builder.row(InlineKeyboardButton(text=i18n.BTN_BACK, callback_data=MainMenuCD(action="main").pack()))
 
-        await call.message.edit_text(i18n.HELP_TEXT, reply_markup=builder.as_markup())
+        await edit_message(call, text=i18n.HELP_TEXT, reply_markup=builder.as_markup())
 
     async def view_postcard(self, call: CallbackQuery, callback_data: PostcardCD, template_service: TemplateService, user_service: UserService, i18n) -> None:
         postcard_id = callback_data.id
@@ -58,7 +59,15 @@ class PostcardRouter(BaseRouter):
         text = i18n.template_preview(postcard.name, has_balance)
         kb = postcard_preview_kb(postcard.id, has_balance)
 
-        await call.message.edit_text(text, reply_markup=kb)
+        preview_video = postcard.preview_video_path
+        preview_image = postcard.preview_image_path
+        
+        if preview_video:
+            await edit_message(call, text=text, reply_markup=kb, video=preview_video)
+        elif preview_image:
+            await edit_message(call, text=text, reply_markup=kb, photo=preview_image)
+        else:
+            await edit_message(call, text=text, reply_markup=kb)
 
     async def start_generation(
         self,
@@ -75,4 +84,4 @@ class PostcardRouter(BaseRouter):
         template_id = callback_data.id
         await state.update_data(template_id=template_id, is_custom_prompt=False)
         await state.set_state(GenerationStates.uploading_photo)
-        await call.message.edit_text(i18n.ASK_PHOTO, reply_markup=ask_photo_kb())
+        await edit_message(call, text=i18n.ASK_PHOTO, reply_markup=ask_photo_kb())

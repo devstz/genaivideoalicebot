@@ -14,6 +14,7 @@ class TemplateRead(BaseModel):
     category: str
     status: str
     image: str
+    video: Optional[str] = None
     negativePrompt: Optional[str] = None
     templateType: str = "preset"
 
@@ -24,6 +25,7 @@ class TemplateCreate(BaseModel):
     category: str
     status: str = "active"
     image: Optional[str] = None
+    video: Optional[str] = None
     negativePrompt: Optional[str] = None
     templateType: str = "preset"
 
@@ -34,5 +36,6 @@ class TemplateUpdate(BaseModel):
     category: Optional[str] = None
     status: Optional[str] = None
     image: Optional[str] = None
+    video: Optional[str] = None
     negativePrompt: Optional[str] = None
     templateType: Optional[str] = None

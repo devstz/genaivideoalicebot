@@ -12,8 +12,9 @@ WELCOME_FIRST = (
 
 WELCOME_MAIN = (
     "🎬 <b>Main Menu</b>\n\n"
-    "Bring any photo to life in just a few taps.\n"
-    "Choose an action:"
+    "Bring any photo to life in just a few taps.\n\n"
+    "🎁 Get 1 free generation by inviting a friend!\n"
+    "Tap «My Profile» for details"
 )
 
 AGREEMENT_ACCEPED = (
@@ -37,16 +38,19 @@ BTN_PAY_SKIP_EMAIL = "⏭ Skip email"
 BTN_SKIP = "⏭ Skip"
 BTN_CONFIRM = "✅ Confirm"
 BTN_CUSTOM_PROMPT = "✨ Create your own"
+BTN_DASHBOARD = "📊 Dashboard"
 
 # --- Profile ---
 PROFILE_TEXT = (
     "👤 <b>Your Profile</b>\n\n"
     "🆔 ID: <code>{user_id}</code>\n"
     "🎥 Generations left: <b>{balance}</b>\n\n"
+    "🎁 <b>Get a free generation!</b>\n"
+    "Your friend needs to start the bot using your link below\n\n"
     "🔗 <b>Your referral link:</b>\n"
     "<code>{ref_link}</code>\n\n"
     "👥 Friends invited: <b>{ref_count}</b>\n"
-    "💎 <i>Each friend = 1 free generation for you!</i>"
+    "💎 <i>Invite a friend — get a free generation</i>"
 )
 
 # --- Templates ---
@@ -158,6 +162,25 @@ NEW_REFERRAL_BONUS = "🎉 A new user joined with your link! You've received <b>
 # --- Errors ---
 ERROR_GENERIC = "❌ Something went wrong. Please try again later."
 ERROR_NOT_PHOTO = "❌ Please send a photo (not a file or document)."
+
+# --- Dashboard ---
+DASHBOARD_TITLE = "Dashboard"
+DASHBOARD_USERS = "Users"
+DASHBOARD_GENERATIONS = "Generations"
+DASHBOARD_REVENUE = "Revenue (month)"
+DASHBOARD_TODAY = "Today"
+DASHBOARD_PERFORMANCE = "Performance"
+DASHBOARD_AVG_TIME = "Avg time"
+DASHBOARD_STATUS = "Status"
+DASHBOARD_TOP_TEMPLATES = "Top templates"
+DASHBOARD_BALANCE = "Balance"
+DASHBOARD_CREDITS = "credits"
+DASHBOARD_REMAINING = "Remaining generations"
+DASHBOARD_MODEL = "Model"
+DASHBOARD_PIAPI_UNAVAILABLE = "PiAPI unavailable"
+DASHBOARD_METRICS_UNAVAILABLE = "Metrics unavailable"
+BTN_DASHBOARD_REFRESH = "🔄 Refresh"
+BTN_DASHBOARD_BACK = "🔙 Back"
 
 STATUS_MESSAGES = {
     GenerationStatus.PENDING: "⏳ Queued...",

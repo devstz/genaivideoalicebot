@@ -9,6 +9,7 @@ from bot.keyboards.inline.private_keyboards import (
 )
 from bot.keyboards.callback_data.private import MainMenuCD, TemplateCD, ConfirmCD
 from bot.states.private import GenerationStates
+from bot.routers.helper import edit_message
 from services.template_service import TemplateService
 from services.user_service import UserService
 from services.generation_service import GenerationService
@@ -38,7 +39,7 @@ class TemplateRouter(BaseRouter):
             await call.answer(i18n.TEMPLATE_EMPTY, show_alert=True)
             return
             
-        await call.message.edit_text(i18n.TEMPLATE_LIST, reply_markup=templates_kb(templates))
+        await edit_message(call, text=i18n.TEMPLATE_LIST, reply_markup=templates_kb(templates))
 
     async def view_template(self, call: CallbackQuery, callback_data: TemplateCD, template_service: TemplateService, user_service: UserService, i18n) -> None:
         template_id = callback_data.id
@@ -54,7 +55,16 @@ class TemplateRouter(BaseRouter):
         text = i18n.template_preview(template.name, has_balance)
         kb = template_preview_kb(template.id, has_balance)
         
-        await call.message.edit_text(text, reply_markup=kb)
+        preview_video = template.preview_video_path
+        logger.info("Template id=%s name=%s video=%r image=%r", template.id, template.name, preview_video, template.preview_image_path)
+        preview_image = template.preview_image_path
+        
+        if preview_video:
+            await edit_message(call, text=text, reply_markup=kb, video=preview_video)
+        elif preview_image:
+            await edit_message(call, text=text, reply_markup=kb, photo=preview_image)
+        else:
+            await edit_message(call, text=text, reply_markup=kb)
 
     async def start_generation(
         self,
@@ -71,7 +81,7 @@ class TemplateRouter(BaseRouter):
         template_id = callback_data.id
         await state.update_data(template_id=template_id, is_custom_prompt=False)
         await state.set_state(GenerationStates.uploading_photo)
-        await call.message.edit_text(i18n.ASK_PHOTO, reply_markup=ask_photo_kb())
+        await edit_message(call, text=i18n.ASK_PHOTO, reply_markup=ask_photo_kb())
 
     async def start_custom_prompt(
         self,
@@ -91,7 +101,7 @@ class TemplateRouter(BaseRouter):
             return
         await state.update_data(template_id=None, is_custom_prompt=True)
         await state.set_state(GenerationStates.uploading_photo)
-        await call.message.edit_text(i18n.ASK_PHOTO, reply_markup=ask_photo_kb())
+        await edit_message(call, text=i18n.ASK_PHOTO, reply_markup=ask_photo_kb())
 
     async def back_from_photo(self, call: CallbackQuery, state: FSMContext, template_service: TemplateService, i18n) -> None:
         await state.clear()
@@ -99,11 +109,11 @@ class TemplateRouter(BaseRouter):
         if not templates:
             await call.answer(i18n.TEMPLATE_EMPTY, show_alert=True)
             return
-        await call.message.edit_text(i18n.TEMPLATE_LIST, reply_markup=templates_kb(templates))
+        await edit_message(call, text=i18n.TEMPLATE_LIST, reply_markup=templates_kb(templates))
 
     async def back_from_wishes(self, call: CallbackQuery, state: FSMContext, i18n) -> None:
         await state.set_state(GenerationStates.uploading_photo)
-        await call.message.edit_text(i18n.ASK_PHOTO, reply_markup=ask_photo_kb())
+        await edit_message(call, text=i18n.ASK_PHOTO, reply_markup=ask_photo_kb())
 
     async def process_photo(self, message: Message, state: FSMContext, i18n) -> None:
         if not message.photo:
