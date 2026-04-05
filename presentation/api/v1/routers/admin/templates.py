@@ -16,6 +16,13 @@ from config.settings import get_settings
 
 templates_router = APIRouter(prefix="/templates", tags=["Admin Templates"])
 
+def _reject_data_url(field_name: str, value: Optional[str]) -> None:
+    if value is not None and value.startswith("data:"):
+        raise HTTPException(
+            status_code=400,
+            detail=f"{field_name}: загрузите файл через POST /admin/templates/upload, не передавайте data URL в JSON.",
+        )
+
 import uuid
 import shutil
 from pathlib import Path
@@ -113,6 +120,8 @@ async def create_template(
     uow: SQLAlchemyUnitOfWork = Depends(get_uow_dependency),
     admin: User = Depends(get_current_admin),
 ):
+    _reject_data_url("image", payload.image)
+    _reject_data_url("video", payload.video)
     ai_model = await uow.ai_model_repo.get_current()
     if not ai_model:
         ai_models = await uow.ai_model_repo.list_all()
@@ -151,6 +160,9 @@ async def update_template(
     template = await uow.template_repo.get(template_id)
     if not template:
         raise HTTPException(status_code=404, detail="Template not found")
+
+    _reject_data_url("image", payload.image)
+    _reject_data_url("video", payload.video)
 
     if payload.title is not None:
         template.name = payload.title

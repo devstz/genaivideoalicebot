@@ -28,6 +28,8 @@ def _model_to_read(m: Mailing) -> MailingRead:
         recipient_count=m.recipient_count,
         created_at=m.created_at,
         sent_at=m.sent_at,
+        attachment_path=m.attachment_path,
+        attachment_type=m.attachment_type,
     )
 
 
@@ -62,10 +64,12 @@ async def create_and_send_mailing(
     admin: User = Depends(get_current_admin),
 ):
     mailing = Mailing(
-        message=payload.message,
+        message=payload.message or "",
         audience_filter=payload.audience,
         status="sending",
         include_admins=payload.include_admins,
+        attachment_path=payload.attachment_path,
+        attachment_type=payload.attachment_type,
     )
     mailing = await uow.mailing_repo.add(mailing)
     await send_mailing(uow, mailing)

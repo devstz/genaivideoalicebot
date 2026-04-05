@@ -19,3 +19,5 @@ class Mailing(Base, TimestampMixin, ModelHelpersMixin, IdPkMixin):
     recipient_count: Mapped[int] = mapped_column(default=0, nullable=False)
     sent_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
     include_admins: Mapped[bool] = mapped_column(default=False, nullable=False)
+    attachment_path: Mapped[Optional[str]] = mapped_column(String(512), nullable=True)
+    attachment_type: Mapped[Optional[str]] = mapped_column(String(16), nullable=True)
