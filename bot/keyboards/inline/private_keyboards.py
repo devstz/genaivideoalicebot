@@ -4,7 +4,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from bot.locales.ru import (
     BTN_AGREEMENT, BTN_ACCEPT_AGREEMENT,
     BTN_REVIVE_PHOTO, BTN_PACKS, BTN_PROFILE,
-    BTN_BACK, BTN_BUY_PACK, BTN_MOCK_PAY, BTN_LAVA_PAY, BTN_PAY_OPEN_LINK, BTN_PAY_SKIP_EMAIL,
+    BTN_BACK, BTN_BUY_PACK, BTN_MOCK_PAY, BTN_LAVA_PAY, BTN_LAVA_PAY_SBP, BTN_PAY_OPEN_LINK, BTN_PAY_SKIP_EMAIL,
     BTN_SKIP, BTN_CONFIRM, BTN_CUSTOM_PROMPT,
     BTN_SETTINGS, BTN_DASHBOARD, BTN_CHANGE_PASSWORD, BTN_TOGGLE_2FA_ON, BTN_TOGGLE_2FA_OFF, BTN_SETTINGS_REFRESH,
     BTN_POSTCARDS, BTN_HELP, BTN_CUSTOM_PROMPT_MAIN,
@@ -115,6 +115,7 @@ def payment_mock_kb(pack_id: int) -> InlineKeyboardMarkup:
 def payment_lava_kb(pack_id: int) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     builder.button(text=BTN_LAVA_PAY, callback_data=PaymentCD(pack_id=pack_id, action="lava"))
+    builder.button(text=BTN_LAVA_PAY_SBP, callback_data=PaymentCD(pack_id=pack_id, action="lava_sbp"))
     builder.button(text=BTN_BACK, callback_data=MainMenuCD(action="packs"))
     builder.adjust(1)
     return builder.as_markup()

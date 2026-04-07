@@ -41,7 +41,7 @@ class LavaPaymentProvider(BasePaymentProvider):
             )
         return self._client
 
-    async def create_payment(self, *, user_id: int, pack: Pack, buyer_email: str) -> PaymentCreateResult:
+    async def create_payment(self, *, user_id: int, pack: Pack, buyer_email: str, payment_method: str | None = None) -> PaymentCreateResult:
         if not self.settings.LAVA_API_KEY:
             raise ValueError("LAVA_API_KEY is not configured")
         if not pack.lava_offer_id:
@@ -49,9 +49,9 @@ class LavaPaymentProvider(BasePaymentProvider):
 
         last_error: Exception | None = None
         for name, coro_factory in (
-            ("v3", lambda: self._create_payment_http_v3(buyer_email=buyer_email, pack=pack)),
-            ("v2", lambda: self._create_payment_http_v2(buyer_email=buyer_email, pack=pack)),
-            ("sdk", lambda: self._create_payment_sdk(buyer_email=buyer_email, pack=pack)),
+            ("v3", lambda: self._create_payment_http_v3(buyer_email=buyer_email, pack=pack, payment_method=payment_method)),
+            ("v2", lambda: self._create_payment_http_v2(buyer_email=buyer_email, pack=pack, payment_method=payment_method)),
+            ("sdk", lambda: self._create_payment_sdk(buyer_email=buyer_email, pack=pack, payment_method=payment_method)),
         ):
             try:
                 return await coro_factory()
@@ -74,13 +74,16 @@ class LavaPaymentProvider(BasePaymentProvider):
             raw=data,
         )
 
-    async def _create_payment_http_v3(self, *, buyer_email: str, pack: Pack) -> PaymentCreateResult:
+    async def _create_payment_http_v3(self, *, buyer_email: str, pack: Pack, payment_method: str | None = None) -> PaymentCreateResult:
         """Текущий контракт Lava (см. gate.lava.top/docs): минимальное тело без periodicity."""
         payload = {
             "email": buyer_email,
             "offerId": pack.lava_offer_id,
             "currency": "RUB",
         }
+        if payment_method == "sbp":
+            payload["paymentProvider"] = "PAY2ME"
+            payload["paymentMethod"] = "SBP"
         headers = {
             "X-Api-Key": self.settings.LAVA_API_KEY,
             "Content-Type": "application/json",
@@ -92,13 +95,16 @@ class LavaPaymentProvider(BasePaymentProvider):
             data = response.json()
         return self._payment_result_from_invoice_json(data)
 
-    async def _create_payment_http_v2(self, *, buyer_email: str, pack: Pack) -> PaymentCreateResult:
+    async def _create_payment_http_v2(self, *, buyer_email: str, pack: Pack, payment_method: str | None = None) -> PaymentCreateResult:
         payload = {
             "email": buyer_email,
             "offerId": pack.lava_offer_id,
             "currency": "RUB",
             "periodicity": "ONE_TIME",
         }
+        if payment_method == "sbp":
+            payload["paymentProvider"] = "PAY2ME"
+            payload["paymentMethod"] = "SBP"
         headers = {
             "X-Api-Key": self.settings.LAVA_API_KEY,
             "Content-Type": "application/json",
@@ -110,7 +116,7 @@ class LavaPaymentProvider(BasePaymentProvider):
             data = response.json()
         return self._payment_result_from_invoice_json(data)
 
-    async def _create_payment_sdk(self, *, buyer_email: str, pack: Pack) -> PaymentCreateResult:
+    async def _create_payment_sdk(self, *, buyer_email: str, pack: Pack, payment_method: str | None = None) -> PaymentCreateResult:
         def _create() -> PaymentCreateResult:
             inv = self._lava_client().create_one_time_payment(
                 email=buyer_email,

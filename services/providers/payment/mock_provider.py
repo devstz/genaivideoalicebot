@@ -11,7 +11,7 @@ from .base import BasePaymentProvider, PaymentCreateResult, PaymentWebhookResult
 class MockPaymentProvider(BasePaymentProvider):
     name = "mock"
 
-    async def create_payment(self, *, user_id: int, pack: Pack, buyer_email: str) -> PaymentCreateResult:
+    async def create_payment(self, *, user_id: int, pack: Pack, buyer_email: str, payment_method: str | None = None) -> PaymentCreateResult:
         pdata = pack.prices_by_currency if isinstance(pack.prices_by_currency, dict) else {}
         rub = pdata.get("RUB") if pdata else None
         try:

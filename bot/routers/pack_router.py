@@ -77,7 +77,7 @@ class PackRouter(BaseRouter):
                 await call.answer(i18n.ERROR_GENERIC, show_alert=True)
             return
 
-        if callback_data.action != "lava":
+        if callback_data.action not in {"lava", "lava_sbp"}:
             await call.answer(i18n.ERROR_GENERIC, show_alert=True)
             return
 
@@ -89,6 +89,7 @@ class PackRouter(BaseRouter):
                 pack_id=pack_id,
                 buyer_email=user.email,
                 i18n=i18n,
+                method="sbp" if callback_data.action == "lava_sbp" else None,
             )
             return
 
@@ -120,6 +121,7 @@ class PackRouter(BaseRouter):
             pack_id=pack_id,
             buyer_email=email,
             i18n=i18n,
+            method="sbp",
         )
 
     async def skip_payment_email(self, call: CallbackQuery, state: FSMContext, pack_service: PackService, i18n) -> None:
@@ -139,6 +141,7 @@ class PackRouter(BaseRouter):
             buyer_email=technical_email,
             i18n=i18n,
             warning=i18n.PAYMENT_EMAIL_SKIPPED_WARNING,
+            method="sbp",
         )
 
     async def _create_lava_payment(
@@ -150,6 +153,7 @@ class PackRouter(BaseRouter):
         buyer_email: str,
         i18n,
         warning: str | None = None,
+        method: str | None = None,
     ) -> None:
         pack = await pack_service.get_pack(pack_id)
         if not pack or not pack.is_active:
@@ -167,6 +171,7 @@ class PackRouter(BaseRouter):
                 pack_id=pack_id,
                 buyer_email=buyer_email,
                 force_provider="lava",
+                payment_method=method,
             )
         except Exception:
             logger.exception("Failed to create Lava payment")

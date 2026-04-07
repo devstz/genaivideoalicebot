@@ -33,7 +33,7 @@ class BasePaymentProvider(ABC):
     name: str
 
     @abstractmethod
-    async def create_payment(self, *, user_id: int, pack: Pack, buyer_email: str) -> PaymentCreateResult:
+    async def create_payment(self, *, user_id: int, pack: Pack, buyer_email: str, payment_method: str | None = None) -> PaymentCreateResult:
         raise NotImplementedError
 
     @abstractmethod

@@ -50,6 +50,7 @@ class PackService:
         pack_id: int,
         buyer_email: str,
         force_provider: str | None = None,
+        payment_method: str | None = None,
     ) -> PurchaseFlowResult:
         pack = await self.uow.pack_repo.get(pack_id)
         if not pack or not pack.is_active:
@@ -57,7 +58,7 @@ class PackService:
 
         provider_name = (force_provider or await self._get_active_provider_name()).strip().lower()
         provider = get_payment_provider(provider_name)
-        provider_result = await provider.create_payment(user_id=user_id, pack=pack, buyer_email=buyer_email)
+        provider_result = await provider.create_payment(user_id=user_id, pack=pack, buyer_email=buyer_email, payment_method=payment_method)
 
         is_mock = provider_result.provider == "mock"
         initial_status = PaymentStatus.CONFIRMED if is_mock else PaymentStatus.PENDING

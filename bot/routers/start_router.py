@@ -90,13 +90,13 @@ class StartRouter(BaseRouter):
             await message.answer(i18n.WELCOME_FIRST, reply_markup=agreement_kb(settings.AGREEMENT_URL))
             return
 
-        await message.answer(i18n.WELCOME_MAIN, reply_markup=main_menu_kb(is_admin=bool(user.admin_password_hash)))
+        await message.answer(i18n.WELCOME_MAIN, reply_markup=main_menu_kb(is_admin=bool(user.is_superuser or user.admin_password_hash)))
 
     async def accept_agreement(self, call: CallbackQuery, user_service: UserService, user: User, i18n) -> None:
         accepted = await user_service.accept_agreement(call.from_user.id)
         if accepted:
             await call.message.edit_text(i18n.AGREEMENT_ACCEPED)
-            await call.message.answer(i18n.WELCOME_MAIN, reply_markup=main_menu_kb(is_admin=bool(user.admin_password_hash)))
+            await call.message.answer(i18n.WELCOME_MAIN, reply_markup=main_menu_kb(is_admin=bool(user.is_superuser or user.admin_password_hash)))
         else:
             await call.answer("✅", show_alert=False)
-            await call.message.edit_text(i18n.WELCOME_MAIN, reply_markup=main_menu_kb(is_admin=bool(user.admin_password_hash)))
+            await call.message.edit_text(i18n.WELCOME_MAIN, reply_markup=main_menu_kb(is_admin=bool(user.is_superuser or user.admin_password_hash)))
