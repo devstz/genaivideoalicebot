@@ -6,6 +6,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
 
 from bot.routers.base import BaseRouter
+from bot.routers.helper import edit_message
 from bot.keyboards.inline.private_keyboards import (
     main_menu_kb,
     packs_kb,
@@ -40,7 +41,8 @@ class PackRouter(BaseRouter):
             await call.answer(i18n.PACKS_EMPTY, show_alert=True)
             return
 
-        await call.message.edit_text(i18n.PACKS_LIST, reply_markup=packs_kb(packs, i18n, lang=lang))
+        await edit_message(call, text=i18n.PACKS_LIST, reply_markup=packs_kb(packs, i18n, lang=lang))
+        await call.answer()
 
     async def view_pack(self, call: CallbackQuery, callback_data: PackCD, pack_service: PackService, i18n, lang: str) -> None:
         from bot.utils.pack_display import pack_price_lines
@@ -64,7 +66,8 @@ class PackRouter(BaseRouter):
         
         provider = await pack_service.get_active_provider_name()
         keyboard = payment_lava_kb(pack.id) if provider == "lava" else payment_mock_kb(pack.id)
-        await call.message.edit_text(text, reply_markup=keyboard)
+        await edit_message(call, text=text, reply_markup=keyboard)
+        await call.answer()
 
     async def process_payment_click(self, call: CallbackQuery, callback_data: PaymentCD, state: FSMContext, pack_service: PackService, i18n) -> None:
         pack_id = callback_data.pack_id
