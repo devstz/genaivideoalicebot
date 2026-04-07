@@ -8,7 +8,7 @@ class Config(BaseSettings):
     MEDIA_ROOT: str = "./media"
     API_HOST: str = "0.0.0.0"
     API_PORT: int = 8000
-    BOT_USERNAME: str = ""
+    BOT_USERNAME: str = ""  # fallback, если getMe по TOKEN не смог вернуть username
     PIAPI_KEY: str = "PIAPI_KEY"
     MAX_CONCURRENT_GENERATIONS: int = 10
     MAX_ACTIVE_GENERATIONS_PER_USER: int = 1

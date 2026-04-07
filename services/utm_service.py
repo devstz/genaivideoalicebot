@@ -7,6 +7,7 @@ from decimal import Decimal
 from sqlalchemy import and_, func, select
 
 from config.settings import get_settings
+from services.telegram_bot_username import get_bot_username_sync
 from db.models import Pack, Purchase, User, UtmCampaign, UtmClick, UtmRegistration
 from db.uow import SQLAlchemyUnitOfWork
 from enums import PaymentStatus
@@ -32,7 +33,7 @@ class UtmService:
     @staticmethod
     def _bot_link(start_code: str) -> str:
         settings = get_settings()
-        bot_username = settings.BOT_USERNAME.replace("@", "") if settings.BOT_USERNAME else "bot"
+        bot_username = get_bot_username_sync(settings) or "bot"
         return f"https://t.me/{bot_username}?start={start_code}"
 
     @staticmethod

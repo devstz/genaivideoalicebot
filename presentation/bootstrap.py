@@ -18,6 +18,7 @@ from bot.builder.bot_manager import BotManager
 from bot.builder.dispatcher_manager import DispatcherManager
 from presentation.api.v1.routers.connect_routers import connect_routers
 from services.generation_worker import VideoGenerationWorker
+from services.telegram_bot_username import ensure_resolved_bot_username
 
 import asyncio
 
@@ -38,7 +39,13 @@ async def lifespan(app: FastAPI):
     bot_manager = BotManager(settings.TOKEN)
     dp_manager = DispatcherManager.initialize(bot_manager)
     await dp_manager.setup()
-    
+
+    un = await ensure_resolved_bot_username(settings)
+    if un:
+        logger.info("Bot username for deep links: %s", un)
+    else:
+        logger.warning("Bot username not resolved; set TOKEN or BOT_USERNAME for admin/UTM links")
+
     # 2. Start Polling in background
     logger.info("Starting bot polling in background...")
     

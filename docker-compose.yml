@@ -14,6 +14,8 @@ services:
     networks:
       - genaivideo_network
 
+  # bot_api: TOKEN в .env задаёт бота; @username для QR/2FA/UTM берётся из Telegram getMe (кеш процесса).
+  # BOT_USERNAME в .env — только fallback, если getMe недоступен.
   bot_api:
     build: 
       context: .

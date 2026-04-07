@@ -12,6 +12,7 @@ from services.auth.cache_auth_repo import CacheAuthRepository
 from services.auth.jwt_service import JwtService
 from services.auth.password_service import PasswordService
 from services.providers.cache.mock_cache import MockCacheProvider
+from services.telegram_bot_username import ensure_resolved_bot_username
 
 router = APIRouter(prefix="/admin/auth", tags=["Admin Auth"])
 
@@ -81,7 +82,7 @@ async def get_current_profile(admin: User = Depends(get_current_admin)):
     """Возвращает данные текущего авторизованного админа."""
     settings = get_settings()
     name = admin.full_name or (f"{admin.first_name or ''} {admin.last_name or ''}".strip()) or f"User #{admin.user_id}"
-    bot_username = settings.BOT_USERNAME.replace("@", "") if settings.BOT_USERNAME else None
+    bot_username = await ensure_resolved_bot_username(settings)
     return ProfileResponse(
         user_id=admin.user_id,
         name=name,
@@ -129,7 +130,12 @@ async def login_with_password(
         )
 
     token = await _auth_repo.create_password_2fa_session(user.user_id)
-    bot_username = settings.BOT_USERNAME.replace("@", "")
+    bot_username = await ensure_resolved_bot_username(settings)
+    if not bot_username:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Bot username is not configured",
+        )
     deep_link = f"https://t.me/{bot_username}?start=auth_{token}"
     return AuthStatusResponse(status="pending_2fa", token=token, deep_link=deep_link)
 
@@ -232,10 +238,13 @@ async def init_auth():
     """
     settings = get_settings()
     token = await _auth_repo.create_auth_session()
-    
-    # Ссылка вида https://t.me/BotUsername?start=auth_12345
-    # Заменяем @ на всякий случай, если имя бота передано как @username
-    bot_username = settings.BOT_USERNAME.replace("@", "") 
+
+    bot_username = await ensure_resolved_bot_username(settings)
+    if not bot_username:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Bot username is not configured",
+        )
     deep_link = f"https://t.me/{bot_username}?start=auth_{token}"
     
     return InitAuthResponse(token=token, deep_link=deep_link)
